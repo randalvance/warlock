@@ -35,8 +35,7 @@ const tooLarge: ApiErrorBody = {
 		message: `a file can be at most ${maxUploadBytes} bytes`,
 	},
 };
-// Room for the multipart boundaries and the other fields around the file.
-const formSlackBytes = 64 * 1024;
+const multipartOverheadBytes = 64 * 1024;
 
 export function projectsRoute(projects: Projects) {
 	return new Hono()
@@ -81,7 +80,7 @@ export function projectsRoute(projects: Projects) {
 			"/:projectId/artifacts",
 			validate("param", ProjectParam),
 			bodyLimit({
-				maxSize: maxUploadBytes + formSlackBytes,
+				maxSize: maxUploadBytes + multipartOverheadBytes,
 				onError: (c) => c.json(tooLarge, errorStatus.too_large),
 			}),
 			validate("form", NewArtifact),
@@ -133,7 +132,6 @@ export function projectsRoute(projects: Projects) {
 		);
 }
 
-/** Always a download, so an uploaded HTML file never renders on the app's origin. */
 function attachment(name: string): string {
 	const ascii = name.replace(/[^\x20-\x7e]|["\\]/g, "_");
 	return `attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(name)}`;

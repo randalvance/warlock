@@ -33,7 +33,7 @@ export interface ArtifactFile {
 	readonly bytes: Buffer;
 }
 
-/** The only writer of the project tables and the only caller of GitHub. Every method that misses a project throws `not_found`. */
+/** Every method that misses a project throws `not_found`. */
 export interface Projects {
 	list(): ProjectSummary[];
 	get(id: ProjectId): Project;
@@ -46,7 +46,6 @@ export interface Projects {
 	addArtifact(id: ProjectId, input: NewArtifact): Promise<Artifact>;
 	readArtifactFile(id: ProjectId, artifactId: ArtifactId): ArtifactFile;
 	addContext(id: ProjectId, input: ContextInput): ContextEntry;
-	/** Replaces both fields. */
 	editContext(
 		id: ProjectId,
 		contextId: ContextId,

@@ -33,7 +33,6 @@ type ErrorResponses = {
 	};
 };
 
-/** Every route also answers with the error bodies that `onError` and `notFound` send. */
 export type AppType = ApplyGlobalResponse<
 	ReturnType<typeof createApp>,
 	ErrorResponses

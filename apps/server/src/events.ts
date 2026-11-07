@@ -7,7 +7,6 @@ export type Seq = z.infer<typeof Seq>;
 
 export const ServerEvent = z.discriminatedUnion("type", [
 	z.object({ type: z.literal("server.started") }),
-	/** Any write to a project. Bodies and bytes stay out of the log; readers refetch the project. */
 	z.object({ type: z.literal("project.changed"), projectId: ProjectId }),
 ]);
 export type ServerEvent = z.infer<typeof ServerEvent>;

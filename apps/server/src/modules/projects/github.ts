@@ -5,9 +5,7 @@ import { ApiError } from "../../http.ts";
 import { type RepoName, type RepoRef, repoName } from "./model.ts";
 
 export interface GitHubConfig {
-	/** https://api.github.com, a GitHub Enterprise API root, or a test stub. */
 	readonly apiUrl: URL;
-	/** Undefined when neither GITHUB_TOKEN nor `gh auth token` gave one. */
 	readonly token: string | undefined;
 }
 
@@ -138,7 +136,6 @@ function unavailable(message: string): ApiError {
 	return new ApiError({ code: "github_unavailable", message });
 }
 
-/** GITHUB_TOKEN when set, else `gh auth token`, else undefined. */
 export async function loadGitHubToken(
 	env: NodeJS.ProcessEnv,
 ): Promise<string | undefined> {

@@ -4,35 +4,22 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import type { GitHubConfig } from "../src/modules/projects/github.ts";
 
-/**
- * How the stub answers one repo. `blocked` is a 403 with rate limit left, as
- * an org's SSO answers. `rate_limited` is a 403 with none left.
- * `secondary_rate_limited` is a 403 with rate limit left, as GitHub answers a
- * burst of requests.
- */
 export type StubRepo =
 	| { readonly defaultBranch: string }
 	| {
 			readonly answer:
-				| "blocked"
+				| "sso_forbidden"
 				| "rate_limited"
 				| "secondary_rate_limited"
 				| "server_error";
 	  };
 
 export interface GitHubStub {
-	/** Pass into Config.github, or as GITHUB_API_URL and GITHUB_TOKEN. */
 	readonly config: GitHubConfig & { readonly token: string };
-	/** Each request path, such as "/repos/acme/api", in arrival order. */
 	readonly requests: readonly string[];
 	close(): Promise<void>;
 }
 
-/**
- * Serves `GET /repos/{owner}/{name}` on loopback. An unknown repo is a 404 and
- * a wrong token a 401. Owner and name match case-insensitively and answer with
- * the map's casing, as GitHub does.
- */
 export async function startGitHubStub(
 	repos: Record<string, StubRepo>,
 ): Promise<GitHubStub> {
@@ -69,7 +56,7 @@ export async function startGitHubStub(
 			});
 		}
 		switch (repo.answer) {
-			case "blocked":
+			case "sso_forbidden":
 				return json(
 					403,
 					{ message: "Resource protected by SSO" },

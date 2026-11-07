@@ -7,7 +7,6 @@ export type ArtifactId = z.infer<typeof ArtifactId>;
 export const ContextId = z.uuid().brand<"ContextId">();
 export type ContextId = z.infer<typeof ContextId>;
 
-/** "owner/name" as the user typed it. Only a RepoRef has been checked against GitHub. */
 export const RepoName = z
 	.string()
 	.trim()
@@ -18,7 +17,6 @@ export const RepoName = z
 	.brand<"RepoName">();
 export type RepoName = z.infer<typeof RepoName>;
 
-/** A repo GitHub confirmed the token can read, with GitHub's casing. */
 export interface RepoRef {
 	readonly owner: string;
 	readonly name: string;
@@ -29,7 +27,6 @@ export function repoName(ref: Pick<RepoRef, "owner" | "name">): RepoName {
 	return RepoName.parse(`${ref.owner}/${ref.name}`);
 }
 
-/** A file carries name, mediaType, and size instead of a path, because its bytes live in the database. */
 export type Artifact =
 	| {
 			readonly kind: "file";
@@ -97,7 +94,6 @@ export const NewArtifact = z.discriminatedUnion("kind", [
 ]);
 export type NewArtifact = z.infer<typeof NewArtifact>;
 
-/** PUT replaces both fields, so a repeat converges. */
 export const ContextInput = z.object({
 	title: z.string().trim().min(1).max(200),
 	body: z.string().max(100_000),

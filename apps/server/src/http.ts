@@ -18,7 +18,6 @@ export type ApiErrorBody = {
 		| {
 				readonly code: "repo_unavailable";
 				readonly message: string;
-				/** Each repo GitHub would not show the token, as "owner/name". */
 				readonly repos: readonly string[];
 		  }
 		| {
@@ -44,7 +43,6 @@ export const errorStatus = {
 } as const satisfies Record<ApiErrorCode, number>;
 export type ErrorStatus = (typeof errorStatus)[ApiErrorCode];
 
-/** Thrown by modules. The app's error handler answers with `body` and `status`. */
 export class ApiError extends Error {
 	readonly body: ApiErrorBody;
 	readonly status: ErrorStatus;

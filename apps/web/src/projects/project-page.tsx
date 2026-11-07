@@ -18,7 +18,6 @@ import { FormError } from "@/projects/form-error";
 const projectApi = client.api.projects[":projectId"];
 
 export function ProjectPage() {
-	// The server parses the id and answers 404 or 400 for a bad one.
 	const projectId = useParams().projectId as ProjectId;
 	const project = useQuery(projectQueries.detail(projectId));
 	if (project.error) return <FormError error={project.error} />;

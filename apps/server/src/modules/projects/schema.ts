@@ -19,7 +19,6 @@ export const projects = sqliteTable("projects", {
 	name: text("name").notNull(),
 });
 
-/** Owner and name hold GitHub's casing, so the key dedupes `ACME/API` and `acme/api`. */
 export const projectRepos = sqliteTable(
 	"project_repos",
 	{
@@ -60,7 +59,6 @@ export const artifacts = sqliteTable(
 	],
 );
 
-/** Split from `artifacts` so that a plain select of artifacts never loads a blob. */
 export const artifactBytes = sqliteTable("artifact_bytes", {
 	artifactId: text("artifact_id")
 		.$type<ArtifactId>()

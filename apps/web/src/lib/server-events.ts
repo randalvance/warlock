@@ -26,7 +26,6 @@ function ensureStream() {
 	});
 }
 
-/** Opens the one shared stream on the first listener and closes it after the last. */
 export function subscribeServerEvents(
 	listener: ServerEventListener,
 ): () => void {

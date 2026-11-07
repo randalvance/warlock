@@ -12,7 +12,7 @@ import { startFresh, tempDbPath } from "./support.ts";
 const readable = {
 	"acme/api": { defaultBranch: "main" },
 	"acme/web": { defaultBranch: "trunk" },
-	"acme/sso": { answer: "blocked" },
+	"acme/sso": { answer: "sso_forbidden" },
 } satisfies Record<string, StubRepo>;
 
 async function serve(dbPath = tempDbPath()) {
@@ -48,7 +48,6 @@ async function errorOf(response: Response): Promise<ApiErrorBody["error"]> {
 	return ((await response.json()) as ApiErrorBody).error;
 }
 
-/** The newest seq in the event log, from the cursor the stream's `ready` frame carries. */
 async function headSeq(url: URL): Promise<number> {
 	const response = await fetch(new URL("/api/events", url));
 	const reader = response.body?.getReader();
@@ -66,11 +65,12 @@ test.each([
 ])(
 	"the API rejects a project with %s before asking GitHub",
 	async (_, body) => {
-		const { github, api } = await serve();
+		const { github, server, api } = await serve();
 
-		const rejected = await api.projects.$post({
-			// @ts-expect-error the client type already forbids this body
-			json: body,
+		const rejected = await fetch(new URL("/api/projects", server.url), {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify(body),
 		});
 		expect(rejected.status).toBe(400);
 		expect(await errorOf(rejected)).toMatchObject({

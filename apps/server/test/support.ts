@@ -13,7 +13,6 @@ export function tempDbPath(): string {
 	return join(dir, "warlock.db");
 }
 
-/** A refused port, so a test that forgets a stub fails as github_unavailable instead of reaching GitHub. */
 const noGitHub: GitHubConfig = {
 	apiUrl: new URL("http://127.0.0.1:9/"),
 	token: "unused",

@@ -25,7 +25,6 @@ type SuccessBody<R> =
 			: never
 		: never;
 
-/** The success body, or throws ApiRequestError carrying the server's message. */
 export async function unwrap<R extends ClientResponse<unknown, number, string>>(
 	request: Promise<R>,
 ): Promise<SuccessBody<R>> {

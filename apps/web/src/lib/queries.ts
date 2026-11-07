@@ -9,6 +9,7 @@ import type {
 	ServerEventType,
 	StoredEvent,
 } from "@warlock/server/api";
+import type { StreamStatus } from "@warlock/server/events";
 import { client, unwrap } from "@/lib/api";
 import { subscribeServerEvents } from "@/lib/server-events";
 
@@ -37,7 +38,6 @@ export const projectQueries = {
 		}),
 };
 
-/** What each event makes stale. A new event type fails the typecheck until it has a row here. */
 export const staleAfter: {
 	[T in ServerEventType]: (event: EventOf<T>) => QueryKey[];
 } = {
@@ -53,20 +53,19 @@ function staleFor(event: StoredEvent): QueryKey[] {
 	return stale(event);
 }
 
-/**
- * The event stream is the only way the cache learns of a write. Each move to
- * live, the first connect and every reconnect, invalidates everything, which
- * covers writes missed while the stream was down or before its cursor.
- */
 export function syncQueryCache(queryClient: QueryClient): () => void {
 	return subscribeServerEvents({
-		onStatus: (status) => {
-			if (status === "live") void queryClient.invalidateQueries();
-		},
+		onStatus: invalidateAllOnReconnect(queryClient),
 		onEvent: (event) => {
 			for (const queryKey of staleFor(event)) {
 				void queryClient.invalidateQueries({ queryKey });
 			}
 		},
 	});
+}
+
+function invalidateAllOnReconnect(queryClient: QueryClient) {
+	return (status: StreamStatus) => {
+		if (status === "live") void queryClient.invalidateQueries();
+	};
 }

@@ -14,7 +14,6 @@ export interface Config {
 	/** Port on 127.0.0.1. 0 asks the OS for a free one. */
 	readonly port: number;
 	readonly dbPath: string;
-	/** Required, so that only main.ts can default to the real GitHub. */
 	readonly github: GitHubConfig;
 }
 

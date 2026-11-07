@@ -13,13 +13,10 @@ import { e2ePorts } from "./ports.ts";
 
 interface Warlock {
 	readonly github: GitHubStub;
-	/** The running server's process id. */
 	readonly pid: number;
-	/** SIGTERM, wait for a clean exit, then start a new process on the same port and database file. */
 	restart(): Promise<void>;
 }
 
-/** Every test gets its own server process, database, and GitHub stub. */
 export const test = base.extend<{ warlock: Warlock }>({
 	warlock: [
 		// biome-ignore lint/correctness/noEmptyPattern: Playwright requires the fixtures argument to be destructured

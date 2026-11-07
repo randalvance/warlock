@@ -2,6 +2,7 @@ import { once } from "node:events";
 import { mkdirSync } from "node:fs";
 import { createServer, type Server, type ServerResponse } from "node:http";
 import { dirname } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { getRequestListener } from "@hono/node-server";
 import { createApp } from "./app.ts";
 import { createBroadcast } from "./broadcast.ts";
@@ -16,11 +17,11 @@ export interface Config {
 export interface RunningServer {
 	readonly url: URL;
 	readonly db: Database;
-	/** Ends open streams, closes every connection, then the database. Every call returns the first call's promise. */
+	/** Ends open streams, waits up to a second for them to flush, closes every connection, then the database. Every call returns the first call's promise. */
 	stop(): Promise<void>;
 }
 
-/** Listens on loopback only, then commits `server.started`. A failed start writes nothing. */
+/** Listens on loopback only, then commits `server.started`. A failed start writes nothing and leaves nothing open. */
 export async function start(config: Config): Promise<RunningServer> {
 	mkdirSync(dirname(config.dbPath), { recursive: true });
 	const broadcast = createBroadcast();
@@ -35,11 +36,15 @@ export async function start(config: Config): Promise<RunningServer> {
 	let port: number;
 	try {
 		port = await listen(http, config.port);
+		db.commit(() => ({
+			value: undefined,
+			events: [{ type: "server.started" }],
+		}));
 	} catch (error) {
+		http.close();
 		db.close();
 		throw error;
 	}
-	db.commit(() => ({ value: undefined, events: [{ type: "server.started" }] }));
 
 	let stopping: Promise<void> | undefined;
 	const stop = async () => {
@@ -49,7 +54,11 @@ export async function start(config: Config): Promise<RunningServer> {
 		broadcast.close();
 		// Let the ended streams flush before dropping sockets. The Vite proxy
 		// holds a dropped upstream open, so a browser would never see the end.
-		await Promise.all([...responses].map((res) => once(res, "close")));
+		// A client that stops reading never flushes, so the wait has a limit.
+		await Promise.race([
+			Promise.all([...responses].map((res) => once(res, "close"))),
+			delay(flushLimitMs, undefined, { ref: false }),
+		]);
 		// An ended SSE response still leaves its keep-alive socket holding close() open.
 		http.closeAllConnections();
 		await closed;
@@ -64,6 +73,8 @@ export async function start(config: Config): Promise<RunningServer> {
 		},
 	};
 }
+
+const flushLimitMs = 1000;
 
 function listen(http: Server, port: number): Promise<number> {
 	return new Promise((resolve, reject) => {

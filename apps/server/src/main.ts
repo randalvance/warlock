@@ -3,7 +3,8 @@ import { z } from "zod";
 import { start } from "./server.ts";
 
 const Env = z.object({
-	WARLOCK_PORT: z.coerce.number().int().min(0).max(65535),
+	// Not 0, because the Vite proxy reads this port and cannot follow an ephemeral one.
+	WARLOCK_PORT: z.coerce.number().int().min(1).max(65535),
 	WARLOCK_DB_PATH: z
 		.string()
 		.min(1)

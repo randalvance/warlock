@@ -37,6 +37,9 @@ function backgroundLuma(page: Page): Promise<number> {
 	return page.evaluate(() => {
 		const context = document.createElement("canvas").getContext("2d");
 		if (!context) throw new Error("no 2d canvas");
+		// A transparent body would read back as black, so it composites over white.
+		context.fillStyle = "white";
+		context.fillRect(0, 0, 1, 1);
 		context.fillStyle = getComputedStyle(document.body).backgroundColor;
 		context.fillRect(0, 0, 1, 1);
 		const [r = 0, g = 0, b = 0] = context.getImageData(0, 0, 1, 1).data;

@@ -64,6 +64,25 @@ test("a commit that throws writes nothing and publishes nothing", async () => {
 	expect(await followed()).toEqual(log);
 });
 
+test("a commit inside another commit publishes nothing when the outer one rolls back", async () => {
+	const { db, followed } = open(tempDbPath());
+	expect(() =>
+		db.commit(() => {
+			db.commit(() => ({ value: undefined, events: [started] }));
+			throw new Error("outer write failed");
+		}),
+	).toThrow();
+
+	expect(
+		eventsAfter(db.read, Seq.parse(0)),
+		"the outer rollback left no event behind",
+	).toEqual([]);
+	expect(
+		await followed(),
+		"a follower never sees an event the log does not hold",
+	).toEqual([]);
+});
+
 test("writes outside commit and async writes do not compile", () => {
 	expectTypeOf<Database["read"]>().not.toHaveProperty("insert");
 	expectTypeOf<Database["read"]>().not.toHaveProperty("delete");

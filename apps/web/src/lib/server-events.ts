@@ -22,6 +22,10 @@ function subscribe(listener: () => void) {
 	ensureStream();
 	return () => {
 		listeners.delete(listener);
+		if (listeners.size > 0) return;
+		stream?.close();
+		stream = undefined;
+		status = "connecting";
 	};
 }
 

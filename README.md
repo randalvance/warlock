@@ -24,6 +24,6 @@ pnpm dev
 | `pnpm typecheck` | `tsc` for the root and both apps |
 | `pnpm test` | Vitest server tests, including the restart test |
 | `pnpm db:check` | Fails if a schema change has no migration |
-| `pnpm smoke` | The Playwright smoke test against `pnpm dev`, on ports 4417 and 5273 |
+| `pnpm smoke` | The Playwright browser tests. Playwright runs Vite on port 5273, and each test starts its own server on port 4417 with a fresh database and a local GitHub stub |
 
 After you change a table in a `schema.ts` file, run `pnpm --filter @warlock/server db:generate` and commit the new migration.

@@ -27,7 +27,7 @@ Warlock keeps the proposed stack. This ADR adds the parts the proposal left open
 | Validation | Zod at the HTTP and event-stream boundaries. |
 | Web | Vite, React, React Router, Tailwind CSS 4, and shadcn/ui. The web app is dark mode only. |
 | Lint and format | Biome. |
-| Tests | Vitest for unit and server tests. Playwright runs one smoke test against `pnpm dev`. |
+| Tests | Vitest for unit and server tests. Playwright runs the browser tests against Vite, and each test starts and owns its server process, so it can restart it. |
 | CI | One GitHub Actions job runs lint, typecheck, the migration check, unit tests, and the smoke test. |
 
 ### The event log is a table

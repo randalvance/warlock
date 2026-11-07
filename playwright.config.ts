@@ -1,15 +1,13 @@
-import { mkdtempSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { defineConfig, devices } from "@playwright/test";
+import { e2ePorts } from "./e2e/ports.ts";
 
-const smokePorts = { server: 4417, web: 5273 };
-const web = `http://127.0.0.1:${smokePorts.web}`;
-const healthThroughProxy = `${web}/api/health`;
+const web = `http://127.0.0.1:${e2ePorts.web}`;
 
 export default defineConfig({
 	testDir: "e2e",
 	forbidOnly: !!process.env.CI,
+	// One server port for the Vite proxy, so one test at a time.
+	workers: 1,
 	reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
 	use: { baseURL: web, trace: "retain-on-failure" },
 	projects: [
@@ -18,18 +16,15 @@ export default defineConfig({
 			use: { ...devices["Desktop Chrome"], colorScheme: "light" },
 		},
 	],
+	// Only Vite. The fixture in e2e/fixtures.ts owns the server, so a test can restart it.
 	webServer: {
-		command: "pnpm dev",
-		url: healthThroughProxy,
+		command: "pnpm --filter @warlock/web dev",
+		url: web,
 		reuseExistingServer: false,
 		timeout: 60_000,
 		env: {
-			WARLOCK_PORT: String(smokePorts.server),
-			WARLOCK_WEB_PORT: String(smokePorts.web),
-			WARLOCK_DB_PATH: join(
-				mkdtempSync(join(tmpdir(), "warlock-smoke-")),
-				"warlock.db",
-			),
+			WARLOCK_PORT: String(e2ePorts.server),
+			WARLOCK_WEB_PORT: String(e2ePorts.web),
 		},
 	},
 });

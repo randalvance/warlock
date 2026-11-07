@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Command panel</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
+<script src="ds/agentic-factory/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:#ff7ae0}a:hover{color:#f2f2f0}
+.wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
+.wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
+.wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-in{height:40px;box-sizing:border-box;padding:0 12px;background:var(--surface-300,#232328);border:1px solid var(--line-200,#303036);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
+.wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
+.wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
+.wl-head{display:flex;align-items:baseline;gap:12px;padding:12px 14px 8px}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
+  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
+    <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
+    <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
+    <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
+    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
+    <span style="flex-grow: 1"></span>
+    <a href="Warlock.dc.html" class="wl-nav on" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+  </nav>
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Command panel</h1>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">the warlock · Fable 5.1 · tools over warlock-api mcp</span>
+      <span style="flex-grow: 1"></span>
+      <x-import component-from-global-scope="AgenticFactory.Sign" tone="accent">Listening</x-import>
+      <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
+    </header>
+
+    <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: stretch">
+      <section aria-label="Conversation with the warlock" class="wl-card" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; min-height: 840px">
+        <div class="wl-head" style="border-bottom: 1px solid var(--line-100, #232327); padding-bottom: 12px"><span class="wl-sig" style="font-size: 14px">Today</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">project warlock · every action lands in the event log</span></div>
+        <div style="flex-grow: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{thread}}" as="m" hint-placeholder-count="6">
+            <sc-if value="{{m.isYou}}" hint-placeholder-val="{{true}}">
+              <div style="display: flex; justify-content: flex-end"><div style="max-width: 72%; background: var(--surface-300, #232328); border: 1px solid var(--line-200, #303036); border-radius: var(--radius-xl, 14px); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 14px">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); align-self: flex-end">you · {{m.time}}</span></div></div>
+            </sc-if>
+            <sc-if value="{{m.isTool}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; align-items: center; gap: 10px; min-height: 28px; padding: 0 6px"><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd); flex: 0 0 auto"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">{{m.tool}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); margin-left: auto">{{m.time}}</span></div>
+            </sc-if>
+            <sc-if value="{{m.isWarlock}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; gap: 10px; align-items: flex-start"><span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 999px; background: var(--surface-200, #1b1b1f); border: 1px solid var(--line-200, #303036); display: flex; align-items: center; justify-content: center; color: var(--accent, #ff3dcd); flex: 0 0 auto"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap" size="{{14}}"></x-import></span><div style="max-width: 72%; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 14px; color: var(--ink-100, #f2f2f0)">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63)">warlock · {{m.time}}</span></div></div>
+            </sc-if>
+          </sc-for>
+        </div>
+        <form onSubmit="{{send}}" style="display: flex; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--line-100, #232327); align-items: center">
+          <label for="cmd" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Tell the warlock what to do</label>
+          <input id="cmd" class="wl-in" placeholder="Tell the warlock what to do" value="{{draft}}" onChange="{{onDraft}}" autocomplete="off">
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="zap" type="submit" on-click="{{send}}">Send</x-import>
+        </form>
+      </section>
+
+      <div style="flex: 1 1 340px; max-width: 420px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <section aria-label="Command history" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Command history</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">persisted · {{historyCount}}</span></div>
+          <sc-for list="{{history}}" as="h" hint-placeholder-count="4">
+            <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">{{h.time}}</span><span style="font-size: 13px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" on-click="{{h.reuse}}">Reuse</button></div>
+          </sc-for>
+        </section>
+
+        <section aria-label="Warlock tools" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Tools</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">internal mcp · same api as the ui</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">tasks.create</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">one task in a project</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">tasks.list</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">by project and status</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">spellbooks.pick</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">records the reason</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">runs.start</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">task plus spellbook</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">runs.cancel</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">fails the run as cancelled</span></div>
+          <div class="wl-row" style="min-height: 30px"><span class="wl-mono" style="font-size: 12px; width: 130px">runs.status</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">station, timer, handoffs</span></div>
+        </section>
+
+        <section aria-label="Event log" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Event log</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">warlock actions only</span></div>
+          <sc-for list="{{events}}" as="e" hint-placeholder-count="4">
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">{{e.seq}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{e.text}}</span></div>
+          </sc-for>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      draft: '',
+      extra: [],
+      history: [
+        { time: '13:12', text: 'What is Ada doing?' },
+        { time: '13:40', text: 'Start the review loop on WO-12' },
+        { time: '14:01', text: 'Fix the typo in the README of project warlock' },
+        { time: '14:04', text: 'status' }
+      ],
+      events: [
+        { seq: 176, text: 'warlock.tool_call · tasks.create · WO-14' },
+        { seq: 177, text: 'warlock.tool_call · spellbooks.pick · Bug fix' },
+        { seq: 178, text: 'warlock.tool_call · runs.start · run 31' },
+        { seq: 187, text: 'warlock.tool_call · runs.status · run 31' }
+      ]
+    };
+  }
+  renderVals() {
+    const base = [
+      { role: 'you', time: '14:01', text: 'Fix the typo in the README of project warlock' },
+      { role: 'tool', time: '14:01', tool: 'tasks.create', text: 'WO-14 · Fix the typo in the README · project warlock · ready' },
+      { role: 'tool', time: '14:01', tool: 'spellbooks.pick', text: 'Bug fix · one wrong word in one file, nothing new' },
+      { role: 'tool', time: '14:02', tool: 'runs.start', text: 'run 31 · Scout on implement · worktree run-31' },
+      { role: 'warlock', time: '14:02', text: 'Created WO-14, picked Bug fix and started run 31. Scout is on Implement. I will report here at the first handoff.' },
+      { role: 'you', time: '14:04', text: 'status' },
+      { role: 'tool', time: '14:04', tool: 'runs.status', text: 'run 31 · running · implement · 0:38 · 1 commit on warlock/run-31' },
+      { role: 'warlock', time: '14:04', text: 'Run 31 is at Implement, 0:38 in. One commit so far on warlock/run-31. Nothing needs you.' }
+    ];
+    const thread = base.concat(this.state.extra).map((m) => ({
+      ...m,
+      isYou: m.role === 'you',
+      isTool: m.role === 'tool',
+      isWarlock: m.role === 'warlock'
+    }));
+    const history = this.state.history.map((h) => ({ ...h, reuse: () => this.setState({ draft: h.text }) }));
+    return {
+      draft: this.state.draft,
+      thread: thread,
+      history: history,
+      historyCount: this.state.history.length + ' commands',
+      events: this.state.events,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      send: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const text = (this.state.draft || '').trim();
+        if (!text) return;
+        const seq = this.state.events[this.state.events.length - 1].seq + 1;
+        this.setState({
+          draft: '',
+          extra: this.state.extra.concat([
+            { role: 'you', time: '14:06', text: text },
+            { role: 'tool', time: '14:06', tool: 'tasks.list', text: 'project warlock · 1 running · 2 ready' },
+            { role: 'warlock', time: '14:06', text: 'Noted. I will turn that into a task, pick a spellbook and start a run, then report here.' }
+          ]),
+          history: this.state.history.concat([{ time: '14:06', text: text }]),
+          events: this.state.events.concat([{ seq: seq, text: 'warlock.tool_call · tasks.list · project warlock' }])
+        });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -155,7 +155,7 @@ class Component extends DCLogic {
         const seq = (last ? last.seq : 0) + 1;
         const now = new Date();
         const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-        const isStatus = /\bstatus\b/i.test(text);
+        const isStatus = /^(status|what is the status|how is it going)[\s?.!]*$/i.test(text);
         const turn = isStatus
           ? [
               { role: 'you', time: time, text: text },

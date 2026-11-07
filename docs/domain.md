@@ -1,0 +1,161 @@
+# Warlock domain model
+
+This page defines the words Warlock uses and the data shape behind each one. Code, issues, and agent prompts use these names and no synonyms.
+
+## Glossary
+
+| Term | Meaning |
+| --- | --- |
+| Dark factory | The whole Warlock system. It turns tasks into software work that agents do. |
+| Warlock | The main agent. Every command enters through the warlock. It picks a spellbook for a task and delegates the work to minions through a formation. |
+| Minion | A worker agent. Each minion has its own system prompt, skills, MCP servers, and memory. |
+| Agent profile | The configuration an agent runs with. It holds a system prompt, skills, and MCP servers. The warlock and every minion have one. |
+| Project | The owner of a body of work. A project has one or more GitHub repos, a collection of artifacts, and context. |
+| Artifact | A file, link, or note that belongs to a project. Minions read artifacts and produce new ones. |
+| Context | Standing knowledge about a project, such as conventions and architecture notes. Every agent that works on the project receives it. |
+| Task | One piece of software work in a project. A task can mirror a GitHub issue. |
+| Spellbook | A strategy for one kind of task. It names the tasks it fits, the formation that runs them, and the brief each station's minion receives. |
+| Formation | A workflow. It lists the stations, the minion at each station, and the allowed transitions between stations. |
+| Station | One step in a formation. One minion staffs it. |
+| Outcome | The label a minion reports when it finishes a station, such as `approved` or `changes_requested`. The outcome selects the next transition. |
+| Transition | An allowed move from one station to the next station, or to the end of the run, for one outcome. |
+| Run | One execution of a formation for one task. |
+| Handoff | A recorded transition inside a run. It carries the artifacts from one minion to the next. |
+| Board | The kanban view of tasks. It can sync with a GitHub Projects board. |
+| Factory view | The live view of runs. It shows each minion at work and each handoff to the next station. |
+
+## Data shape
+
+The sketch below is TypeScript. Field names can change during implementation. The relationships between the types are the contract.
+
+```ts
+type Brand<T, B extends string> = T & { readonly __brand: B };
+
+type ProjectId = Brand<string, "ProjectId">;
+type ArtifactId = Brand<string, "ArtifactId">;
+type ContextId = Brand<string, "ContextId">;
+type MinionId = Brand<string, "MinionId">;
+type FormationId = Brand<string, "FormationId">;
+type StationId = Brand<string, "StationId">;
+type SpellbookId = Brand<string, "SpellbookId">;
+type TaskId = Brand<string, "TaskId">;
+type RunId = Brand<string, "RunId">;
+type Outcome = Brand<string, "Outcome">;
+
+interface Project {
+	id: ProjectId;
+	name: string;
+	repos: [RepoRef, ...RepoRef[]];
+	artifacts: Artifact[];
+	context: ContextEntry[];
+}
+
+interface RepoRef {
+	owner: string;
+	name: string;
+	defaultBranch: string;
+}
+
+type Artifact =
+	| { kind: "file"; id: ArtifactId; path: string; producedBy?: RunId }
+	| { kind: "link"; id: ArtifactId; url: string; producedBy?: RunId }
+	| { kind: "note"; id: ArtifactId; title: string; body: string; producedBy?: RunId };
+
+interface ContextEntry {
+	id: ContextId;
+	title: string;
+	body: string;
+}
+
+interface AgentProfile {
+	systemPrompt: string;
+	skills: SkillRef[];
+	mcpServers: McpServerConfig[];
+}
+
+interface Warlock {
+	profile: AgentProfile;
+}
+
+interface Minion {
+	id: MinionId;
+	name: string;
+	profile: AgentProfile;
+	memory: MemoryRef;
+}
+
+type End = "done" | "failed";
+
+interface Station {
+	id: StationId;
+	minion: MinionId;
+}
+
+interface Transition {
+	from: StationId;
+	outcome: Outcome;
+	to: StationId | End;
+}
+
+interface Formation {
+	id: FormationId;
+	name: string;
+	entry: StationId;
+	stations: Record<StationId, Station>;
+	transitions: Transition[];
+}
+
+interface Spellbook {
+	id: SpellbookId;
+	name: string;
+	fits: string;
+	formation: FormationId;
+	briefs: Record<StationId, string>;
+}
+
+type TaskStatus = "backlog" | "ready" | "in_progress" | "in_review" | "done";
+
+interface Task {
+	id: TaskId;
+	projectId: ProjectId;
+	title: string;
+	body: string;
+	status: TaskStatus;
+	spellbook?: SpellbookId;
+	issue?: { repo: RepoRef; number: number };
+}
+
+type RunState =
+	| { kind: "running"; station: StationId }
+	| { kind: "succeeded" }
+	| { kind: "failed"; station: StationId; reason: string };
+
+interface Handoff {
+	from: StationId;
+	outcome: Outcome;
+	to: StationId | End;
+	at: string;
+	artifacts: ArtifactId[];
+}
+
+interface Run {
+	id: RunId;
+	taskId: TaskId;
+	spellbookId: SpellbookId;
+	formationId: FormationId;
+	state: RunState;
+	handoffs: Handoff[];
+}
+```
+
+`SkillRef`, `McpServerConfig`, and `MemoryRef` are defined by the agent profiles epic.
+
+## Rules the model enforces
+
+- A project has at least one repo.
+- A formation's entry station and every transition endpoint exist in `stations`.
+- Every station has at least one outgoing transition, and every station is reachable from the entry station.
+- A formation has at most one transition for each pair of station and outcome.
+- A spellbook has a brief for every station in its formation.
+- A run is at one station at a time. A run moves only along a transition that its formation defines.
+- Each run works in its own git worktree and branch. Two runs never share a checkout.

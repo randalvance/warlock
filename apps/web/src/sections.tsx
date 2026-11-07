@@ -1,6 +1,5 @@
 import type { RouteObject } from "react-router";
 
-/** The one list of sections. It drives the nav and the routes. */
 export const sections = [
 	{ path: "projects", label: "Projects" },
 	{ path: "agents", label: "Agents" },

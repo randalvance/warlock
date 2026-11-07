@@ -2,23 +2,24 @@ import { connectEvents, type StreamStatus } from "@warlock/server/events";
 import { useSyncExternalStore } from "react";
 
 let status: StreamStatus = "connecting";
-let connected = false;
+let stream: { close(): void } | undefined;
 const listeners = new Set<() => void>();
 
-/** Opens the tab's one event stream on first use and keeps it for the page's life. */
+function ensureStream() {
+	if (stream) return;
+	stream = connectEvents({
+		baseUrl: window.location.origin,
+		EventSource,
+		onStatus: (next) => {
+			status = next;
+			for (const notify of listeners) notify();
+		},
+	});
+}
+
 function subscribe(listener: () => void) {
 	listeners.add(listener);
-	if (!connected) {
-		connected = true;
-		connectEvents({
-			baseUrl: window.location.origin,
-			EventSource,
-			onStatus: (next) => {
-				status = next;
-				for (const notify of listeners) notify();
-			},
-		});
-	}
+	ensureStream();
 	return () => {
 		listeners.delete(listener);
 	};

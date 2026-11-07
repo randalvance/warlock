@@ -1,10 +1,18 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
 	"files": {
 		"includes": ["**", "!.claude", "!**/*.md", "!apps/server/drizzle/meta"]
 	},
-	"css": { "parser": { "tailwindDirectives": true } },
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
 	"linter": {
 		"rules": {
 			"nursery": {
@@ -13,5 +21,44 @@
 			}
 		}
 	},
-	"assist": { "actions": { "source": { "organizeImports": "on" } } }
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": [
+				"apps/server/src/events.ts",
+				"apps/server/src/events-wire.ts"
+			],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": {
+							"level": "error",
+							"options": {
+								"patterns": [
+									{
+										"group": [
+											"node:*",
+											"better-sqlite3",
+											"drizzle-orm",
+											"drizzle-orm/*",
+											"hono",
+											"hono/*",
+											"@hono/*"
+										],
+										"message": "The web bundles this file through @warlock/server/events, so it must stay browser-safe."
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	]
 }

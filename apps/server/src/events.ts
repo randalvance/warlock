@@ -4,10 +4,6 @@ import { z } from "zod";
 export const Seq = z.number().int().nonnegative().brand<"Seq">();
 export type Seq = z.infer<typeof Seq>;
 
-/**
- * The one list of event types. Rows are kept forever, so a variant may gain
- * optional fields but never rename, remove, or tighten one.
- */
 export const ServerEvent = z.discriminatedUnion("type", [
 	z.object({ type: z.literal("server.started") }),
 ]);

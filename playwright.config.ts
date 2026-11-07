@@ -3,9 +3,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
-// Ports away from the dev defaults (4317, 5173), so the smoke test runs while a dev stack is up.
-const ports = { server: 4417, web: 5273 };
-const web = `http://127.0.0.1:${ports.web}`;
+const smokePorts = { server: 4417, web: 5273 };
+const web = `http://127.0.0.1:${smokePorts.web}`;
+const healthThroughProxy = `${web}/api/health`;
 
 export default defineConfig({
 	testDir: "e2e",
@@ -20,13 +20,12 @@ export default defineConfig({
 	],
 	webServer: {
 		command: "pnpm dev",
-		// Through the proxy, so both apps and the proxy between them must answer.
-		url: `${web}/api/health`,
+		url: healthThroughProxy,
 		reuseExistingServer: false,
 		timeout: 60_000,
 		env: {
-			WARLOCK_PORT: String(ports.server),
-			WARLOCK_WEB_PORT: String(ports.web),
+			WARLOCK_PORT: String(smokePorts.server),
+			WARLOCK_WEB_PORT: String(smokePorts.web),
 			WARLOCK_DB_PATH: join(
 				mkdtempSync(join(tmpdir(), "warlock-smoke-")),
 				"warlock.db",

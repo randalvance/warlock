@@ -20,12 +20,12 @@ export interface RunningServer {
 	stop(): Promise<void>;
 }
 
-/** Listens on loopback only, since there is no auth, then commits `server.started`. A failed start writes nothing. */
+/** Listens on loopback only, then commits `server.started`. A failed start writes nothing. */
 export async function start(config: Config): Promise<RunningServer> {
 	mkdirSync(dirname(config.dbPath), { recursive: true });
 	const broadcast = createBroadcast();
-	const db = openDatabase(config.dbPath, broadcast.publish);
-	const handle = getRequestListener(createApp({ db, broadcast }).fetch);
+	const db = openDatabase(config.dbPath, broadcast);
+	const handle = getRequestListener(createApp(db).fetch);
 	const responses = new Set<ServerResponse>();
 	const http = createServer((req, res) => {
 		responses.add(res);

@@ -12,11 +12,7 @@ export function tempDbPath(): string {
 	return join(dir, "warlock.db");
 }
 
-/**
- * Starts a server the way main.ts does. `vi.resetModules()` evaluates the
- * server's modules afresh, so module-level state cannot pass for persistence.
- */
-export async function boot(dbPath: string, port = 0) {
+export async function startFresh(dbPath: string, port = 0) {
 	vi.resetModules();
 	const { start } = await import("../src/server.ts");
 	const server = await start({ port, dbPath });
@@ -24,7 +20,6 @@ export async function boot(dbPath: string, port = 0) {
 	return server;
 }
 
-/** The first `count` events after `after`, read over HTTP with the client the browser uses. */
 export function readEvents(
 	url: URL,
 	query: { after: number; count: number },

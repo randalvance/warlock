@@ -1,4 +1,3 @@
-// Browser-safe: imports nothing from Node or from the server's internals.
 import { z } from "zod";
 import { Seq, StoredEvent } from "./events.ts";
 
@@ -29,7 +28,6 @@ const Ready = z.object({ cursor: Seq });
 
 export type StreamStatus = "connecting" | "live" | "reconnecting";
 
-/** The part of the WHATWG EventSource that `connectEvents` uses. */
 export interface EventSourceLike {
 	addEventListener(
 		type: string,
@@ -39,7 +37,7 @@ export interface EventSourceLike {
 }
 
 export interface ConnectOptions {
-	/** An origin such as `http://127.0.0.1:4317`. The browser passes its own. */
+	/** An origin such as `http://127.0.0.1:4317`. */
 	readonly baseUrl: string;
 	readonly EventSource: new (url: string) => EventSourceLike;
 	/** Start after this seq. Absent means start at the head. */

@@ -22,8 +22,6 @@ jobs:
           cache: pnpm
       - id: install
         run: pnpm install --frozen-lockfile
-      # Every check runs after a good install, even when an earlier check failed,
-      # so one run reports every failure.
       - name: Lint
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm lint

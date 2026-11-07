@@ -50,7 +50,7 @@ The web reads the API types through `@warlock/server/api`, a types-only package 
 ## Consequences
 
 - An epic adds a table in `apps/server/src/modules/<name>/schema.ts`, runs `pnpm --filter @warlock/server db:generate`, and commits the migration. `pnpm db:check` fails in CI when a schema change has no migration.
-- An epic adds an event type by adding one entry to the event schema in `apps/server/src/events.ts`. The server, the stream decoder, and the web all derive their event types from that entry.
+- An epic adds an event type by adding one entry to the event schema in `apps/server/src/events.ts`. The server, the stream decoder, and the web all derive their event types from that entry. The typecheck then requires a sample stored row in `apps/server/test/event-history.test.ts`, and that test fails if a later schema change stops a stored row from parsing.
 - `db.commit` callbacks are synchronous. Async work, such as epic #2's GitHub repo check, runs before the transaction.
 - Only one server process may write a database file, because the stream's wake-up is in-process.
 - Each git worktree has its own development database at `apps/server/.data/warlock.db`.

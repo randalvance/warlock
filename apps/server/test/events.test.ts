@@ -3,10 +3,10 @@ import { expect, onTestFinished, test, vi } from "vitest";
 import type { StoredEvent } from "../src/events.ts";
 import { connectEvents } from "../src/events-wire.ts";
 import type { ApiErrorBody } from "../src/http.ts";
-import { boot, readEvents, tempDbPath } from "./support.ts";
+import { readEvents, startFresh, tempDbPath } from "./support.ts";
 
 test("a commit reaches a stream that is already open", async () => {
-	const server = await boot(tempDbPath());
+	const server = await startFresh(tempDbPath());
 	const received: StoredEvent[] = [];
 	let live = false;
 	const client = connectEvents({
@@ -32,7 +32,7 @@ test("a commit reaches a stream that is already open", async () => {
 });
 
 test("stop ends open streams cleanly and resolves", async () => {
-	const server = await boot(tempDbPath());
+	const server = await startFresh(tempDbPath());
 	const response = await fetch(new URL("/api/events", server.url));
 	const reader = response.body?.getReader();
 	if (!reader) throw new Error("the stream has no body");
@@ -51,7 +51,7 @@ test("stop ends open streams cleanly and resolves", async () => {
 });
 
 test("a malformed cursor is a 400 that names the field", async () => {
-	const server = await boot(tempDbPath());
+	const server = await startFresh(tempDbPath());
 	const response = await fetch(new URL("/api/events?after=-1", server.url));
 	expect(response.status).toBe(400);
 	const body = (await response.json()) as ApiErrorBody;

@@ -1,8 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-// From the epic's scope, not imported from the app: a test that read the
-// app's own list would pass with a section missing.
-const sections = [
+const epicSections = [
 	"Projects",
 	"Agents",
 	"Formations",
@@ -19,13 +17,13 @@ test("the shell is dark, reaches every section, and goes live", async ({
 		/\/projects$/,
 	);
 	expect(
-		await backgroundLuminance(page),
+		await backgroundLuma(page),
 		"dark even though the browser prefers light",
 	).toBeLessThan(0.2);
 
 	const nav = page.getByRole("navigation", { name: "Sections" });
-	await expect(nav.getByRole("link")).toHaveText(sections);
-	for (const name of sections) {
+	await expect(nav.getByRole("link")).toHaveText(epicSections);
+	for (const name of epicSections) {
 		await nav.getByRole("link", { name }).click();
 		await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
 	}
@@ -35,8 +33,7 @@ test("the shell is dark, reaches every section, and goes live", async ({
 	);
 });
 
-/** Relative luminance (0 to 1) of the body background, in any CSS color syntax. */
-function backgroundLuminance(page: Page): Promise<number> {
+function backgroundLuma(page: Page): Promise<number> {
 	return page.evaluate(() => {
 		const context = document.createElement("canvas").getContext("2d");
 		if (!context) throw new Error("no 2d canvas");

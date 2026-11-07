@@ -1,19 +1,27 @@
 import { expect, expectTypeOf, onTestFinished, test } from "vitest";
+import { createBroadcast } from "../src/broadcast.ts";
 import { type Database, eventsAfter, openDatabase } from "../src/db.ts";
 import { Seq, type StoredEvent } from "../src/events.ts";
 import { events } from "../src/schema.ts";
 import { tempDbPath } from "./support.ts";
 
 function open(path: string) {
-	const published: StoredEvent[][] = [];
-	const db = openDatabase(path, (stored) => published.push([...stored]));
+	const broadcast = createBroadcast();
+	const db = openDatabase(path, broadcast);
 	onTestFinished(() => db.close());
-	return { db, published };
+	const { events } = db.follow();
+	const followed = async () => {
+		broadcast.close();
+		const received: StoredEvent[] = [];
+		for await (const event of events) received.push(event);
+		return received;
+	};
+	return { db, followed };
 }
 
 const started = { type: "server.started" } as const;
 
-test("committed events survive reopening the file, in seq order", () => {
+test("committed events survive reopening the file, in seq order", async () => {
 	const path = tempDbPath();
 	const first = open(path);
 	const value = first.db.commit(() => ({
@@ -23,15 +31,17 @@ test("committed events survive reopening the file, in seq order", () => {
 	expect(value, "commit returns the write's value").toBe("ok");
 	const written = eventsAfter(first.db.read, Seq.parse(0));
 	expect(written.map((e) => e.seq)).toEqual([1, 2]);
-	expect(first.published, "published once, after commit").toEqual([written]);
+	expect(await first.followed(), "a follower receives each event once").toEqual(
+		written,
+	);
 	first.db.close();
 
 	const second = open(path);
 	expect(eventsAfter(second.db.read, Seq.parse(0))).toEqual(written);
 });
 
-test("a commit that throws writes nothing and publishes nothing", () => {
-	const { db, published } = open(tempDbPath());
+test("a commit that throws writes nothing and publishes nothing", async () => {
+	const { db, followed } = open(tempDbPath());
 	expect(() =>
 		db.commit((tx) => {
 			tx.insert(events)
@@ -51,7 +61,7 @@ test("a commit that throws writes nothing and publishes nothing", () => {
 		log.map((e) => e.seq),
 		"the rolled-back row left no seq behind",
 	).toEqual([1]);
-	expect(published).toEqual([log]);
+	expect(await followed()).toEqual(log);
 });
 
 test("writes outside commit and async writes do not compile", () => {

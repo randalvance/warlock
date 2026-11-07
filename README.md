@@ -16,7 +16,7 @@ pnpm install
 pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |

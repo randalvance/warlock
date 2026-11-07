@@ -7,11 +7,15 @@ import { getRequestListener } from "@hono/node-server";
 import { createApp } from "./app.ts";
 import { createBroadcast } from "./broadcast.ts";
 import { type Database, openDatabase } from "./db.ts";
+import { createGitHub, type GitHubConfig } from "./modules/projects/github.ts";
+import { createProjects } from "./modules/projects/store.ts";
 
 export interface Config {
 	/** Port on 127.0.0.1. 0 asks the OS for a free one. */
 	readonly port: number;
 	readonly dbPath: string;
+	/** Required, so that only main.ts can default to the real GitHub. */
+	readonly github: GitHubConfig;
 }
 
 export interface RunningServer {
@@ -26,7 +30,8 @@ export async function start(config: Config): Promise<RunningServer> {
 	mkdirSync(dirname(config.dbPath), { recursive: true });
 	const broadcast = createBroadcast();
 	const db = openDatabase(config.dbPath, broadcast);
-	const handle = getRequestListener(createApp(db).fetch);
+	const projects = createProjects({ db, github: createGitHub(config.github) });
+	const handle = getRequestListener(createApp(db, projects).fetch);
 	const responses = new Set<ServerResponse>();
 	const http = createServer((req, res) => {
 		responses.add(res);

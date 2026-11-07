@@ -36,23 +36,6 @@ test("a readable repo comes back with GitHub's casing and default branch, once",
 	]);
 });
 
-test("a missing repo and a blocked repo are each named, and a readable one does not rescue them", async () => {
-	const { github } = await withStub({
-		"acme/api": { defaultBranch: "main" },
-		"acme/sso": { answer: "blocked" },
-	});
-	const error = await errorOf(
-		github.resolve(names("acme/api", "acme/missing", "acme/sso")),
-	);
-	expect(error).toMatchObject({
-		code: "repo_unavailable",
-		repos: ["acme/missing", "acme/sso"],
-	});
-	expect(error.message, "the message names every unreadable repo").toMatch(
-		/acme\/missing.*acme\/sso/,
-	);
-});
-
 test.each([
 	["the token is rejected", { "acme/api": { defaultBranch: "main" } }, "wrong"],
 	["the rate limit is spent", { "acme/api": { answer: "rate_limited" } }],

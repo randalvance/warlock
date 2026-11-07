@@ -68,7 +68,12 @@ export const ProjectName = z.string().trim().min(1).max(120);
 
 export const NewProject = z.object({
 	name: ProjectName,
-	repos: z.array(RepoName).min(1, "a project needs at least one repo"),
+	repos: z
+		.array(RepoName)
+		.refine(
+			(repos): repos is [RepoName, ...RepoName[]] => repos.length > 0,
+			"a project needs at least one repo",
+		),
 });
 export type NewProject = z.infer<typeof NewProject>;
 

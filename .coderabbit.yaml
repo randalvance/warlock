@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+    ignore_title_keywords:
+      - "WIP"
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        docs/domain.md is the vocabulary contract. Code, docs, issues, and
+        agent prompts use its terms (warlock, minion, formation, station,
+        spellbook, run, handoff, and the rest) and no synonyms. Flag any
+        synonym, such as "workflow step" for station or "worker" for minion.
+    - path: "docs/domain.md"
+      instructions: |
+        When a change adds, renames, or removes a term, check that the
+        glossary and the data shape agree, and that README.md still matches.
+
+knowledge_base:
+  code_guidelines:
+    filePatterns:
+      - "docs/domain.md"
+
+chat:
+  auto_reply: true

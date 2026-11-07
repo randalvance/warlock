@@ -1,0 +1,5 @@
+node_modules/
+apps/server/.data/
+.env.local
+playwright-report/
+test-results/

@@ -1,0 +1,17 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+	"files": {
+		"includes": ["**", "!.claude", "!**/*.md", "!apps/server/drizzle/meta"]
+	},
+	"css": { "parser": { "tailwindDirectives": true } },
+	"linter": {
+		"rules": {
+			"nursery": {
+				"noFloatingPromises": "error",
+				"noMisusedPromises": "error"
+			}
+		}
+	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } }
+}

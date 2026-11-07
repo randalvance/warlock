@@ -98,7 +98,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <button class="wl-btn" type="button" on-click="{{reset}}" disabled="{{atStart}}">Reset</button>
             <button class="wl-btn" type="button" on-click="{{back}}" disabled="{{atStart}}">Step back</button>
             <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="zap" on-click="{{next}}" disabled="{{atEnd}}">Next handoff</x-import>
-            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{stepLabel}} · 4 station visits of 12</span>
+            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{stepLabel}} · {{visits}} · limit 12</span>
           </div>
           <sc-for list="{{handoffs}}" as="h" hint-placeholder-count="4">
             <div class="wl-row" style="min-height: 32px; background: {{h.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">{{h.at}}</span><span class="wl-mono" style="font-size: 12px; color: {{h.color}}; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{h.artifacts}}</span></div>
@@ -131,9 +131,10 @@ class Component extends DCLogic {
     const current = ['implement', 'review', 'implement', 'review', 'done'][step];
     const stations = [
       { name: 'Implement', state: current === 'implement' ? 'running' : (step > 0 ? 'passed' : 'queued') },
-      { name: 'Review', state: current === 'review' ? 'running' : (step >= 2 ? 'passed' : 'queued') }
+      { name: 'Review', state: current === 'review' ? 'running' : (step >= 4 ? 'passed' : 'queued') }
     ];
     const done = step === 4;
+    const visits = Math.min(step + 1, handoffs.length);
     const stepLabel = done ? 'run succeeded' : ('at ' + current + ' · handoff ' + step + ' of 4');
     return {
       yes: true,
@@ -146,6 +147,7 @@ class Component extends DCLogic {
       stepLabel: stepLabel,
       atStart: step === 0,
       atEnd: done,
+      visits: visits + (visits === 1 ? ' station visit' : ' station visits'),
       handoffs: handoffs.map((h, i) => ({
         ...h,
         bg: i === step - 1 ? 'var(--surface-200, #1b1b1f)' : 'transparent',

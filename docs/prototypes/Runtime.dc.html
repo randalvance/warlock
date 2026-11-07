@@ -118,7 +118,7 @@ class Component extends DCLogic {
       { time: '14:04', kind: 'bash', text: 'bash pnpm lint' }
     ];
     const log = cancelled
-      ? baseLog.concat([{ time: '14:05', kind: 'said', text: 'cancelled by you · agent stopped' }])
+      ? baseLog.concat([{ time: '14:05', kind: 'said', text: 'cancelled by you · minion stopped' }])
       : baseLog.concat([{ time: '14:05', kind: 'bash', text: 'running biome check…', live: true }]);
     const chips = cancelled
       ? [{ label: 'failed · cancelled', tone: 'err' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]

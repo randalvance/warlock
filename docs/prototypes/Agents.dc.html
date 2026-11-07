@@ -111,8 +111,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <div style="display: flex; flex-direction: column; gap: 6px">
               <span class="wl-lbl">Skills · Agent Skills folders, each with a SKILL.md</span>
               <div class="wl-card">
-                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/tdd/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px">Remove</button></div>
-                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/pr/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px">Remove</button></div>
+                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/tdd/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px" aria-label="Remove skill skills/tdd">Remove</button></div>
+                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/pr/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px" aria-label="Remove skill skills/pr">Remove</button></div>
                 <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327)"><input class="wl-in" placeholder="skills/<name>" aria-label="Skill folder" style="max-width: 260px"><button class="wl-btn" type="button">Add skill</button></div>
               </div>
             </div>
@@ -125,19 +125,21 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
                   <span class="wl-mono" style="font-size: 12px; width: 72px">github</span>
                   <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">stdio</x-import>
                   <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">npx -y @modelcontextprotocol/server-github</span>
-                  <button class="wl-btn" type="button" style="height: 28px">Edit</button>
+                  <button class="wl-btn" type="button" style="height: 28px" aria-label="Edit MCP server github">Edit</button>
                 </div>
                 <div class="wl-row">
                   <span class="wl-mono" style="font-size: 12px; width: 72px">docs</span>
                   <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">http</x-import>
                   <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">https://docs.internal/mcp</span>
-                  <button class="wl-btn" type="button" style="height: 28px">Edit</button>
+                  <button class="wl-btn" type="button" style="height: 28px" aria-label="Edit MCP server docs">Edit</button>
                 </div>
                 <div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14))">
                   <span class="wl-mono" style="font-size: 12px; width: 72px">linear</span>
                   <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">http</x-import>
                   <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1">no url</span>
                   <x-import component-from-global-scope="AgenticFactory.Chip" tone="err">invalid</x-import>
+                  <button class="wl-btn" type="button" style="height: 28px" aria-label="Edit MCP server linear">Edit</button>
+                  <button class="wl-btn" type="button" style="height: 28px" aria-label="Remove MCP server linear">Remove</button>
                 </div>
                 <div style="padding: 0 14px 10px; font-size: 12px; color: var(--err, #ff4d4d)">mcpServers.linear.url is required for an http server.</div>
                 <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327); flex-wrap: wrap">

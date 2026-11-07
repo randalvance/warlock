@@ -151,15 +151,18 @@ class Component extends DCLogic {
         if (e && e.preventDefault) e.preventDefault();
         const text = (this.state.draft || '').trim();
         if (!text) return;
-        const seq = this.state.events[this.state.events.length - 1].seq + 1;
+        const last = this.state.events[this.state.events.length - 1];
+        const seq = (last ? last.seq : 0) + 1;
+        const now = new Date();
+        const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
         this.setState({
           draft: '',
           extra: this.state.extra.concat([
-            { role: 'you', time: '14:06', text: text },
-            { role: 'tool', time: '14:06', tool: 'tasks.list', text: 'project warlock · 1 running · 2 ready' },
-            { role: 'warlock', time: '14:06', text: 'Noted. I will turn that into a task, pick a spellbook and start a run, then report here.' }
+            { role: 'you', time: time, text: text },
+            { role: 'tool', time: time, tool: 'tasks.list', text: 'project warlock · 1 running · 2 ready' },
+            { role: 'warlock', time: time, text: 'Noted. I will turn that into a task, pick a spellbook and start a run, then report here.' }
           ]),
-          history: this.state.history.concat([{ time: '14:06', text: text }]),
+          history: this.state.history.concat([{ time: time, text: text }]),
           events: this.state.events.concat([{ seq: seq, text: 'warlock.tool_call · tasks.list · project warlock' }])
         });
       }

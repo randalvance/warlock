@@ -10,7 +10,8 @@
 		"lint": "biome ci .",
 		"format": "biome check --write .",
 		"typecheck": "pnpm -r typecheck",
-		"test": "pnpm -r test"
+		"test": "pnpm -r test",
+		"db:check": "pnpm --filter @warlock/server db:check"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.6.4",

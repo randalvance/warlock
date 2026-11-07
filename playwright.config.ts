@@ -16,7 +16,7 @@ export default defineConfig({
 		},
 	],
 	webServer: {
-		command: "pnpm --filter @warlock/web dev",
+		command: "pnpm nx run @warlock/web:dev",
 		url: web,
 		reuseExistingServer: false,
 		timeout: 60_000,

@@ -1,0 +1,12 @@
+{
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"neverConnectToCloud": true,
+	"namedInputs": {
+		"default": ["{projectRoot}/**/*", "{workspaceRoot}/tsconfig.base.json"]
+	},
+	"targetDefaults": {
+		"typecheck": { "cache": true, "inputs": ["default", "^default"] },
+		"test": { "cache": true },
+		"db:check": { "cache": true }
+	}
+}

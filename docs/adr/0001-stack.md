@@ -18,7 +18,7 @@ Warlock keeps the proposed stack. This ADR adds the parts the proposal left open
 
 | Concern | Choice |
 | --- | --- |
-| Workspace | pnpm workspaces with two apps, `apps/server` and `apps/web`. There is no shared package. |
+| Workspace | pnpm workspaces with two apps, `apps/server` and `apps/web`. There is no shared package. Nx runs the tasks, as [ADR 0002](0002-nx.md) records. |
 | Runtime | Node 22.22 or later. React Router 8.5 needs 22.22. The server runs its TypeScript source with Node's built-in type stripping, so there is no build step and no `tsx`. |
 | Language | TypeScript 7.0 in strict mode, with `verbatimModuleSyntax` and `erasableSyntaxOnly`. |
 | Server | Hono on `@hono/node-server`. The server binds to `127.0.0.1` only. |
@@ -49,7 +49,7 @@ The web reads the API types through `@warlock/server/api`, a types-only package 
 
 ## Consequences
 
-- An epic adds a table in `apps/server/src/modules/<name>/schema.ts`, runs `pnpm --filter @warlock/server db:generate`, and commits the migration. `pnpm db:check` fails in CI when a schema change has no migration.
+- An epic adds a table in `apps/server/src/modules/<name>/schema.ts`, runs `pnpm nx run @warlock/server:db:generate`, and commits the migration. `pnpm db:check` fails in CI when a schema change has no migration.
 - An epic adds an event type by adding one entry to the event schema in `apps/server/src/events.ts`. The server, the stream decoder, and the web all derive their event types from that entry. The typecheck then requires a sample stored row in `apps/server/test/event-history.test.ts`, and that test fails if a later schema change stops a stored row from parsing.
 - `db.commit` callbacks are synchronous. Async work, such as epic #2's GitHub repo check, runs before the transaction.
 - Only one server process may write a database file, because the stream's wake-up is in-process.

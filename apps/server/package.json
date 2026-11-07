@@ -2,21 +2,32 @@
 	"name": "@warlock/server",
 	"private": true,
 	"type": "module",
+	"exports": {
+		"./api": {
+			"types": "./src/api.ts"
+		},
+		"./events": "./src/events-wire.ts"
+	},
 	"scripts": {
+		"dev": "node --env-file=../../.env --watch src/main.ts",
 		"typecheck": "tsc",
 		"test": "vitest run",
 		"db:generate": "drizzle-kit generate",
 		"db:check": "sh scripts/check-migrations.sh"
 	},
 	"dependencies": {
+		"@hono/node-server": "2.1.5",
+		"@hono/zod-validator": "0.9.1",
 		"better-sqlite3": "13.0.3",
 		"drizzle-orm": "0.45.4",
+		"hono": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "9.6.0",
 		"@types/node": "catalog:",
 		"drizzle-kit": "0.31.11",
+		"eventsource": "5.1.4",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
 	}

@@ -1,12 +1,12 @@
 import { fileURLToPath } from "node:url";
 import BetterSqlite3 from "better-sqlite3";
-import { asc, gt } from "drizzle-orm";
+import { asc, gt, max } from "drizzle-orm";
 import {
 	type BetterSQLite3Database,
 	drizzle,
 } from "drizzle-orm/better-sqlite3";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import { type Seq, type ServerEvent, StoredEvent } from "./events.ts";
+import { Seq, type ServerEvent, StoredEvent } from "./events.ts";
 import { events } from "./schema.ts";
 
 type Drizzle = BetterSQLite3Database;
@@ -73,7 +73,14 @@ export function openDatabase(
 	};
 }
 
-/** Every stored event with a seq above `after`, in order. */
+export function headSeq(read: Reader): Seq {
+	const row = read
+		.select({ head: max(events.seq) })
+		.from(events)
+		.get();
+	return Seq.parse(row?.head ?? 0);
+}
+
 export function eventsAfter(read: Reader, after: Seq): StoredEvent[] {
 	return read
 		.select()

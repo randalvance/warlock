@@ -1,16 +1,8 @@
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { expect, expectTypeOf, onTestFinished, test } from "vitest";
 import { type Database, eventsAfter, openDatabase } from "../src/db.ts";
 import { Seq, type StoredEvent } from "../src/events.ts";
 import { events } from "../src/schema.ts";
-
-function tempDbPath(): string {
-	const dir = mkdtempSync(join(tmpdir(), "warlock-test-"));
-	onTestFinished(() => rmSync(dir, { recursive: true, force: true }));
-	return join(dir, "warlock.db");
-}
+import { tempDbPath } from "./support.ts";
 
 function open(path: string) {
 	const published: StoredEvent[][] = [];

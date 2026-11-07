@@ -22,6 +22,12 @@ test("a project with two repos, artifacts, and context survives a server restart
 	await page.getByRole("button", { name: "Create project" }).click();
 	await expect(page).toHaveURL(/\/projects\/[0-9a-f-]{36}$/);
 
+	await page.getByLabel("Attach repo").fill("acme/api/extra");
+	await page.getByRole("button", { name: "Attach" }).click();
+	await expect(
+		page.getByRole("alert"),
+		"a malformed repo to attach shows the field's message",
+	).toHaveText("use owner/name, such as acme/api");
 	await page.getByLabel("Attach repo").fill("acme/missing");
 	await page.getByRole("button", { name: "Attach" }).click();
 	await expect(

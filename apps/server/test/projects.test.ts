@@ -3,6 +3,7 @@ import { expect, expectTypeOf, onTestFinished, test } from "vitest";
 import type { AppType } from "../src/app.ts";
 import type { ApiErrorBody } from "../src/http.ts";
 import {
+	maxJsonBodyBytes,
 	maxUploadBytes,
 	type ProjectId,
 } from "../src/modules/projects/model.ts";
@@ -122,11 +123,12 @@ test.each([
 ])("attaching %s fails with a message that names it", async (_, name) => {
 	const { api } = await serve();
 	const project = await createProject(api);
-	const param = { projectId: project.id, owner: "acme" };
+	const param = { projectId: project.id };
 
-	const attached = await api.projects[":projectId"].repos[":owner"][
-		":name"
-	].$put({ param: { ...param, name } });
+	const attached = await api.projects[":projectId"].repos.$post({
+		param,
+		json: { repo: `acme/${name}` },
+	});
 	expect(attached.status).toBe(422);
 	const error = await errorOf(attached);
 	expect(error).toMatchObject({
@@ -135,15 +137,41 @@ test.each([
 	});
 	expect(error.message).toContain(`acme/${name}`);
 
-	const control = await api.projects[":projectId"].repos[":owner"][
-		":name"
-	].$put({ param: { ...param, name: "WEB" } });
+	const control = await api.projects[":projectId"].repos.$post({
+		param,
+		json: { repo: "acme/WEB" },
+	});
 	expect(control.status, "a readable repo attaches").toBe(200);
 	expect((await readProject(api, project.id)).repos).toEqual([
 		{ owner: "acme", name: "api", defaultBranch: "main" },
 		{ owner: "acme", name: "web", defaultBranch: "trunk" },
 	]);
 });
+
+test.each([
+	["three segments", "a/b/c"],
+	["no slash", "acme"],
+])(
+	"attaching a repo with %s is a 400 at repo and attaches nothing",
+	async (_, repo) => {
+		const { api } = await serve();
+		const project = await createProject(api);
+
+		const attached = await api.projects[":projectId"].repos.$post({
+			param: { projectId: project.id },
+			json: { repo },
+		});
+		expect(attached.status).toBe(400);
+		expect(await errorOf(attached)).toMatchObject({
+			code: "invalid_request",
+			issues: [{ path: "repo", message: "use owner/name, such as acme/api" }],
+		});
+		expect(
+			(await readProject(api, project.id)).repos,
+			"the project keeps only its original repo",
+		).toEqual([{ owner: "acme", name: "api", defaultBranch: "main" }]);
+	},
+);
 
 test("detaching a project's last repo is refused and the repo stays", async () => {
 	const { api } = await serve();
@@ -229,6 +257,33 @@ test.each([
 	expect(atCap.status, "a file exactly at the cap is accepted").toBe(201);
 });
 
+test("a JSON body over the limit is a 413 and stores nothing", async () => {
+	const { api } = await serve();
+	const project = await createProject(api);
+	const param = { projectId: project.id };
+
+	const tooBig = await api.projects[":projectId"].context.$post({
+		param,
+		json: { title: "Huge", body: "x".repeat(maxJsonBodyBytes) },
+	});
+	expect(tooBig.status).toBe(413);
+	expect((await errorOf(tooBig)).code).toBe("too_large");
+	expect((await readProject(api, project.id)).context).toEqual([]);
+
+	const body = "\u0001".repeat(100_000);
+	const largestValid = await api.projects[":projectId"].context.$post({
+		param,
+		json: { title: "Largest", body },
+	});
+	expect(
+		largestValid.status,
+		"a 100,000-character body that escapes to about 600 KB is accepted",
+	).toBe(201);
+	expect((await readProject(api, project.id)).context).toMatchObject([
+		{ title: "Largest", body },
+	]);
+});
+
 test("notes, links, and context entries read back, and a write that changes nothing logs no event", async () => {
 	const { api, server } = await serve();
 	const project = await createProject(api);
@@ -269,8 +324,9 @@ test("notes, links, and context entries read back, and a write that changes noth
 		param: contextParam,
 		json: edit,
 	});
-	await api.projects[":projectId"].repos[":owner"][":name"].$put({
-		param: { ...param, owner: "ACME", name: "api" },
+	await api.projects[":projectId"].repos.$post({
+		param,
+		json: { repo: "ACME/api" },
 	});
 	await api.projects[":projectId"].$patch({
 		param,

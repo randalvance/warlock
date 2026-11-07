@@ -45,14 +45,9 @@ function ProjectView({ project }: { project: Project }) {
 					label="Attach repo"
 					placeholder="owner/name"
 					action="Attach"
-					submit={(value) => {
-						const [owner = "", name = ""] = value.trim().split("/");
-						return unwrap(
-							projectApi.repos[":owner"][":name"].$put({
-								param: { ...param, owner, name },
-							}),
-						);
-					}}
+					submit={(repo) =>
+						unwrap(projectApi.repos.$post({ param, json: { repo } }))
+					}
 				/>
 			</Section>
 			<Section title="Artifacts">

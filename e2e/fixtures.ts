@@ -25,28 +25,34 @@ export const test = base.extend<{ warlock: Warlock }>({
 				"acme/api": { defaultBranch: "main" },
 				"acme/web": { defaultBranch: "trunk" },
 			});
-			const dataDir = mkdtempSync(join(tmpdir(), "warlock-e2e-"));
-			const env = {
-				...process.env,
-				WARLOCK_PORT: String(e2ePorts.server),
-				WARLOCK_DB_PATH: join(dataDir, "warlock.db"),
-				GITHUB_API_URL: github.config.apiUrl.href,
-				GITHUB_TOKEN: github.config.token,
-			};
-			let server = await startServer(env);
-			await use({
-				github,
-				get pid() {
-					return pidOf(server);
-				},
-				async restart() {
+			try {
+				const dataDir = mkdtempSync(join(tmpdir(), "warlock-e2e-"));
+				try {
+					const env = {
+						...process.env,
+						WARLOCK_PORT: String(e2ePorts.server),
+						WARLOCK_DB_PATH: join(dataDir, "warlock.db"),
+						GITHUB_API_URL: github.config.apiUrl.href,
+						GITHUB_TOKEN: github.config.token,
+					};
+					let server = await startServer(env);
+					await use({
+						github,
+						get pid() {
+							return pidOf(server);
+						},
+						async restart() {
+							await stopServer(server);
+							server = await startServer(env);
+						},
+					});
 					await stopServer(server);
-					server = await startServer(env);
-				},
-			});
-			await stopServer(server);
-			await github.close();
-			rmSync(dataDir, { recursive: true, force: true });
+				} finally {
+					rmSync(dataDir, { recursive: true, force: true });
+				}
+			} finally {
+				await github.close();
+			}
 		},
 		{ auto: true },
 	],
@@ -76,7 +82,11 @@ async function startServer(env: NodeJS.ProcessEnv): Promise<ChildProcess> {
 		if (ok) return child;
 		await delay(100);
 	}
-	child.kill("SIGKILL");
+	if (child.exitCode === null && child.signalCode === null) {
+		const exited = once(child, "exit");
+		child.kill("SIGKILL");
+		await exited;
+	}
 	throw new Error("the server did not answer /api/health within 10s");
 }
 

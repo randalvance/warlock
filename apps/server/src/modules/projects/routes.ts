@@ -1,11 +1,13 @@
-import { Hono } from "hono";
+import { type Context, Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
+import { createMiddleware } from "hono/factory";
 import { z } from "zod";
 import { type ApiErrorBody, errorStatus, validate } from "../../http.ts";
 import {
 	ArtifactId,
 	ContextId,
 	ContextInput,
+	maxJsonBodyBytes,
 	maxUploadBytes,
 	NewArtifact,
 	NewProject,
@@ -29,18 +31,45 @@ const ArtifactParam = z.object({
 });
 const ContextParam = z.object({ projectId: ProjectId, contextId: ContextId });
 
-const tooLarge: ApiErrorBody = {
-	error: {
-		code: "too_large",
-		message: `a file can be at most ${maxUploadBytes} bytes`,
-	},
-};
+const AttachRepo = z.object({ repo: RepoName });
+
 const multipartOverheadBytes = 64 * 1024;
+
+function limitBody(maxSize: number, message: string) {
+	const tooLarge = (c: Context) =>
+		c.json(
+			{ error: { code: "too_large", message } } satisfies ApiErrorBody,
+			errorStatus.too_large,
+		);
+	const streamed = bodyLimit({ maxSize, onError: tooLarge });
+	return createMiddleware(async (c, next) => {
+		const declared = c.req.header("content-length");
+		// Hono's bodyLimit opens the body as a web stream first. Its backpressure
+		// stalls node-server's drain of the unread body, which then resets the
+		// connection the client reuses for its next request.
+		if (
+			declared !== undefined &&
+			c.req.header("transfer-encoding") === undefined
+		) {
+			return Number(declared) > maxSize ? tooLarge(c) : next();
+		}
+		return streamed(c, next);
+	});
+}
+
+const jsonBodyLimit = limitBody(
+	maxJsonBodyBytes,
+	`a request body can be at most ${maxJsonBodyBytes} bytes`,
+);
+const fileBodyLimit = limitBody(
+	maxUploadBytes + multipartOverheadBytes,
+	`a file can be at most ${maxUploadBytes} bytes`,
+);
 
 export function projectsRoute(projects: Projects) {
 	return new Hono()
 		.get("/", (c) => c.json({ projects: projects.list() }, 200))
-		.post("/", validate("json", NewProject), async (c) =>
+		.post("/", jsonBodyLimit, validate("json", NewProject), async (c) =>
 			c.json({ project: await projects.create(c.req.valid("json")) }, 201),
 		)
 		.get("/:projectId", validate("param", ProjectParam), (c) =>
@@ -49,6 +78,7 @@ export function projectsRoute(projects: Projects) {
 		.patch(
 			"/:projectId",
 			validate("param", ProjectParam),
+			jsonBodyLimit,
 			validate("json", ProjectPatch),
 			(c) => {
 				const { projectId } = c.req.valid("param");
@@ -56,11 +86,14 @@ export function projectsRoute(projects: Projects) {
 				return c.json({ project: projects.rename(projectId, name) }, 200);
 			},
 		)
-		.put(
-			"/:projectId/repos/:owner/:name",
-			validate("param", RepoParam),
+		.post(
+			"/:projectId/repos",
+			validate("param", ProjectParam),
+			jsonBodyLimit,
+			validate("json", AttachRepo),
 			async (c) => {
-				const { projectId, repo } = c.req.valid("param");
+				const { projectId } = c.req.valid("param");
+				const { repo } = c.req.valid("json");
 				return c.json(
 					{ repo: await projects.attachRepo(projectId, repo) },
 					200,
@@ -79,10 +112,7 @@ export function projectsRoute(projects: Projects) {
 		.post(
 			"/:projectId/artifacts",
 			validate("param", ProjectParam),
-			bodyLimit({
-				maxSize: maxUploadBytes + multipartOverheadBytes,
-				onError: (c) => c.json(tooLarge, errorStatus.too_large),
-			}),
+			fileBodyLimit,
 			validate("form", NewArtifact),
 			async (c) => {
 				const { projectId } = c.req.valid("param");
@@ -109,6 +139,7 @@ export function projectsRoute(projects: Projects) {
 		.post(
 			"/:projectId/context",
 			validate("param", ProjectParam),
+			jsonBodyLimit,
 			validate("json", ContextInput),
 			(c) => {
 				const { projectId } = c.req.valid("param");
@@ -119,6 +150,7 @@ export function projectsRoute(projects: Projects) {
 		.put(
 			"/:projectId/context/:contextId",
 			validate("param", ContextParam),
+			jsonBodyLimit,
 			validate("json", ContextInput),
 			(c) => {
 				const { projectId, contextId } = c.req.valid("param");

@@ -7,18 +7,19 @@
 		"node": ">=22.22"
 	},
 	"scripts": {
-		"dev": "pnpm -r --parallel dev",
+		"dev": "nx run-many -t dev",
 		"lint": "biome ci .",
 		"format": "biome check --write .",
-		"typecheck": "tsc && pnpm -r typecheck",
-		"test": "pnpm -r test",
-		"db:check": "pnpm --filter @warlock/server db:check",
+		"typecheck": "tsc && nx run-many -t typecheck",
+		"test": "nx run-many -t test",
+		"db:check": "nx run @warlock/server:db:check",
 		"smoke": "playwright test"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.6.4",
 		"@playwright/test": "1.64.1",
 		"@types/node": "catalog:",
+		"nx": "24.0.3",
 		"typescript": "catalog:"
 	}
 }

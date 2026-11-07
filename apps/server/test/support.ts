@@ -5,6 +5,7 @@ import { EventSource } from "eventsource";
 import { onTestFinished, vi } from "vitest";
 import { Seq, type StoredEvent } from "../src/events.ts";
 import { connectEvents } from "../src/events-wire.ts";
+import type { GitHubConfig } from "../src/modules/projects/github.ts";
 
 export function tempDbPath(): string {
 	const dir = mkdtempSync(join(tmpdir(), "warlock-test-"));
@@ -12,10 +13,21 @@ export function tempDbPath(): string {
 	return join(dir, "warlock.db");
 }
 
-export async function startFresh(dbPath: string, port = 0) {
+const noGitHub: GitHubConfig = {
+	apiUrl: new URL("http://127.0.0.1:9/"),
+	token: "unused",
+};
+
+export async function startFresh(
+	dbPath: string,
+	{
+		port = 0,
+		github = noGitHub,
+	}: { port?: number; github?: GitHubConfig } = {},
+) {
 	vi.resetModules();
 	const { start } = await import("../src/server.ts");
-	const server = await start({ port, dbPath });
+	const server = await start({ port, dbPath, github });
 	onTestFinished(() => server.stop());
 	return server;
 }

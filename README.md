@@ -16,7 +16,7 @@ pnpm install
 pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |
@@ -24,6 +24,6 @@ pnpm dev
 | `pnpm typecheck` | `tsc` for the root and both apps |
 | `pnpm test` | Vitest server tests, including the restart test |
 | `pnpm db:check` | Fails if a schema change has no migration |
-| `pnpm smoke` | The Playwright smoke test against `pnpm dev`, on ports 4417 and 5273 |
+| `pnpm smoke` | The Playwright browser tests. Playwright runs Vite on port 5273, and each test starts its own server on port 4417 with a fresh database and a local GitHub stub |
 
 After you change a table in a `schema.ts` file, run `pnpm --filter @warlock/server db:generate` and commit the new migration.

@@ -57,7 +57,7 @@ interface RepoRef {
 }
 
 type Artifact =
-	| { kind: "file"; id: ArtifactId; path: string; producedBy?: RunId }
+	| { kind: "file"; id: ArtifactId; name: string; mediaType: string; size: number; producedBy?: RunId }
 	| { kind: "link"; id: ArtifactId; url: string; producedBy?: RunId }
 	| { kind: "note"; id: ArtifactId; title: string; body: string; producedBy?: RunId };
 
@@ -147,6 +147,8 @@ interface Run {
 	handoffs: Handoff[];
 }
 ```
+
+A file artifact has a name, a media type, and a size instead of a path, because its bytes live in the database next to its row.
 
 `SkillRef`, `McpServerConfig`, and `MemoryRef` are defined by the agent profiles epic.
 

@@ -43,7 +43,7 @@ test("a client connected across a restart receives what was written while it was
 
 	await vi.waitFor(() => expect(statuses).toContain("live"));
 	await first.stop();
-	const second = await startFresh(dbPath, Number(first.url.port));
+	const second = await startFresh(dbPath, { port: Number(first.url.port) });
 	const log = await readEvents(second.url, { after: 0, count: 2 });
 
 	await vi.waitFor(() => expect(received).toHaveLength(1));

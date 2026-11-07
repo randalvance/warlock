@@ -1,9 +1,15 @@
+import type { StoredEvent } from "@warlock/server/api";
 import { connectEvents, type StreamStatus } from "@warlock/server/events";
 import { useSyncExternalStore } from "react";
 
+export interface ServerEventListener {
+	onStatus?(status: StreamStatus): void;
+	onEvent?(event: StoredEvent): void;
+}
+
 let status: StreamStatus = "connecting";
 let stream: { close(): void } | undefined;
-const listeners = new Set<() => void>();
+const listeners = new Set<ServerEventListener>();
 
 function ensureStream() {
 	if (stream) return;
@@ -12,12 +18,17 @@ function ensureStream() {
 		EventSource,
 		onStatus: (next) => {
 			status = next;
-			for (const notify of listeners) notify();
+			for (const listener of listeners) listener.onStatus?.(next);
+		},
+		onEvent: (event) => {
+			for (const listener of listeners) listener.onEvent?.(event);
 		},
 	});
 }
 
-function subscribe(listener: () => void) {
+export function subscribeServerEvents(
+	listener: ServerEventListener,
+): () => void {
 	listeners.add(listener);
 	ensureStream();
 	return () => {
@@ -30,5 +41,8 @@ function subscribe(listener: () => void) {
 }
 
 export function useStreamStatus(): StreamStatus {
-	return useSyncExternalStore(subscribe, () => status);
+	return useSyncExternalStore(
+		(notify) => subscribeServerEvents({ onStatus: notify }),
+		() => status,
+	);
 }

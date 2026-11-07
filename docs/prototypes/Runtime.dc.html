@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Run 31</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
+<script src="ds/agentic-factory/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:#ff7ae0}a:hover{color:#f2f2f0}
+.wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
+.wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
+.wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
+.wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
+.wl-head{display:flex;align-items:baseline;gap:12px;padding:12px 14px 8px}
+.wl-inspector{display:grid;min-height:600px;border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
+  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
+    <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
+    <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
+    <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
+    <a href="Factory.dc.html" class="wl-nav on" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
+    <span style="flex-grow: 1"></span>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+  </nav>
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+      <a href="Factory.dc.html" class="wl-btn" style="height: 28px">Factory</a>
+      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Run 31 · Scout on WO-14</h1>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">single station · claude-agent-sdk · started 14:02</span>
+      <span style="flex-grow: 1"></span>
+      <div style="display: flex; gap: 24px; align-items: flex-end">
+        <sc-if value="{{running}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Tally" value="{{elapsed}}" label="elapsed"></x-import></sc-if>
+        <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Tally" value="{{elapsed}}" label="failed" tone="err"></x-import></sc-if>
+        <x-import component-from-global-scope="AgenticFactory.Tally" value="3" label="files" tone="plain"></x-import>
+        <x-import component-from-global-scope="AgenticFactory.Tally" value="12k" label="tokens" tone="plain"></x-import>
+      </div>
+      <sc-if value="{{running}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{cancel}}">Cancel run</x-import></sc-if>
+      <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{restart}}">Rerun</x-import></sc-if>
+    </header>
+
+    <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
+      <div class="wl-inspector" style="flex: 1 1 480px; min-width: 0">
+        <x-import component-from-global-scope="AgenticFactory.WorkOrder" title="Add a line to the README" id="WO-14 · run 31" agent="Scout" station="Implement" description="Brief from the Bug fix spellbook: add one line to README.md that names the domain model, commit it, and report the outcome." chips="{{chips}}" log="{{log}}" placeholder="Tell Scout something" composer="{{running}}"></x-import>
+      </div>
+
+      <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section aria-label="Isolation" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Isolation</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">one worktree and branch per run</span></div>
+          <div class="wl-row"><span style="width: 88px; font-size: 12px; color: var(--ink-300, #8f8f96)">Repo</span><span class="wl-mono" style="font-size: 12px">randalvance/warlock · main@8dc01b2</span></div>
+          <div class="wl-row"><span style="width: 88px; font-size: 12px; color: var(--ink-300, #8f8f96)">Worktree</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">.warlock/worktrees/run-31</span></div>
+          <div class="wl-row"><span style="width: 88px; font-size: 12px; color: var(--ink-300, #8f8f96)">Branch</span><span class="wl-mono" style="font-size: 12px">warlock/run-31</span></div>
+          <div class="wl-row"><span style="width: 88px; font-size: 12px; color: var(--ink-300, #8f8f96)">Profile</span><span class="wl-mono" style="font-size: 12px">Scout · 2 skills · 2 MCP · 3 memory notes</span></div>
+          <div class="wl-row" style="background: var(--surface-200, #1b1b1f)"><span style="width: 88px; font-size: 12px; color: var(--ink-300, #8f8f96)">Also on repo</span><span class="wl-mono" style="font-size: 12px">run 32 · Mason · .warlock/worktrees/run-32</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">running</x-import></div>
+        </section>
+
+        <section aria-label="Outcome" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Outcome</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Scout picks one from this list at the end</span></div>
+          <sc-if value="{{running}}" hint-placeholder-val="{{true}}">
+            <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="queued"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">done</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">the change is committed and complete</span></div>
+            <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="queued"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">needs_review</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">committed, wants a second pair of eyes</span></div>
+            <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="queued"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">blocked</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">cannot finish without you</span></div>
+          </sc-if>
+          <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}">
+            <div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14))"><x-import component-from-global-scope="AgenticFactory.Lamp" state="failed"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">failed</span><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">reason: cancelled · no outcome reported</span></div>
+          </sc-if>
+        </section>
+
+        <section aria-label="Artifacts produced" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Artifacts produced</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">attached to the project when the station ends</span></div>
+          <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">commit</x-import><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">a1f3c2d docs: name the domain model in the README</span></div>
+          <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">file</x-import><span class="wl-mono" style="font-size: 12px">README.md · +1</span></div>
+        </section>
+
+        <section aria-label="Persisted events" class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Events</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">persisted · replay in order after a restart</span></div>
+          <sc-for list="{{events}}" as="ev" hint-placeholder-count="6">
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">{{ev.seq}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); width: 120px">{{ev.type}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ev.detail}}</span></div>
+          </sc-for>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cancelled: false };
+  }
+  renderVals() {
+    const cancelled = this.state.cancelled;
+    const baseLog = [
+      { time: '14:02', kind: 'read', text: 'read context: Conventions, Architecture' },
+      { time: '14:02', kind: 'read', text: 'read memory/scout/conventions.md' },
+      { time: '14:02', kind: 'read', text: 'read README.md' },
+      { time: '14:03', kind: 'said', text: 'adding one line under the first paragraph' },
+      { time: '14:03', kind: 'edit', text: 'edit README.md' },
+      { time: '14:04', kind: 'bash', text: 'bash git commit -am "docs: name the domain model in the README"' },
+      { time: '14:04', kind: 'bash', text: 'bash pnpm lint' }
+    ];
+    const log = cancelled
+      ? baseLog.concat([{ time: '14:05', kind: 'said', text: 'cancelled by you · minion stopped' }])
+      : baseLog.concat([{ time: '14:05', kind: 'bash', text: 'running biome check…', live: true }]);
+    const chips = cancelled
+      ? [{ label: 'failed · cancelled', tone: 'err' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]
+      : [{ label: 'running 0:38', tone: 'accent' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }];
+    const baseEvents = [
+      { seq: 180, type: 'run.started', detail: 'run 31 · WO-14 · Scout · worktree run-31' },
+      { seq: 181, type: 'agent.message', detail: 'adding one line under the first paragraph' },
+      { seq: 182, type: 'tool.call', detail: 'edit README.md' },
+      { seq: 183, type: 'tool.call', detail: 'bash git commit -am …' },
+      { seq: 184, type: 'artifact.added', detail: 'commit a1f3c2d on warlock/run-31' },
+      { seq: 185, type: 'tool.call', detail: 'bash pnpm lint' }
+    ];
+    const events = cancelled
+      ? baseEvents.concat([{ seq: 186, type: 'run.failed', detail: 'reason: cancelled · by you' }])
+      : baseEvents;
+    return {
+      yes: true,
+      running: !cancelled,
+      cancelled: cancelled,
+      elapsed: cancelled ? '0:41' : '0:38',
+      chips: chips,
+      log: log,
+      events: events,
+      cancel: () => this.setState({ cancelled: true }),
+      restart: () => this.setState({ cancelled: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

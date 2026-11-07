@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Formations</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
+<script src="ds/agentic-factory/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:#ff7ae0}a:hover{color:#f2f2f0}
+.wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
+.wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
+.wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
+.wl-lbl{font:500 13px/1 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8)}
+.wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
+.wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
+.wl-head{display:flex;align-items:baseline;gap:12px;padding:12px 14px 8px}
+.wl-plist{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 14px;border-top:1px solid var(--line-100,#232327);text-decoration:none;color:var(--ink-100,#f2f2f0)}
+.wl-plist.on{background:var(--accent-tint,rgba(255,61,205,.14));box-shadow:inset 2px 0 0 var(--accent,#ff3dcd)}
+.wl-node{height:56px;box-sizing:border-box;border-radius:var(--radius-md,8px);background:var(--surface-200,#1b1b1f);border:1px solid var(--line-200,#303036);color:var(--ink-100,#f2f2f0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-family:'Instrument Sans',sans-serif}
+.wl-node.on{background:var(--accent-tint,rgba(255,61,205,.14));border-color:var(--line-300,#45454c);color:var(--accent-bright,#ff7ae0)}
+.wl-node.end{border-style:dashed;cursor:default;color:var(--ink-300,#8f8f96)}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
+  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
+    <a href="Formations.dc.html" class="wl-nav on" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
+    <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
+    <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
+    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
+    <span style="flex-grow: 1"></span>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+  </nav>
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Formations</h1>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">2 formations · 1 in use by 2 spellbooks</span>
+      <span style="flex-grow: 1"></span>
+      <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
+      <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save formation</x-import></sc-if>
+      <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save formation</x-import></sc-if>
+    </header>
+
+    <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
+      <section aria-label="Formation list" class="wl-card" style="flex: 1 1 220px; max-width: 280px">
+        <div class="wl-head"><span class="wl-sig" style="font-size: 14px">All formations</span></div>
+        <a href="#editor" class="wl-plist on"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Implement then review</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · 2 stations · 3 transitions</span></span></a>
+        <a href="#editor" class="wl-plist"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Solo implement</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">1 station · 2 transitions</span></span></a>
+        <div style="padding: 12px 14px; border-top: 1px solid var(--line-100, #232327)"><button class="wl-btn" type="button">New formation</button></div>
+      </section>
+
+      <section id="editor" aria-label="Edit formation" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end">
+          <div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 6px"><label for="fname" class="wl-lbl">Name</label><input id="fname" class="wl-in" value="Implement then review"></div>
+          <div style="flex: 0 1 200px; display: flex; flex-direction: column; gap: 6px"><label for="fentry" class="wl-lbl">Entry station</label><select id="fentry" class="wl-in"><option>implement</option><option>review</option></select></div>
+          <div style="flex: 0 1 160px; display: flex; flex-direction: column; gap: 6px"><label for="fmax" class="wl-lbl">Max station visits</label><input id="fmax" class="wl-in" value="12" type="number" min="1"></div>
+          <button class="wl-btn" type="button">Edit as JSON</button>
+        </div>
+
+        <div class="wl-card" style="padding: 16px 20px 20px">
+          <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px"><span class="wl-sig" style="font-size: 14px">Graph</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">read only · click a station to see its transitions</span></div>
+          <div style="display: grid; grid-template-columns: 170px minmax(80px, 1fr) 170px minmax(80px, 1fr) 170px; align-items: center; column-gap: 0">
+            <button type="button" class="wl-node {{implementCls}}" on-click="{{pickImplement}}" aria-pressed="{{implementOn}}"><span class="wl-sig" style="font-size: 15px">Implement</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Scout · entry</span></button>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 6px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">done</span><div style="width: 100%; display: flex; align-items: center"><div style="flex-grow: 1; height: 2px; background: var(--lane, #303036)"></div><svg aria-hidden="true" width="8" height="10" viewBox="0 0 8 10" style="display: block"><path d="M0 0 L8 5 L0 10 Z" fill="var(--lane, #303036)"></path></svg></div></div>
+            <button type="button" class="wl-node {{reviewCls}}" on-click="{{pickReview}}" aria-pressed="{{reviewOn}}"><span class="wl-sig" style="font-size: 15px">Review</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Ada</span></button>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 6px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">approved</span><div style="width: 100%; display: flex; align-items: center"><div style="flex-grow: 1; height: 2px; background: var(--lane, #303036)"></div><svg aria-hidden="true" width="8" height="10" viewBox="0 0 8 10" style="display: block"><path d="M0 0 L8 5 L0 10 Z" fill="var(--lane, #303036)"></path></svg></div></div>
+            <div class="wl-node end" aria-label="End: done"><span class="wl-sig" style="font-size: 15px">Done</span><span class="wl-mono" style="font-size: 11px">end of run</span></div>
+            <div style="grid-column: 1 / 4; margin: 0 85px; height: 36px; border: 2px solid var(--lane, #303036); border-top: none; border-radius: 0 0 10px 10px; position: relative; margin-top: 4px"><svg aria-hidden="true" width="10" height="8" viewBox="0 0 10 8" style="position: absolute; left: -6px; top: -8px"><path d="M0 8 L5 0 L10 8 Z" fill="var(--lane, #303036)"></path></svg></div>
+            <div style="grid-column: 1 / 4; text-align: center"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">changes_requested · back to implement</span></div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px">
+          <div style="display: flex; flex-direction: column; gap: 20px">
+            <div class="wl-card">
+              <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Stations</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">one minion each</span></div>
+              <div class="wl-row"><span class="wl-mono" style="font-size: 12px; width: 110px">implement</span><select class="wl-in" aria-label="Minion for implement" style="max-width: 120px"><option>Scout</option><option>Ada</option><option>Mason</option></select><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1">outcomes: done</span></div>
+              <div class="wl-row"><span class="wl-mono" style="font-size: 12px; width: 110px">review</span><select class="wl-in" aria-label="Minion for review" style="max-width: 120px"><option>Ada</option><option>Scout</option><option>Mason</option></select><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1">outcomes: approved, changes_requested</span></div>
+              <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327)"><input class="wl-in" placeholder="station id" aria-label="New station id" style="max-width: 160px"><button class="wl-btn" type="button">Add station</button></div>
+            </div>
+            <div class="wl-card">
+              <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Selected station</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{selName}}</span></div>
+              <sc-for list="{{selTransitions}}" as="t" hint-placeholder-count="2">
+                <div class="wl-row"><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96)">on</span><span class="wl-mono" style="font-size: 12px; width: 150px">{{t.outcome}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96)">go to</span><span class="wl-mono" style="font-size: 12px">{{t.to}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 20px">
+            <div class="wl-card">
+              <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Transitions</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">from · outcome · to</span></div>
+              <sc-for list="{{transitions}}" as="t" hint-placeholder-count="3">
+                <div class="wl-row" style="background: {{t.bg}}"><span class="wl-mono" style="font-size: 12px; width: 90px">{{t.from}}</span><span class="wl-mono" style="font-size: 12px; width: 150px">{{t.outcome}}</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">{{t.to}}</span><sc-if value="{{t.dup}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">duplicate</x-import></sc-if></div>
+              </sc-for>
+              <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327); flex-wrap: wrap">
+                <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" on-click="{{addDup}}">Add review · approved · implement</button></sc-if>
+                <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" on-click="{{removeDup}}">Remove the duplicate</button></sc-if>
+              </div>
+            </div>
+            <div class="wl-card">
+              <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Validation</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">every rule in the domain model</span></div>
+              <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="font-size: 13px">Entry station and every transition endpoint exist</span></div>
+              <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="font-size: 13px">Every station has an outgoing transition</span></div>
+              <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="font-size: 13px">Every station is reachable from the entry</span></div>
+              <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="font-size: 13px">At most one transition per station and outcome</span></div></sc-if>
+              <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14)); align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><x-import component-from-global-scope="AgenticFactory.Lamp" state="failed"></x-import><span style="font-size: 13px; display: flex; flex-direction: column; gap: 2px"><span>At most one transition per station and outcome</span><span class="wl-mono" style="font-size: 11px; color: var(--err, #ff4d4d)">review has two transitions for approved</span></span></div></sc-if>
+            </div>
+          </div>
+        </div>
+
+        <div class="wl-card">
+          <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Run engine</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">state machine · last run of this formation</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:40</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · implement → review on done · handoff 1 · 2 artifacts</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:52</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → implement on changes_requested · handoff 2 · 1 artifact</span></div>
+          <div class="wl-row" style="background: var(--surface-200, #1b1b1f)"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:58</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">server restarted · run 29 resumed from handoff 2 · no duplicate handoff written</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">resumed</x-import></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">14:10</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → done on approved · handoff 4 · 4 station visits of 12</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">succeeded</x-import></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'implement', dup: false };
+  }
+  renderVals() {
+    const sel = this.state.sel;
+    const dup = this.state.dup;
+    const base = [
+      { from: 'implement', outcome: 'done', to: 'review' },
+      { from: 'review', outcome: 'approved', to: 'done' },
+      { from: 'review', outcome: 'changes_requested', to: 'implement' }
+    ];
+    const all = dup ? base.concat([{ from: 'review', outcome: 'approved', to: 'implement', dup: true }]) : base;
+    const transitions = all.map((t) => ({ ...t, dup: !!t.dup, bg: t.dup ? 'var(--err-tint, rgba(255,77,77,.14))' : 'transparent' }));
+    return {
+      yes: true,
+      valid: !dup,
+      invalid: dup,
+      transitions: transitions,
+      selName: sel,
+      selTransitions: all.filter((t) => t.from === sel),
+      implementCls: sel === 'implement' ? 'on' : '',
+      reviewCls: sel === 'review' ? 'on' : '',
+      implementOn: sel === 'implement',
+      reviewOn: sel === 'review',
+      pickImplement: () => this.setState({ sel: 'implement' }),
+      pickReview: () => this.setState({ sel: 'review' }),
+      addDup: () => this.setState({ dup: true }),
+      removeDup: () => this.setState({ dup: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

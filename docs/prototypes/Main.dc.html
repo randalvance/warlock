@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Warlock shell</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
+<script src="ds/agentic-factory/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:#ff7ae0}a:hover{color:#f2f2f0}
+.wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
+.wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
+.wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none}
+.wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
+  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav on" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
+    <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
+    <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
+    <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
+    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
+    <span style="flex-grow: 1"></span>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+  </nav>
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Projects</h1>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">local · sqlite ./warlock.db · events seq {{seq}}</span>
+      <span style="flex-grow: 1"></span>
+      <span style="display: inline-flex; align-items: center; gap: 8px">
+        <span style="font-size: 12px; color: var(--ink-300, #8f8f96)">Event stream</span>
+        <sc-if value="{{isLive}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import></sc-if>
+        <sc-if value="{{isReconnecting}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">reconnecting</x-import></sc-if>
+        <sc-if value="{{isOffline}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">offline</x-import></sc-if>
+      </span>
+      <a href="Warlock.dc.html" class="wl-btn"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal" size="{{14}}"></x-import>Command</a>
+    </header>
+
+    <main style="padding: 24px; display: flex; flex-direction: column; gap: 24px; max-width: 1200px; box-sizing: border-box; width: 100%">
+      <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+        <span class="wl-sig" style="font-size: 16px; color: var(--ink-100, #f2f2f0)">Projects</span>
+        <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">0 projects</span>
+      </div>
+
+      <section aria-label="No projects yet" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+        <span class="wl-sig" style="font-size: 22px; color: var(--ink-200, #c4c4c8)">No projects yet</span>
+        <p style="margin: 0; max-width: 440px; color: var(--ink-300, #8f8f96)">A project owns repos, artifacts and context. Create one to give the warlock something to work on.</p>
+        <div style="margin-top: 8px">
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="layout-grid">New project</x-import>
+        </div>
+      </section>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <section aria-label="Server" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 16px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; align-items: baseline; gap: 12px">
+            <span class="wl-sig" style="font-size: 14px; color: var(--ink-100, #f2f2f0)">Server</span>
+            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">hono · sqlite · drizzle</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0">
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 56px">14:02:11</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">server.started</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seq 184</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 56px">14:02:11</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">db.commit · migrations 0000_events</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">ok</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 56px">14:02:12</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">GET /api/events?after=183</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">replay 1 · stream open</span></div>
+          </div>
+          <p style="margin: 0; font-size: 12px; color: var(--ink-300, #8f8f96)">Every write goes through db.commit and appends its events in the same transaction. A client that reconnects asks for what it missed.</p>
+        </section>
+
+        <section aria-label="Checks" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 16px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; align-items: baseline; gap: 12px">
+            <span class="wl-sig" style="font-size: 14px; color: var(--ink-100, #f2f2f0)">Checks on main</span>
+            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">github actions · 5 of 5</span>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Lint</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">biome · 0:09</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Typecheck</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">tsc · 0:21</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Migration check</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">drizzle · 0:04</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Server tests, restart included</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">vitest · 9 of 9 · 0:14</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Browser smoke</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">playwright · 0:38</span></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"stream":{"editor":"enum","options":["live","reconnecting","offline"],"default":"live","section":"Event stream"},"seq":{"editor":"int","default":184,"min":0,"section":"Event stream"},"$preview":{"width":1360,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const stream = this.props.stream ?? 'live';
+    return {
+      seq: this.props.seq ?? 184,
+      isLive: stream === 'live',
+      isReconnecting: stream === 'reconnecting',
+      isOffline: stream === 'offline'
+    };
+  }
+}
+</script>
+</body>
+</html>

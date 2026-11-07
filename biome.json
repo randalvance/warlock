@@ -6,7 +6,13 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["**", "!.claude", "!**/*.md", "!apps/server/drizzle/meta"]
+		"includes": [
+			"**",
+			"!.claude",
+			"!**/*.md",
+			"!apps/server/drizzle/meta",
+			"!docs/prototypes"
+		]
 	},
 	"css": {
 		"parser": {

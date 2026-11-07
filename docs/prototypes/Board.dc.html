@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Board</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
+<script src="ds/agentic-factory/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:#ff7ae0}a:hover{color:#f2f2f0}
+.wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
+.wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
+.wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:disabled{opacity:.4;cursor:default}
+.wl-mv{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-pill,999px);border:1px solid var(--line-100,#232327);background:transparent;color:var(--ink-300,#8f8f96);cursor:pointer;padding:0}
+.wl-mv:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-mv:disabled{opacity:.3;cursor:default}
+.wl-row{display:flex;align-items:center;gap:12px;min-height:32px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
+.wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
+.wl-task{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.wl-task:hover{border-color:var(--line-200,#303036)}
+</style>
+</helmet>
+<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
+  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
+    <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
+    <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
+    <a href="Board.dc.html" class="wl-nav on" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
+    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
+    <span style="flex-grow: 1"></span>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+  </nav>
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Board</h1>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">project warlock · {{count}} tasks · github projects "Warlock roadmap"</span>
+      <span style="flex-grow: 1"></span>
+      <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">synced 14:05</x-import>
+      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">next in 0:42</span>
+      <button class="wl-btn" type="button">Import issues</button>
+      <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{syncNow}}">Sync now</x-import>
+    </header>
+
+    <main style="padding: 24px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; width: 100%">
+      <div style="overflow-x: auto">
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; min-width: 1100px; align-items: start">
+          <sc-for list="{{columns}}" as="col" hint-placeholder-count="5">
+            <section aria-label="{{col.label}}" style="display: flex; flex-direction: column; gap: 10px; background: var(--bg-100, #0f0f11); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 12px; min-height: 420px">
+              <div style="display: flex; align-items: baseline; gap: 8px; padding: 2px 4px 6px"><span class="wl-sig" style="font-size: 14px">{{col.label}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{col.count}}</span></div>
+              <sc-for list="{{col.tasks}}" as="t" hint-placeholder-count="2">
+                <article class="wl-task" aria-label="{{t.title}}">
+                  <div style="display: flex; align-items: center; gap: 8px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{t.id}}</span><span style="flex-grow: 1"></span><sc-if value="{{t.hasIssue}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.issue}}</x-import></sc-if></div>
+                  <span style="font-size: 13px; font-weight: 500; color: var(--ink-100, #f2f2f0)">{{t.title}}</span>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+                    <sc-if value="{{t.running}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">{{t.runLabel}}</x-import></sc-if>
+                    <sc-if value="{{t.passed}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">{{t.runLabel}}</x-import></sc-if>
+                    <sc-if value="{{t.hasBook}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.book}}</x-import></sc-if>
+                    <span style="flex-grow: 1"></span>
+                    <button class="wl-mv" type="button" aria-label="Move back" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+                    <button class="wl-mv" type="button" aria-label="Move forward" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+                  </div>
+                </article>
+              </sc-for>
+            </section>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; align-items: start">
+        <section aria-label="Sync log" class="wl-card">
+          <div style="display: flex; align-items: baseline; gap: 12px; padding: 12px 14px 8px"><span class="wl-sig" style="font-size: 14px">Sync log</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">two way · status field only · last write wins</span></div>
+          <sc-for list="{{log}}" as="l" hint-placeholder-count="5">
+            <div class="wl-row" style="background: {{l.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">{{l.time}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{l.text}}</span><sc-if value="{{l.conflict}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">conflict</x-import></sc-if></div>
+          </sc-for>
+        </section>
+        <section aria-label="Rules" class="wl-card">
+          <div style="display: flex; align-items: baseline; gap: 12px; padding: 12px 14px 8px"><span class="wl-sig" style="font-size: 14px">Rules</span></div>
+          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">Each imported issue becomes one task, linked by repo and number. Importing again changes nothing.</span></div>
+          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">A run moves its task: start → in_progress, review station → in_review, succeeded → done.</span></div>
+          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">When both sides changed since the last sync, the later write wins and the log says so.</span></div>
+          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">token scope: repo, project · gh auth refresh -s project</span></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: [
+        { id: 'WO-10', title: 'Foundation: app shell, storage, and CI', issue: '#1', status: 'done', run: 'passed', runLabel: 'run 27 passed' },
+        { id: 'WO-9', title: 'Add CI smoke test against pnpm dev', issue: '#16', status: 'done' },
+        { id: 'WO-12', title: 'Agent runtime: run one minion on one task', issue: '#4', status: 'in_review', run: 'passed', runLabel: 'run 29 at review', book: 'Feature' },
+        { id: 'WO-14', title: 'Fix the typo in the README', issue: '#15', status: 'in_progress', run: 'running', runLabel: 'run 31 · 0:38', book: 'Bug fix' },
+        { id: 'WO-13', title: 'Formation editor: read-only graph', status: 'ready', book: 'Feature' },
+        { id: 'WO-11', title: 'Projects: repos, artifacts, and context', issue: '#2', status: 'backlog' },
+        { id: 'WO-15', title: 'Board: tasks and GitHub sync', issue: '#8', status: 'backlog' }
+      ],
+      log: [
+        { time: '14:05', text: 'sync · 7 tasks · 0 changes · nothing to write' },
+        { time: '14:03', text: 'WO-12 · GitHub wrote in_review at 14:02:51, board wrote ready at 14:02:48 · last write wins → in_review', conflict: true },
+        { time: '14:02', text: 'run 31 started · WO-14 → in_progress · pushed to GitHub Projects' },
+        { time: '13:58', text: 'import · randalvance/warlock · 9 open issues · 2 new tasks, 7 already linked' },
+        { time: '13:40', text: 'sync · WO-13 moved to ready on the board · pushed to GitHub Projects' }
+      ]
+    };
+  }
+  renderVals() {
+    const order = ['backlog', 'ready', 'in_progress', 'in_review', 'done'];
+    const labels = { backlog: 'Backlog', ready: 'Ready', in_progress: 'In progress', in_review: 'In review', done: 'Done' };
+    const move = (id, dir) => {
+      const tasks = this.state.tasks.map((t) => {
+        if (t.id !== id) return t;
+        const i = order.indexOf(t.status) + dir;
+        if (i < 0 || i >= order.length) return t;
+        return { ...t, status: order[i] };
+      });
+      const moved = tasks.find((t) => t.id === id);
+      const log = [{ time: '14:06', text: moved.id + ' → ' + moved.status + ' on the board · pushed to GitHub Projects Status' }].concat(this.state.log);
+      this.setState({ tasks: tasks, log: log });
+    };
+    const decorate = (t) => {
+      const i = order.indexOf(t.status);
+      return {
+        ...t,
+        hasIssue: !!t.issue,
+        hasBook: !!t.book,
+        running: t.run === 'running',
+        passed: t.run === 'passed',
+        first: i === 0,
+        last: i === order.length - 1,
+        back: () => move(t.id, -1),
+        fwd: () => move(t.id, 1)
+      };
+    };
+    const columns = order.map((s) => {
+      const tasks = this.state.tasks.filter((t) => t.status === s).map(decorate);
+      return { id: s, label: labels[s], count: tasks.length, tasks: tasks };
+    });
+    const log = this.state.log.map((l) => ({ ...l, conflict: !!l.conflict, bg: l.conflict ? 'var(--warn-tint, rgba(255,176,46,.14))' : 'transparent' }));
+    return {
+      yes: true,
+      count: this.state.tasks.length,
+      columns: columns,
+      log: log,
+      syncNow: () => this.setState({ log: [{ time: '14:06', text: 'sync · ' + this.state.tasks.length + ' tasks · 0 changes · nothing to write' }].concat(this.state.log) })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -155,15 +155,24 @@ class Component extends DCLogic {
         const seq = (last ? last.seq : 0) + 1;
         const now = new Date();
         const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        const isStatus = /\bstatus\b/i.test(text);
+        const turn = isStatus
+          ? [
+              { role: 'you', time: time, text: text },
+              { role: 'tool', time: time, tool: 'runs.status', text: 'run 31 · running · implement · 1 commit on warlock/run-31' },
+              { role: 'warlock', time: time, text: 'Run 31 is still at Implement. One commit on warlock/run-31. Nothing needs you.' }
+            ]
+          : [
+              { role: 'you', time: time, text: text },
+              { role: 'tool', time: time, tool: 'tasks.list', text: 'project warlock · 1 running · 2 ready' },
+              { role: 'warlock', time: time, text: 'Noted. This prototype only simulates a sample task request: I would create a task, pick a spellbook and start a run, then report here.' }
+            ];
+        const tool = isStatus ? 'runs.status · run 31' : 'tasks.list · project warlock';
         this.setState({
           draft: '',
-          extra: this.state.extra.concat([
-            { role: 'you', time: time, text: text },
-            { role: 'tool', time: time, tool: 'tasks.list', text: 'project warlock · 1 running · 2 ready' },
-            { role: 'warlock', time: time, text: 'Noted. I will turn that into a task, pick a spellbook and start a run, then report here.' }
-          ]),
+          extra: this.state.extra.concat(turn),
           history: this.state.history.concat([{ time: time, text: text }]),
-          events: this.state.events.concat([{ seq: seq, text: 'warlock.tool_call · tasks.list · project warlock' }])
+          events: this.state.events.concat([{ seq: seq, text: 'warlock.tool_call · ' + tool }])
         });
       }
     };

@@ -8,7 +8,9 @@ Warlock is an agentic software factory. Work arrives as GitHub issues labeled `e
 
 ## Environment
 
-- Use Node 22 (`nvm use`). The machine's default Node can be newer, and `pnpm install` refuses a Node older than `engines.node`.
+- Run every command inside the dev container, through the devcontainer CLI on the active Docker context. Start the container with `scripts/devcontainer.sh up`, then run each command as `scripts/devcontainer.sh <command>`, such as `scripts/devcontainer.sh pnpm test` or `scripts/devcontainer.sh git commit`. Only `scripts/devcontainer.sh` itself and Docker housekeeping run on the host.
+- `scripts/devcontainer.sh` passes in `GITHUB_TOKEN` (or the host's `gh` login) and your git name and email, so `gh`, `git commit`, and `git push` work inside the container.
+- The container keeps its own `node_modules` and pnpm store in Docker volumes, so the host's `node_modules` stays untouched. After a lockfile change, run `scripts/devcontainer.sh pnpm install`.
 - pnpm refuses package versions published less than 7 days ago (`minimumReleaseAge`). When an install refuses the latest version, pick the newest version that is old enough.
 - Tests and browser tests answer GitHub from `apps/server/test/github-stub.ts`. Only `pnpm dev` talks to the real GitHub API, with `GITHUB_TOKEN` or the `gh` login.
 

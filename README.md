@@ -8,15 +8,16 @@ Warlock is early in development. The plan is a set of GitHub issues with the `ep
 
 ## Develop
 
-You need Node 22.22 or later and pnpm 10. The stack and its reasons are in [ADR 0001](docs/adr/0001-stack.md).
+You need Docker and the devcontainer CLI (`npm install --global @devcontainers/cli`). The container provides Node 22 and pnpm 10. The stack and its reasons are in [ADR 0001](docs/adr/0001-stack.md).
+
+Run every command inside the dev container. The devcontainer CLI starts it on your active Docker context, and `scripts/devcontainer.sh` runs commands in it:
 
 ```sh
-nvm use
-pnpm install
-pnpm dev
+scripts/devcontainer.sh up
+scripts/devcontainer.sh pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |

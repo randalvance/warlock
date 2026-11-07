@@ -11,7 +11,8 @@
 			"!.claude",
 			"!**/*.md",
 			"!apps/server/drizzle/meta",
-			"!docs/prototypes"
+			"!docs/prototypes",
+			"!.devcontainer/devcontainer-lock.json"
 		]
 	},
 	"css": {

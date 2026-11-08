@@ -60,7 +60,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
     <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
     <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
       <div role="group" aria-label="Confirm stopping run 31" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 20px; background: var(--warn-tint, rgba(255,176,46,.14)); border-bottom: 1px solid var(--line-100, #232327)">
-        <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Stop Scout on run 31? The run is marked cancelled, the worktree and commit a1f3c2d stay, and you can rerun from here.</span>
+        <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Stop Scout on run 31? The run fails with reason cancelled, the worktree and commit a1f3c2d stay, and you can rerun from here.</span>
         <span style="flex-grow: 1"></span>
         <button class="wl-btn" type="button" on-click="{{keepRunning}}">Keep running</button>
         <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import>
@@ -90,7 +90,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="queued"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">blocked</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">cannot finish without you</span></div>
           </sc-if>
           <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}">
-            <div class="wl-row" style="background: var(--warn-tint, rgba(255,176,46,.14))"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">cancelled</x-import><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">stopped by you at 14:05 · no outcome reported · worktree run-31 kept</span></div>
+            <div class="wl-row" style="background: var(--warn-tint, rgba(255,176,46,.14))"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">failed</x-import><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">reason: cancelled · stopped by you at 14:05 · no outcome reported · worktree run-31 kept</span></div>
           </sc-if>
         </section>
 
@@ -141,7 +141,7 @@ class Component extends DCLogic {
         ? baseLog.concat([stopLine, { time: '14:06', kind: 'said', text: 'rerun by you · Scout resumes from commit a1f3c2d' }, checkLine('14:06')])
         : baseLog.concat([checkLine('14:05')]);
     const chips = cancelled
-      ? [{ label: 'cancelled · by you', tone: 'warn' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]
+      ? [{ label: 'failed · reason: cancelled', tone: 'warn' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]
       : [{ label: 'running ' + elapsed, tone: 'accent' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }];
     const baseEvents = [
       { seq: 180, type: 'run.started', detail: 'run 31 · WO-14 · Scout · worktree run-31' },
@@ -151,16 +151,16 @@ class Component extends DCLogic {
       { seq: 184, type: 'artifact.added', detail: 'commit a1f3c2d on warlock/run-31' },
       { seq: 185, type: 'tool.call', detail: 'bash pnpm lint' }
     ];
-    const cancelEvent = { seq: 186, type: 'run.cancelled', detail: 'by you · worktree run-31 kept' };
+    const cancelEvent = { seq: 186, type: 'run.failed', detail: 'reason: cancelled · by you · worktree run-31 kept' };
     const events = cancelled
       ? baseEvents.concat([cancelEvent])
       : rerun
-        ? baseEvents.concat([cancelEvent, { seq: 187, type: 'run.resumed', detail: 'rerun by you · from commit a1f3c2d' }])
+        ? baseEvents.concat([cancelEvent, { seq: 187, type: 'run.started', detail: 'rerun by you · from commit a1f3c2d' }])
         : baseEvents;
     const announce = confirming
-      ? 'Stop run 31? Scout halts and the run is marked cancelled. Choose Stop run or Keep running.'
+      ? 'Stop run 31? Scout halts and the run fails with reason cancelled. Choose Stop run or Keep running.'
       : cancelled
-        ? 'Run 31 cancelled by you after 0:41. Worktree run-31 kept. Rerun is available.'
+        ? 'Run 31 failed with reason cancelled, stopped by you after 0:41. Worktree run-31 kept. Rerun is available.'
         : rerun
           ? 'Run 31 rerunning. Scout resumes from commit a1f3c2d.'
           : 'Run 31 running at Implement, 0:38 elapsed.';

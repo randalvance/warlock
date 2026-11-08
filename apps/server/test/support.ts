@@ -1,10 +1,11 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { EventSource } from "eventsource";
 import { onTestFinished, vi } from "vitest";
 import { Seq, type StoredEvent } from "../src/events.ts";
 import { connectEvents } from "../src/events-wire.ts";
+import type { ApiErrorBody } from "../src/http.ts";
 import type { GitHubConfig } from "../src/modules/projects/github.ts";
 
 export function tempDbPath(): string {
@@ -23,11 +24,12 @@ export async function startFresh(
 	{
 		port = 0,
 		github = noGitHub,
-	}: { port?: number; github?: GitHubConfig } = {},
+		skillsDir = join(dirname(dbPath), "skills"),
+	}: { port?: number; github?: GitHubConfig; skillsDir?: string } = {},
 ) {
 	vi.resetModules();
 	const { start } = await import("../src/server.ts");
-	const server = await start({ port, dbPath, github });
+	const server = await start({ port, dbPath, skillsDir, github });
 	onTestFinished(() => server.stop());
 	return server;
 }
@@ -55,4 +57,21 @@ export function readEvents(
 			},
 		});
 	});
+}
+
+export async function errorOf(
+	response: Response,
+): Promise<ApiErrorBody["error"]> {
+	return ((await response.json()) as ApiErrorBody).error;
+}
+
+export async function headSeq(url: URL): Promise<number> {
+	const response = await fetch(new URL("/api/events", url));
+	const reader = response.body?.getReader();
+	if (!reader) throw new Error("the stream has no body");
+	const { value } = await reader.read();
+	await reader.cancel();
+	const match = /"cursor":(\d+)/.exec(new TextDecoder().decode(value));
+	if (!match) throw new Error("the stream did not open with ready");
+	return Number(match[1]);
 }

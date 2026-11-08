@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import type {
 	EventOf,
+	MinionId,
 	ProjectId,
 	ServerEventType,
 	StoredEvent,
@@ -16,6 +17,15 @@ import { subscribeServerEvents } from "@/lib/server-events";
 export const projectKeys = {
 	list: ["projects", "list"] as const,
 	detail: (id: ProjectId) => ["projects", "detail", id] as const,
+};
+
+export const agentKeys = {
+	warlock: ["warlock"] as const,
+	skills: ["skills"] as const,
+	minions: {
+		list: ["minions", "list"] as const,
+		detail: (id: MinionId) => ["minions", "detail", id] as const,
+	},
 };
 
 export const projectQueries = {
@@ -45,6 +55,11 @@ export const staleAfter: {
 	"project.changed": (event) => [
 		projectKeys.list,
 		projectKeys.detail(event.projectId),
+	],
+	"warlock.changed": () => [agentKeys.warlock],
+	"minion.changed": (event) => [
+		agentKeys.minions.list,
+		agentKeys.minions.detail(event.minionId),
 	],
 };
 

@@ -13,6 +13,17 @@ const storedRows: { [Type in ServerEventType]: [unknown, ...unknown[]] } = {
 			at: "2026-11-07T06:02:41.512Z",
 		},
 	],
+	"warlock.changed": [
+		{ type: "warlock.changed", seq: 3, at: "2026-11-08T02:14:09.330Z" },
+	],
+	"minion.changed": [
+		{
+			type: "minion.changed",
+			minionId: "5d2c9e71-0f4a-4b8e-9c63-7a1e2b4f8d05",
+			seq: 4,
+			at: "2026-11-08T02:15:27.904Z",
+		},
+	],
 };
 
 test("every event row ever stored still parses with today's schema", () => {

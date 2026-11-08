@@ -17,7 +17,7 @@ scripts/devcontainer.sh up
 scripts/devcontainer.sh pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. Agent profiles pick skills from the skills library, a `skills` folder next to the database that holds one Agent Skills folder per skill. Set `WARLOCK_SKILLS_DIR` to use a different folder. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |

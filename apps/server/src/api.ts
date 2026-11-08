@@ -8,6 +8,17 @@ export type {
 } from "./events.ts";
 export type { ApiErrorBody, ApiIssue } from "./http.ts";
 export type {
+	AgentProfile,
+	McpServerConfig,
+	MemoryNote,
+	MemoryNoteId,
+	Minion,
+	MinionId,
+	MinionSummary,
+	SkillRef,
+	Warlock,
+} from "./modules/agents/model.ts";
+export type {
 	Artifact,
 	ArtifactId,
 	ContextEntry,

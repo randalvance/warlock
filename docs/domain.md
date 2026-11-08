@@ -10,6 +10,8 @@ This page defines the words Warlock uses and the data shape behind each one. Cod
 | Warlock | The main agent. Every command enters through the warlock. It picks a spellbook for a task and delegates the work to minions through a formation. |
 | Minion | A worker agent. Each minion has its own system prompt, skills, MCP servers, and memory. |
 | Agent profile | The configuration an agent runs with. It holds a system prompt, skills, and MCP servers. The warlock and every minion have one. |
+| Skills library | The folder on the server's disk that holds the skills a profile can list. Each skill is an Agent Skills folder with a `SKILL.md`, and a profile names it by its folder name. |
+| Memory note | One markdown note in a minion's memory. A minion reads its notes at the start of a run and can append to them. The warlock has no memory. |
 | Project | The owner of a body of work. A project has one or more GitHub repos, a collection of artifacts, and context. |
 | Artifact | A file, link, or note that belongs to a project. Minions read artifacts and produce new ones. |
 | Context | Standing knowledge about a project, such as conventions and architecture notes. Every agent that works on the project receives it. |
@@ -35,6 +37,8 @@ type ProjectId = Brand<string, "ProjectId">;
 type ArtifactId = Brand<string, "ArtifactId">;
 type ContextId = Brand<string, "ContextId">;
 type MinionId = Brand<string, "MinionId">;
+type MemoryNoteId = Brand<string, "MemoryNoteId">;
+type SkillRef = Brand<string, "SkillRef">;
 type FormationId = Brand<string, "FormationId">;
 type StationId = Brand<string, "StationId">;
 type SpellbookId = Brand<string, "SpellbookId">;
@@ -70,8 +74,12 @@ interface ContextEntry {
 interface AgentProfile {
 	systemPrompt: string;
 	skills: SkillRef[];
-	mcpServers: McpServerConfig[];
+	mcpServers: Record<string, McpServerConfig>;
 }
+
+type McpServerConfig =
+	| { type?: "stdio"; command: string; args?: string[]; env?: Record<string, string> }
+	| { type: "http"; url: string; headers?: Record<string, string> };
 
 interface Warlock {
 	profile: AgentProfile;
@@ -81,7 +89,14 @@ interface Minion {
 	id: MinionId;
 	name: string;
 	profile: AgentProfile;
-	memory: MemoryRef;
+	memory: MemoryNote[];
+}
+
+interface MemoryNote {
+	id: MemoryNoteId;
+	name: string;
+	body: string;
+	updatedAt: string;
 }
 
 type End = "done" | "failed";
@@ -150,11 +165,13 @@ interface Run {
 
 A file artifact has a name, a media type, and a size instead of a path, because its bytes live in the database next to its row.
 
-`SkillRef`, `McpServerConfig`, and `MemoryRef` are defined by the agent profiles epic.
+A `SkillRef` is the name of a folder directly under the skills library. `mcpServers` has the shape of the `mcpServers` map in a Claude Code `.mcp.json` file. Each key is a server name, and a stdio entry may leave out its `type`.
 
 ## Rules the model enforces
 
 - A project has at least one repo.
+- A profile lists a skill at most once, and only a skill whose folder in the skills library holds a `SKILL.md`.
+- Minion names are unique ignoring case. Within one minion, memory note names are unique ignoring case.
 - A formation's entry station and every transition endpoint exist in `stations`.
 - Every station has at least one outgoing transition, and every station is reachable from the entry station.
 - A formation has at most one transition for each pair of station and outcome.

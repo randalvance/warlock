@@ -7,6 +7,8 @@ import { getRequestListener } from "@hono/node-server";
 import { createApp } from "./app.ts";
 import { createBroadcast } from "./broadcast.ts";
 import { type Database, openDatabase } from "./db.ts";
+import { createSkillsLibrary } from "./modules/agents/skills.ts";
+import { createAgents } from "./modules/agents/store.ts";
 import { createGitHub, type GitHubConfig } from "./modules/projects/github.ts";
 import { createProjects } from "./modules/projects/store.ts";
 
@@ -14,6 +16,8 @@ export interface Config {
 	/** Port on 127.0.0.1. 0 asks the OS for a free one. */
 	readonly port: number;
 	readonly dbPath: string;
+	/** The skills library folder. `start` creates it. */
+	readonly skillsDir: string;
 	readonly github: GitHubConfig;
 }
 
@@ -27,10 +31,15 @@ export interface RunningServer {
 /** Listens on loopback only, then commits `server.started`. A failed start writes nothing and leaves nothing open. */
 export async function start(config: Config): Promise<RunningServer> {
 	mkdirSync(dirname(config.dbPath), { recursive: true });
+	mkdirSync(config.skillsDir, { recursive: true });
 	const broadcast = createBroadcast();
 	const db = openDatabase(config.dbPath, broadcast);
 	const projects = createProjects({ db, github: createGitHub(config.github) });
-	const handle = getRequestListener(createApp(db, projects).fetch);
+	const library = createSkillsLibrary(config.skillsDir);
+	const agents = createAgents({ db, library });
+	const handle = getRequestListener(
+		createApp(db, projects, agents, library).fetch,
+	);
 	const responses = new Set<ServerResponse>();
 	const http = createServer((req, res) => {
 		responses.add(res);

@@ -21,6 +21,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:disabled{opacity:.4;cursor:default}
 .wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
 .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
@@ -107,7 +108,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <span style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
               <span id="delete-minion" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import></span>
               <x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save minion</x-import>
-              <button id="done-minion" class="wl-btn" type="button" on-click="{{finishEdit}}">Done</button>
+              <button id="done-minion" class="wl-btn" type="button" disabled="{{confirming}}" title="{{doneTitle}}" on-click="{{finishEdit}}">Done</button>
             </span>
           </sc-if>
         </div>
@@ -278,10 +279,11 @@ class Component extends DCLogic {
       reading: alive && !editing,
       editingAlive: alive && editing,
       confirming: confirming,
+      doneTitle: confirming ? 'Choose Delete minion or Keep minion first' : '',
       deleted: deleted,
       announce: announce,
       startEdit: () => { this.setState({ editing: true, notice: 'Editing minion Scout' }); focusLater('#mname'); },
-      finishEdit: () => { this.setState({ editing: false, notice: 'Viewing minion Scout' }); focusLater('#edit-minion'); },
+      finishEdit: () => { if (this.state.phase === 'confirm') return; this.setState({ editing: false, notice: 'Viewing minion Scout' }); focusLater('#edit-minion'); },
       askDelete: () => { this.setState({ phase: 'confirm', notice: '' }); focusLater('#keep-minion'); },
       keep: () => { this.setState({ phase: 'alive', notice: '' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); },
       confirmDelete: () => { this.setState({ phase: 'deleted', notice: '' }); focusLater('#undo-minion'); },

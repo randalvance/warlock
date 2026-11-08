@@ -15,4 +15,6 @@ The files here are the canvas's own sources: `canvas.json` is the index (artboar
 | `Warlock.dc.html` | #7 Warlock | The thread behind the floor's composer, expanded: chat with tool-call lines, a working composer, persisted history, the event log. |
 | `Board.dc.html` | #8 Board | Observe first: the five status columns with GitHub-linked cards, the sync log, and the last-write-wins conflict line. Edit board reveals the Move arrows. |
 
+A plain element binds a handler with the JSX camelCase attribute, such as `onClick`, `onKeyDown`, or `onSubmit`; the kebab form `on-click` is silently ignored on plain elements and works only as a prop on an `<x-import>` design-system component.
+
 The rail links, Open run, and Open thread join the artboards in Play, so the canvas works as one prototype. The home shape and its decisions are in [the surface brief](../../.impeccable/surfaces/docs-prototypes-main-dc-html.md). Formation, station, and spellbook are the prototypes' presentation labels for workflow, step, and playbook in [the domain model](../domain.md); the labels stay on the artboards and the model terms apply in code. Each artboard keeps its own state in Play: a run cancelled on `Runtime.dc.html` is still running when the rail returns to the floor.

@@ -55,8 +55,8 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">synced 14:05</x-import>
       <span class="af-meta">next in 0:42</span>
-      <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" id="edit-board" on-click="{{startEditing}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit board</button></sc-if>
-      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" id="done-editing" on-click="{{stopEditing}}">Done</button></sc-if>
+      <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" id="edit-board" onClick="{{startEditing}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit board</button></sc-if>
+      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" id="done-editing" onClick="{{stopEditing}}">Done</button></sc-if>
       <button class="wl-btn" type="button">Import issues</button>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{syncNow}}">Sync now</x-import>
     </header>
@@ -78,8 +78,8 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
                     <sc-if value="{{t.hasBook}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.book}}</x-import></sc-if>
                     <span style="flex-grow: 1"></span>
                     <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
-                      <button class="wl-mv" type="button" aria-label="{{t.backLabel}}" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
-                      <button class="wl-mv" type="button" aria-label="{{t.fwdLabel}}" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+                      <button class="wl-mv" type="button" aria-label="{{t.backLabel}}" onClick="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+                      <button class="wl-mv" type="button" aria-label="{{t.fwdLabel}}" onClick="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
                     </sc-if>
                   </div>
                 </article>

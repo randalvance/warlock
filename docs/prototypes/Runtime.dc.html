@@ -64,7 +64,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <div role="group" aria-label="Confirm stopping run 31" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 20px; background: var(--warn-tint, rgba(255,176,46,.14)); border-bottom: 1px solid var(--line-100, #232327)">
         <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Stop Scout on run 31? The run fails with reason cancelled, the worktree and commit a1f3c2d stay, and you can rerun from here.</span>
         <span style="flex-grow: 1"></span>
-        <button class="wl-btn" type="button" on-click="{{keepRunning}}">Keep running</button>
+        <button class="wl-btn" type="button" onClick="{{keepRunning}}">Keep running</button>
         <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import>
       </div>
     </sc-if>

@@ -60,10 +60,10 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
       <sc-if value="{{reading}}" hint-placeholder-val="{{true}}">
-        <button id="edit-spellbook" class="wl-btn" type="button" on-click="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit spellbook</button>
+        <button id="edit-spellbook" class="wl-btn" type="button" onClick="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit spellbook</button>
       </sc-if>
       <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
-        <button id="done-spellbook" class="wl-btn" type="button" on-click="{{done}}">Done</button>
+        <button id="done-spellbook" class="wl-btn" type="button" onClick="{{done}}">Done</button>
         <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save spellbook</x-import>
       </sc-if>
     </header>

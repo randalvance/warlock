@@ -6,14 +6,13 @@ The files here are the canvas's own sources: `canvas.json` is the index (artboar
 
 | Artboard | Epic | What it shows |
 | --- | --- | --- |
-| `Main.dc.html` | #1 Foundation | The shell: rail with the six sections, event-stream badge (live, reconnecting, offline), empty Projects state, the `server.started` event, the five CI checks. |
-| `Projects.dc.html` | #2 Projects | A project with two readable repos and one that fails with a message naming the repo, artifacts by kind, context entries. |
-| `Agents.dc.html` | #3 Agent profiles | The warlock card, the minions as a shift board, and Scout's editor: system prompt, `SKILL.md` folders, MCP servers with an invalid entry naming the bad field, memory notes. |
-| `Runtime.dc.html` | #4 Agent runtime | One minion on one task in its own worktree and branch. Cancel fails the run with reason `cancelled` and appends the event. |
-| `Formations.dc.html` | #5 Workflows | The seed formation's stations and transitions, a read-only graph with the review loop, and the validator. Adding a duplicate transition lights the rule and disables Save. |
-| `Spellbooks.dc.html` | #6 Playbooks | The two seeds, a draft failing the missing-brief rule, the warlock's pick for a task with its reason and an override, the eval fixture. |
-| `Warlock.dc.html` | #7 Warlock | The command panel: chat with tool-call lines, a working composer, persisted history, the event log. |
-| `Board.dc.html` | #8 Board | The five status columns with GitHub-linked cards that move, the sync log, and the last-write-wins conflict line. |
-| `Factory.dc.html` | #9 Factory view | Two live runs on their lines with the minion's activity, a finished run replayed handoff by handoff, the dock of shipped work. |
+| `Main.dc.html` | #1 Foundation, #9 Factory view | The floor: one line per project, blocked first, each a strip over a lane of station nodes with the run cards under them and the running one lit. Click or Enter opens a run in the inspector (log with sequence numbers, Cancel run, Rerun, Review); Escape closes it and the floor fills the view, which is the factory view. The composer names the project and queues the new run under the entry station; Next station plays a handoff. Shipped work sits in the Dock. |
+| `Projects.dc.html` | #2 Projects | Observe first: a project with two readable repos and one that fails with a message naming the repo, artifacts by kind, context entries. Edit project reveals the editor and Delete. |
+| `Agents.dc.html` | #3 Agent profiles | Observe first: the warlock card, the minions as a shift board, and Scout's profile: system prompt, `SKILL.md` folders, MCP servers with an invalid entry naming the bad field, memory notes. Edit minion reveals the editor and Delete. |
+| `Runtime.dc.html` | #4 Agent runtime | The floor's inspector at full width, reached from Open run: one minion on one task in its own worktree and branch. Cancel fails the run with reason `cancelled` and appends the event. |
+| `Formations.dc.html` | #5 Workflows | Observe first: the seed formation as a Line with its stations and transitions. Edit formation reveals the editor and the validator; adding a duplicate transition lights the rule and disables Save. |
+| `Spellbooks.dc.html` | #6 Playbooks | Observe first: the two seeds with a brief per station, the warlock's pick for a task with its reason and an override, the eval fixture. Edit spellbook reveals the draft failing the missing-brief rule. |
+| `Warlock.dc.html` | #7 Warlock | The thread behind the floor's composer, expanded: chat with tool-call lines, a working composer, persisted history, the event log. |
+| `Board.dc.html` | #8 Board | Observe first: the five status columns with GitHub-linked cards, the sync log, and the last-write-wins conflict line. Edit board reveals the Move arrows. |
 
-The rail links and the Open run links join the artboards in Play, so the canvas works as one prototype. The artboards predate a rename in [the domain model](../domain.md). They say formation, station, and spellbook where the domain model now says workflow, step, and playbook.
+The rail links, Open run, and Open thread join the artboards in Play, so the canvas works as one prototype. The home shape and its decisions are in [the surface brief](../../.impeccable/surfaces/docs-prototypes-main-dc-html.md). The artboards predate a rename in [the domain model](../domain.md). They say formation, station, and spellbook where the domain model now says workflow, step, and playbook.

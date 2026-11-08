@@ -37,8 +37,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-insp{grid-row:2/4;grid-column:3}
 
 .wl-line{border-bottom:1px solid var(--line-100,#232327);padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
-.wl-strip{display:flex;align-items:center;gap:12px;height:28px}
-.wl-strip h2{margin:0;font-size:18px;line-height:1;color:var(--ink-100,#f2f2f0)}
+.wl-strip{display:flex;align-items:center;gap:12px;height:36px}
+.wl-strip h2{margin:0;font-size:30px;line-height:1;color:var(--ink-100,#f2f2f0)}
 .wl-cap{font-size:11px;color:var(--ink-300,#8f8f96)}
 .wl-lane{display:flex;flex-direction:column;gap:8px}
 .wl-lane + .wl-lane{margin-top:6px;padding-top:12px;border-top:1px dashed var(--line-100,#232327)}
@@ -48,9 +48,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-n4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .wl-n5{grid-template-columns:repeat(5,minmax(0,1fr))}
 .wl-n6{grid-template-columns:repeat(6,minmax(0,1fr))}
-.wl-track{position:relative;height:36px;margin-bottom:22px}
+.wl-track{position:relative;height:48px;margin-bottom:22px}
 .wl-track::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--lane,#303036);transform:translateY(-50%)}
-.wl-nodes{position:relative;height:36px}
+.wl-nodes{position:relative;height:48px;align-items:center}
 .wl-nodes .af-node{justify-self:center;cursor:pointer;padding:0}
 .wl-nodes .af-node:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
 .wl-nodes .af-node[data-state="running"]:hover{color:var(--glow-core,#ffd6f3)}
@@ -60,8 +60,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-run{padding:8px 10px}
 .wl-run .af-card-head{gap:8px;min-height:18px}
 .wl-run .wl-id{flex:none;font:500 11px/1 'Azeret Mono',monospace;color:var(--ink-300,#8f8f96);font-variant-numeric:tabular-nums}
-.wl-run .wl-t{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 13px/18px 'Instrument Sans',sans-serif;color:var(--ink-100,#f2f2f0)}
-.wl-run[data-state="queued"] .wl-t,.wl-run[data-state="queued"] .wl-r2{color:var(--ink-300,#8f8f96)}
+.wl-run .wl-t{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:18px;letter-spacing:.04em}
+.wl-run.af-card[data-state="queued"] .wl-t,.wl-run[data-state="queued"] .wl-r2{color:var(--ink-300,#8f8f96)}
 .wl-run[data-state="running"] .wl-id{color:var(--accent-bright,#ff7ae0)}
 .wl-r2{display:flex;align-items:center;gap:8px;margin-top:6px;min-height:20px;font:400 11px/1 'Azeret Mono',monospace;color:var(--ink-200,#c4c4c8);white-space:nowrap;overflow:hidden}
 .wl-r2 > span{overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -156,7 +156,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
                   <sc-for list="{{s.cards}}" as="c" hint-placeholder-count="1">
                     <div class="{{c.cls}}" tabindex="0" role="button" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" data-run="{{c.id}}" on-click="{{c.open}}">
                       <div class="{{c.cardCls}}" data-state="{{c.state}}">
-                        <div class="af-card-head"><i class="af-lamp" aria-hidden="true"></i><span class="wl-id">{{c.id}}</span><span class="wl-t">{{c.body}}</span></div>
+                        <div class="af-card-head"><i class="af-lamp" aria-hidden="true"></i><span class="wl-id">{{c.id}}</span><span class="af-title wl-t">{{c.body}}</span></div>
                         <div class="wl-r2"><sc-if value="{{c.hasChip}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="{{c.tone}}">{{c.chip}}</x-import></sc-if><span>{{c.meta}}</span></div>
                       </div>
                     </div>

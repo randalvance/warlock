@@ -4,8 +4,8 @@ import { expect, test } from "./fixtures.ts";
 const epicSections = [
 	"Projects",
 	"Agents",
-	"Formations",
-	"Spellbooks",
+	"Workflows",
+	"Playbooks",
 	"Board",
 	"Factory",
 ];

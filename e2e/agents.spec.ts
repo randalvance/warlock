@@ -125,9 +125,7 @@ test("the warlock profile saves and shows on the warlock card after a reload", a
 }) => {
 	await openAgents(page);
 	await page.getByRole("link", { name: "Edit warlock profile" }).click();
-	await page
-		.getByLabel("System prompt")
-		.fill("Pick a spellbook for each task.");
+	await page.getByLabel("System prompt").fill("Pick a playbook for each task.");
 	await page.getByLabel("Skill to add").selectOption("tdd");
 	await page.getByRole("button", { name: "Add skill" }).click();
 	await page.getByRole("button", { name: "Add server" }).click();
@@ -146,7 +144,7 @@ test("the warlock profile saves and shows on the warlock card after a reload", a
 	).toHaveText("docs · http");
 	await page.reload();
 	await expect(page.getByLabel("System prompt")).toHaveValue(
-		"Pick a spellbook for each task.",
+		"Pick a playbook for each task.",
 	);
 	await expect(server.getByLabel("URL")).toHaveValue(
 		"https://docs.example/mcp",

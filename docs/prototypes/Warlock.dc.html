@@ -12,18 +12,22 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-body{margin:0;background:#09090b}
-a{color:#ff7ae0}a:hover{color:#f2f2f0}
+body{margin:0;background:var(--bg-000,#09090b);scrollbar-width:thin;scrollbar-color:var(--line-300,#45454c) transparent}
+a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
+::selection{background:var(--accent,#ff3dcd);color:var(--bg-000,#09090b)}
+.wl-in,.wl-ta,.wl-search{caret-color:var(--accent,#ff3dcd)}
+.wl-in::placeholder,.wl-ta::placeholder{color:var(--ink-300,#8f8f96)}
 .wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
 .wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
 .wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
-.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
-.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible,.wl-thread:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:-2px}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-thread:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:-2px}
 .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.wl-in{height:40px;box-sizing:border-box;padding:0 12px;background:var(--surface-300,#232328);border:1px solid var(--line-200,#303036);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
+.wl-in{height:40px;box-sizing:border-box;padding:0 12px;background:var(--surface-300,#1f1f24);border:1px solid var(--line-200,#303036);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
 .wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
 .wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
 .wl-head{display:flex;align-items:baseline;gap:12px;padding:12px 14px 8px}
@@ -42,10 +46,10 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
-    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
+    <header class="af-topbar">
       <a href="Main.dc.html" class="wl-btn" style="height: 28px">Floor</a>
-      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Thread</h1>
-      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">the composer, expanded · the warlock · Fable 5.1 · tools over warlock-api mcp</span>
+      <h1 class="af-heading">Thread</h1>
+      <span class="af-meta">the composer, expanded · the warlock · Fable 5.1 · tools over warlock-api mcp</span>
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Sign" tone="accent">Listening</x-import>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
@@ -57,7 +61,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         <div id="thread" class="wl-thread" tabindex="0" role="log" aria-live="polite" aria-label="Conversation" style="flex: 1 1 0; min-height: 0; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px">
           <sc-for list="{{thread}}" as="m" hint-placeholder-count="6">
             <sc-if value="{{m.isYou}}" hint-placeholder-val="{{true}}">
-              <div style="display: flex; justify-content: flex-end"><div style="max-width: 72%; background: var(--surface-300, #232328); border: 1px solid var(--line-200, #303036); border-radius: var(--radius-xl, 14px); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 14px">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); align-self: flex-end">you · {{m.time}}</span></div></div>
+              <div style="display: flex; justify-content: flex-end"><div style="max-width: 72%; background: var(--surface-300, #1f1f24); border: 1px solid var(--line-200, #303036); border-radius: var(--radius-xl, 14px); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 14px">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); align-self: flex-end">you · {{m.time}}</span></div></div>
             </sc-if>
             <sc-if value="{{m.isTool}}" hint-placeholder-val="{{false}}">
               <div style="display: flex; align-items: center; gap: 10px; min-height: 28px; padding: 0 6px"><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd); flex: 0 0 auto"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">{{m.tool}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{m.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); margin-left: auto">{{m.time}}</span></div>

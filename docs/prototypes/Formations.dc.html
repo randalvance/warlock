@@ -12,14 +12,17 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-body{margin:0;background:#09090b}
-a{color:#ff7ae0}a:hover{color:#f2f2f0}
+body{margin:0;background:var(--bg-000,#09090b);scrollbar-width:thin;scrollbar-color:var(--line-300,#45454c) transparent}
+a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
+::selection{background:var(--accent,#ff3dcd);color:var(--bg-000,#09090b)}
+.wl-in,.wl-ta,.wl-search{caret-color:var(--accent,#ff3dcd)}
+.wl-in::placeholder,.wl-ta::placeholder{color:var(--ink-300,#8f8f96)}
 .wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
 .wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
 .wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
-.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
 .wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
 .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -48,9 +51,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
-    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
-      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Formations</h1>
-      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">2 formations · 1 in use by 2 spellbooks</span>
+    <header class="af-topbar">
+      <h1 class="af-heading">Formations</h1>
+      <span class="af-meta">2 formations · 1 in use by 2 spellbooks</span>
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
       <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button id="edit-formation" class="wl-btn" type="button" on-click="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit formation</button></sc-if>

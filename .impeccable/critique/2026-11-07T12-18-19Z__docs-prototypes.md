@@ -8,6 +8,7 @@ p1_count: 3
 target_identity: "file:/Users/randal/dev/warlock/.claude/worktrees/warlock-feature-prototypes-efc894/docs/prototypes"
 timestamp: 2026-11-07T12-18-19Z
 slug: docs-prototypes
+closed: true
 ---
 > Baseline note, added 2026-11-08: this snapshot was taken before the harden pass in PR 21. The three P1 findings below are pre-harden observations. Addressed since: confirm strips with undo before Cancel run, Delete project and Delete minion; `aria-live` status regions on every artboard; `:focus-visible` on `.wl-btn` and the other controls; distinct names on the Board's Move arrows; the Spellbooks error tied to its textarea. Still open: the third P1 (generic composition), now the subject of the shape brief in `.impeccable/surfaces/docs-prototypes-main-dc-html.md`, and both P2 items.
 

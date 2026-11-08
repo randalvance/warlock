@@ -75,17 +75,15 @@ export function createAgents(deps: {
 		return row;
 	};
 
+	// SQLite's lower() folds only ASCII, so the comparison runs here.
 	const requireFreeName = (read: Reader, name: string, self?: MinionId) => {
+		const folded = foldName(name);
 		const taken = read
 			.select({ name: minions.name })
 			.from(minions)
-			.where(
-				and(
-					eq(sql`lower(${minions.name})`, sql`lower(${name})`),
-					self === undefined ? undefined : ne(minions.id, self),
-				),
-			)
-			.get();
+			.where(self === undefined ? undefined : ne(minions.id, self))
+			.all()
+			.find((row) => foldName(row.name) === folded);
 		if (taken) {
 			throw new ApiError({
 				code: "conflict",
@@ -258,6 +256,10 @@ export function createAgents(deps: {
 			});
 		},
 	};
+}
+
+function foldName(name: string): string {
+	return name.normalize("NFC").toLowerCase();
 }
 
 function sameJson(stored: unknown, next: unknown): boolean {

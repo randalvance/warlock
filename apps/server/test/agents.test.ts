@@ -411,6 +411,18 @@ test("minion names and a minion's note names are unique ignoring case", async ()
 	expect((await readMinion(api, scout.id)).memory).toEqual([note]);
 });
 
+test("minion names that differ only in non-ASCII case are taken", async () => {
+	const { api } = await serve();
+	const echo = await createMinion(api, plain("Écho"));
+
+	const taken = await api.minions.$post({ json: plain("écho") });
+	expect(taken.status).toBe(409);
+	expect((await errorOf(taken)).message).toContain("Écho");
+	expect(await (await api.minions.$get()).json()).toEqual({
+		minions: [{ id: echo.id, name: "Écho" }],
+	});
+});
+
 test("the web client sees branded minion ids and the 400 body", () => {
 	type Create = Awaited<ReturnType<Api["minions"]["$post"]>>;
 	type BodyAt<S extends number> = Awaited<

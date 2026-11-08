@@ -1,9 +1,8 @@
 import { hc } from "hono/client";
 import { expect, expectTypeOf, onTestFinished, test } from "vitest";
 import type { AppType } from "../src/app.ts";
-import type { ApiErrorBody } from "../src/http.ts";
+import { type ApiErrorBody, maxJsonBodyBytes } from "../src/http.ts";
 import {
-	maxJsonBodyBytes,
 	maxUploadBytes,
 	type ProjectId,
 } from "../src/modules/projects/model.ts";

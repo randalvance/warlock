@@ -8,8 +8,8 @@ import { ProjectsPage } from "@/projects/projects-page";
 export const sections = [
 	{ path: "projects", label: "Projects" },
 	{ path: "agents", label: "Agents" },
-	{ path: "formations", label: "Formations" },
-	{ path: "spellbooks", label: "Spellbooks" },
+	{ path: "workflows", label: "Workflows" },
+	{ path: "playbooks", label: "Playbooks" },
 	{ path: "board", label: "Board" },
 	{ path: "factory", label: "Factory" },
 ] as const;

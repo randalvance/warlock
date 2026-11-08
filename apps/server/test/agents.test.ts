@@ -313,10 +313,10 @@ test("the warlock starts empty, keeps a saved profile across a restart, and logs
 	expect(await (await first.api.warlock.$get()).json()).toEqual({
 		warlock: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
 	});
-	writeSkill(join(first.skillsDir, "pick-spellbook"));
+	writeSkill(join(first.skillsDir, "pick-playbook"));
 	const profile = {
-		systemPrompt: "You pick a spellbook for each task.",
-		skills: ["pick-spellbook"],
+		systemPrompt: "You pick a playbook for each task.",
+		skills: ["pick-playbook"],
 		mcpServers: {
 			"warlock-api": { type: "stdio" as const, command: "node" },
 		},

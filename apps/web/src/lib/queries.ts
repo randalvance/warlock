@@ -11,7 +11,7 @@ import type {
 	StoredEvent,
 } from "@warlock/server/api";
 import type { StreamStatus } from "@warlock/server/events";
-import { client, unwrap } from "@/lib/api";
+import { ApiRequestError, client, unwrap } from "@/lib/api";
 import { subscribeServerEvents } from "@/lib/server-events";
 
 export const projectKeys = {
@@ -46,6 +46,41 @@ export const projectQueries = {
 					)
 				).project,
 		}),
+};
+
+export const agentQueries = {
+	warlock: () =>
+		queryOptions({
+			queryKey: agentKeys.warlock,
+			queryFn: async () => (await unwrap(client.api.warlock.$get())).warlock,
+		}),
+	skills: () =>
+		queryOptions({
+			queryKey: agentKeys.skills,
+			queryFn: async () => (await unwrap(client.api.skills.$get())).skills,
+		}),
+	minions: {
+		list: () =>
+			queryOptions({
+				queryKey: agentKeys.minions.list,
+				queryFn: async () => (await unwrap(client.api.minions.$get())).minions,
+			}),
+		detail: (id: MinionId) =>
+			queryOptions({
+				queryKey: agentKeys.minions.detail(id),
+				queryFn: async () =>
+					(
+						await unwrap(
+							client.api.minions[":minionId"].$get({
+								param: { minionId: id },
+							}),
+						)
+					).minion,
+				retry: (failures, error) =>
+					!(error instanceof ApiRequestError && error.status === 404) &&
+					failures < 3,
+			}),
+	},
 };
 
 export const staleAfter: {

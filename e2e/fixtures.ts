@@ -1,6 +1,6 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import { once } from "node:events";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -28,10 +28,17 @@ export const test = base.extend<{ warlock: Warlock }>({
 			try {
 				const dataDir = mkdtempSync(join(tmpdir(), "warlock-e2e-"));
 				try {
+					const skillsDir = join(dataDir, "skills");
+					mkdirSync(join(skillsDir, "tdd"), { recursive: true });
+					writeFileSync(
+						join(skillsDir, "tdd", "SKILL.md"),
+						"---\nname: tdd\ndescription: Use when writing code test-first.\n---\n",
+					);
 					const env = {
 						...process.env,
 						WARLOCK_PORT: String(e2ePorts.server),
 						WARLOCK_DB_PATH: join(dataDir, "warlock.db"),
+						WARLOCK_SKILLS_DIR: skillsDir,
 						GITHUB_API_URL: github.config.apiUrl.href,
 						GITHUB_TOKEN: github.config.token,
 					};

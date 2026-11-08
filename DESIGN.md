@@ -32,10 +32,16 @@ typography:
     letterSpacing: "0.05em"
   title:
     fontFamily: "Barlow Condensed, sans-serif"
-    fontSize: "18px"
+    fontSize: "30px"
     fontWeight: 600
     lineHeight: 1
     letterSpacing: "0.06em"
+  card-title:
+    fontFamily: "Barlow Condensed, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: "0.04em"
   section:
     fontFamily: "Barlow Condensed, sans-serif"
     fontSize: "14px"
@@ -149,7 +155,7 @@ components:
   card-run:
     backgroundColor: "{colors.surface-100}"
     textColor: "{colors.ink-100}"
-    typography: "{typography.label}"
+    typography: "{typography.card-title}"
     rounded: "{rounded.xl}"
     padding: "8px 10px"
   station-node:
@@ -255,11 +261,12 @@ A black-and-hairline neutral ramp with one magenta accent and three status colou
 
 ### Hierarchy
 - **Heading** (Barlow 600, 20px, 1.15, +0.05em): the page name in the top bar ("Floor", "Board", "Thread"). The inspector heading steps down to 17px.
-- **Title** (Barlow 600, 18px, 1, +0.06em): a line's project name in its Console strip. The Dock strip steps down to 14px.
+- **Title** (Barlow 600, 30px, 1, +0.06em): a line's project name in its Console strip, at the system's console-title size, the largest type on the floor. The Dock strip steps down to 14px.
 - **Section** (Barlow 600, 14px, +0.06em): card and panel heads ("Isolation", "Command history", board column names), set with the `wl-sig` helper.
 - **Sign** (Barlow 600, 13px, +0.12em): one word in a 24px tube (SHIPPED, LISTENING), and the label of primary and danger buttons at +0.08em.
 - **Body** (Instrument Sans 400, 14px, 1.4): shell default, thread messages, option labels. Prose panels drop to 13px/1.45 with a 72ch cap.
-- **Label** (Instrument Sans 500, 13px): quiet button labels, run card titles, board task titles, form labels.
+- **Label** (Instrument Sans 500, 13px): quiet button labels, board task titles, form labels.
+- **Card title** (Barlow 600, 13px, +0.04em): a run card's title, the system's `af-title` stepped down as in its grid cards. The card's state colours it: the filament (`glow-core` with the tube text-shadow) when running, `warn` when blocked, `err` when failed, `ink-300` when queued.
 - **Caption** (Instrument Sans 400, 12px): hints, the inspector's key column, node labels at 11px.
 - **Tally** (Azeret Mono 500, 22px, -0.02em; 18px in the top bar): counts with a 10 to 11px uppercase sans word beneath.
 - **Mono** (Azeret Mono 400, 11 to 12px): ids, timers, log rows (28px tall), worktree and branch names, strip captions, the composer's reply line.
@@ -274,7 +281,7 @@ A black-and-hairline neutral ramp with one magenta accent and three status colou
 
 The home is a fixed 1360x960 artboard laid out as a CSS grid: columns 56px rail / fluid floor / 320px inspector, rows 56px top bar / fluid floor / 56px composer. The rail spans every row; the top bar spans floor and inspector; the inspector spans floor and composer rows so the composer sits across the floor only. Closing the inspector collapses its column to 0 and the floor fills the view: that is the factory view.
 
-The floor scrolls vertically with 20px/24px/16px padding and a 14px gap between Lines. A Line is a 28px Console strip (project name, formation chips, run count, a SHIPPED sign when idle) over one lane per formation in use, separated from the next Line by a `line-100` rule and 12px. A lane is a 36px track with a 2px `lane` rail through its middle, the station nodes centred on it in an equal-column grid (2 to 6 columns, 20px gutters), and 22px below it the run cards in the same column grid under their station. A second lane on a Line is set off by a dashed `line-100` rule. Idle lines show one unlit lane (track in `line-100`) and a hint; a project with no run shows the strip and the hint alone. Lines sort blocked, failed, running, succeeded, queued, idle, empty.
+The floor scrolls vertically with 20px/24px/16px padding and a 14px gap between Lines. A Line is a 36px Console strip (project name, formation chips, run count, a SHIPPED sign when idle) over one lane per formation in use, separated from the next Line by a `line-100` rule and 12px. A lane is a 48px track with a 2px `lane` rail through its middle, the 36px station nodes centred on it in an equal-column grid (2 to 6 columns, 20px gutters), and 22px below it the run cards in the same column grid under their station. A second lane on a Line is set off by a dashed `line-100` rule. Idle lines show one unlit lane (track in `line-100`) and a hint; a project with no run shows the strip and the hint alone. Lines sort blocked, failed, running, succeeded, queued, idle, empty.
 
 The sibling artboards use the same 56px rail and 56px top bar with a flex-wrap body: panels at 24px padding and 20 to 24px gaps, a list column of 44px rows beside a reading pane, board columns in a five-column grid with a 1100px minimum. Spacing is a 4px grid: 4, 6, 8, 10, 12, 14, 16, 20, 24. Touch targets are 44px (rail tiles, list rows), controls 32px, compact controls 28px, chips 20px, lamps 8px.
 
@@ -336,10 +343,10 @@ Buttons are 32px pills with 12px side padding, flat at rest; the primary is the 
 - **Top bar:** 56px, `bg-100`, `line-100` bottom edge, 16 to 20px gaps, 20px side padding: heading, a mono caption or stream chip, tallies, then actions with the primary button last.
 
 ### Line (signature)
-A Console strip over a lane. Strip: 28px, project name in Title signage, formation chips (plain), a mono count caption ("2 runs · 1 running · 1 blocked"), and at the right a lime SHIPPED sign when idle or a mono "shipped n" when busy. Lane: a 36px track with the 2px `lane` rail; station nodes (36px, 8px radius, `surface-200`, `line-200`, mono numeral, 11px sans label 6px below) centred per column; on a live lane the `af-lane-bead` pill (60x3px, `glow-body`) travels left to right over 3s on a loop. Node state follows the runs at it: running (filament numeral, magenta tube, border transparent), blocked (`warn` edge and glow), failed (`err`), passed (`ok` edge), queued (`ink-400` numeral). Nodes are buttons: click opens the station's brief in the inspector.
+A Console strip over a lane. Strip: 36px, project name in Title signage at 30px, formation chips (plain), a mono count caption ("2 runs · 1 running · 1 blocked"), and at the right a lime SHIPPED sign when idle or a mono "shipped n" when busy. Lane: a 48px track with the 2px `lane` rail; station nodes (36px, 8px radius, `surface-200`, `line-200`, mono numeral, 11px sans label 6px below) centred per column; on a live lane the `af-lane-bead` pill (60x3px, `glow-body`) travels left to right over 3s on a loop. Node state follows the runs at it: running (filament numeral, magenta tube, border transparent), blocked (`warn` edge and glow), failed (`err`), passed (`ok` edge), queued (`ink-400` numeral). Nodes are buttons: click opens the station's brief in the inspector.
 
 ### Run card (signature)
-An `af-card` with `data-state`, padded 8px 10px, in the column of its station. Head: 8px lamp, mono run id (`ink-300`, `accent-bright` when running), title in Instrument Sans 500 13px truncating with an ellipsis. Second row (`wl-r2`, 20px): a state chip when blocked, failed or succeeded, then a mono meta line (`minion · 0:38` running, `queued · minion`, `3m 12s · minion` succeeded, the reason when failed). Queued cards set title and meta in `ink-300`. Running: magenta tube, flickers on once then hums. Blocked: amber tube and wash, pulsing. Failed: red tube held until Rerun or Dismiss. Succeeded: lime ring held steady until Review or Dismiss, then the run leaves for the Dock. Selected: `accent-tint` wash and `line-300` border, kept under any tube. The card's wrapper is the focus and keyboard target (`role=button`, `aria-pressed`): Arrow keys move between cards, Home/End jump, Enter or Space opens, Escape closes the inspector and returns focus. A card arriving at a new station or landing from the composer slides in from the left over 0.5s on the DS ease (`wl-slide`); instant under reduced motion.
+An `af-card` with `data-state`, padded 8px 10px, in the column of its station. Head: 8px lamp, mono run id (`ink-300`, `accent-bright` when running), title in Card title signage (`af-title`, 13px) truncating with an ellipsis, the filament when running. Second row (`wl-r2`, 20px): a state chip when blocked, failed or succeeded, then a mono meta line (`minion · 0:38` running, `queued · minion`, `3m 12s · minion` succeeded, the reason when failed). Queued cards set title and meta in `ink-300`. Running: magenta tube, flickers on once then hums. Blocked: amber tube and wash, pulsing. Failed: red tube held until Rerun or Dismiss. Succeeded: lime ring held steady until Review or Dismiss, then the run leaves for the Dock. Selected: `accent-tint` wash and `line-300` border, kept under any tube. The card's wrapper is the focus and keyboard target (`role=button`, `aria-pressed`): Arrow keys move between cards, Home/End jump, Enter or Space opens, Escape closes the inspector and returns focus. A card arriving at a new station or landing from the composer slides in from the left over 0.5s on the DS ease (`wl-slide`); instant under reduced motion.
 
 ### Inspector
 The DS `af-inspector` at 320px on `bg-100` with a `line-100` left edge, 18px padding, 12px gaps. Heading 17px signage ("Run 31"), a mono sub-line (work order, spellbook, formation), the full title in 13px `ink-200`, a chip row (station toned by state; minion, worktree, branch plain), then the `af-log`: 28px mono rows with a kind dot, `#seq time` in `ink-400`, text truncating and revealing on hover, the one live row shimmering. Actions pin to the bottom above a `line-100` rule: Cancel run (danger) while running, Rerun (primary) and Dismiss when failed, Review (primary) and Dismiss when succeeded. Cancel opens a confirm strip on `warn-tint` (8px radius) with Keep running and Stop run. For a station the inspector shows its brief in a `surface-100` panel (8px radius, 13px/1.5 `ink-200`) or lists the spellbooks that brief it. Live announcements go through one visually hidden `role=status` region.

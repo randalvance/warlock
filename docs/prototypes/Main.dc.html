@@ -225,11 +225,29 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
         </sc-if>
         <sc-if value="{{run.passed}}" hint-placeholder-val="{{false}}">
-          <a href="Runtime.dc.html" class="af-btn" data-variant="primary" on-click="{{review}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye" size="{{14}}"></x-import>Review</a>
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="eye" on-click="{{review}}">Review</x-import>
           <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
         </sc-if>
         <sc-if value="{{run.openable}}" hint-placeholder-val="{{true}}"><a href="Runtime.dc.html" class="wl-btn" style="margin-left: auto">Open run 31</a></sc-if>
       </div>
+    </sc-if>
+    <sc-if value="{{showResult}}" hint-placeholder-val="{{false}}">
+      <div>
+        <h2 class="af-heading" tabindex="-1">Run {{res.id}} · result</h2>
+        <div class="af-wo-id">{{res.sub}}</div>
+      </div>
+      <p class="af-wo-desc">{{res.title}}</p>
+      <div class="af-chips">
+        <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">{{res.outcome}}</x-import>
+        <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{res.minion}}</x-import>
+      </div>
+      <div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Commit</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{res.commit}}</span></div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Branch</span><span class="wl-mono" style="font-size: 12px">{{res.branch}}</span></div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Worktree</span><span class="wl-mono" style="font-size: 12px">{{res.worktree}}</span></div>
+      </div>
+      <x-import component-from-global-scope="AgenticFactory.Log" rows="{{res.log}}"></x-import>
+      <div class="wl-acts"><span class="wl-cap">In the Dock as shipped.</span><button class="wl-btn" type="button" style="margin-left: auto" on-click="{{closeInsp}}">Close</button></div>
     </sc-if>
     <sc-if value="{{showStation}}" hint-placeholder-val="{{false}}">
       <div>
@@ -348,6 +366,7 @@ class Component extends DCLogic {
         { id: 28, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Review', state: 'passed', title: 'Pin the pnpm version', wo: 'WO-11', minion: 'Ada', elapsed: '3m 12s', worktree: 'run-28', branch: 'warlock/run-28',
           log: [
             { seq: 160, time: '13:30', kind: 'said', text: 'run.started · WO-11 · Imp · worktree run-28' },
+            { seq: 164, time: '13:31', kind: 'bash', text: 'commit 7c2e91a chore: pin pnpm to 10.22' },
             { seq: 167, time: '13:32', kind: 'said', text: 'handoff Implement → Review · Ada' },
             { seq: 170, time: '13:33', kind: 'said', text: 'run.succeeded · outcome done · 3m 12s · waiting for your review' }
           ] }
@@ -485,6 +504,20 @@ class Component extends DCLogic {
       };
     }
 
+    let res = null;
+    if (insp && insp.kind === 'result' && insp.run) {
+      const r = insp.run;
+      const commitRow = r.log.find((l) => /commit [0-9a-f]{7}/.test(l.text));
+      res = {
+        id: r.id, title: r.title, minion: r.minion,
+        sub: r.wo + ' · ' + r.spellbook + ' spellbook · ' + r.formation + ' · shipped ' + this.now(),
+        outcome: 'done · ' + r.elapsed,
+        commit: commitRow ? commitRow.text.replace(/^commit /, '') : 'see the branch',
+        branch: r.branch, worktree: r.worktree + ' · kept',
+        log: r.log.map((l) => ({ time: '#' + l.seq + ' ' + l.time, kind: l.kind, text: l.text, live: false }))
+      };
+    }
+
     let st = null;
     if (insp && insp.kind === 'station') {
       const sameLane = lastRun && lastRun.project === insp.project && lastRun.formation === insp.formation;
@@ -565,7 +598,7 @@ class Component extends DCLogic {
       if (key === 'End') { e.preventDefault(); slots[slots.length - 1].focus(); }
     };
 
-    const dismiss = () => {
+    const leave = (openResult) => {
       if (!selRun) return;
       const r = selRun;
       const slots = findAll('.wl-slot');
@@ -574,11 +607,15 @@ class Component extends DCLogic {
       const p = S.projects.map((x) => x.name === r.project ? { ...x, shipped: x.shipped + (r.state === 'passed' ? 1 : 0), lastFormation: r.formation } : x);
       const dock = r.state === 'passed' ? [{ title: r.title, id: 'run ' + r.id, branch: r.branch, agent: r.minion, when: this.now() }].concat(S.dock) : S.dock;
       this.setState({
-        runs: S.runs.filter((x) => x.id !== r.id), projects: p, dock: dock, insp: null,
-        announce: r.state === 'passed' ? 'Run ' + r.id + ' shipped. It moved to the Dock.' : 'Run ' + r.id + ' dismissed from the floor.'
+        runs: S.runs.filter((x) => x.id !== r.id), projects: p, dock: dock,
+        insp: openResult ? { kind: 'result', run: r } : null,
+        announce: openResult ? 'Run ' + r.id + ' result open in the inspector. The run moved to the Dock.'
+          : r.state === 'passed' ? 'Run ' + r.id + ' shipped. It moved to the Dock.' : 'Run ' + r.id + ' dismissed from the floor.'
       });
-      if (next) focusLater('.wl-slot[data-run="' + next.getAttribute('data-run') + '"]'); else focusLater('#task');
+      if (openResult) focusLater('.wl-insp h2');
+      else if (next) focusLater('.wl-slot[data-run="' + next.getAttribute('data-run') + '"]'); else focusLater('#task');
     };
+    const dismiss = () => leave(false);
 
     return {
       yes: true,
@@ -597,6 +634,7 @@ class Component extends DCLogic {
       onKey: onKey,
       showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, failed: false, passed: false, minion: '' },
       showStation: !!st, st: st || { name: '', sub: '', hasBrief: false, spellbook: '', brief: '', listing: false, books: [] },
+      showResult: !!res, res: res || { id: '', sub: '', title: '', minion: '', outcome: '', commit: '', branch: '', worktree: '', log: [] },
       confirming: S.confirming, confirmAria: 'Confirm stopping run ' + (selId != null ? selId : ''),
       askCancel: () => { this.setState({ confirming: true, announce: 'Stop run ' + selId + '? Choose Stop run or Keep running.' }); focusLater('#keep-running'); },
       keepRunning: () => { this.setState({ confirming: false, announce: 'Run ' + selId + ' keeps running.' }); focusLater('.wl-slot[data-run="' + selId + '"]'); },
@@ -612,7 +650,7 @@ class Component extends DCLogic {
         p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: p.seq, time: this.now(), kind: 'read', text: 'read context: Conventions, Architecture', live: true }]) } : r);
         this.setState({ ...p, announce: 'Run ' + selRun.id + ' rerunning. ' + selRun.minion + ' resumes at ' + selRun.station + '.' });
       },
-      review: () => { dismiss(); },
+      review: () => leave(true),
       dismiss: dismiss,
       handoff: handoff,
       closeInsp: () => { this.setState({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' }); if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]'); else focusLater('#task'); }

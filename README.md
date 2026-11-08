@@ -1,6 +1,6 @@
 # Warlock
 
-Warlock is an agentic software factory, called the dark factory. You give the warlock agent a task. The warlock picks a spellbook for the task, and a formation of minion agents does the work, handing it from station to station.
+Warlock is an agentic software factory, called the dark factory. You give the warlock agent a task. The warlock picks a playbook for the task, and a workflow of minion agents does the work, handing it from step to step.
 
 Warlock is early in development. The plan is a set of GitHub issues with the `epic` label.
 
@@ -17,7 +17,7 @@ scripts/devcontainer.sh up
 scripts/devcontainer.sh pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. Agent profiles pick skills from the skills library, a `skills` folder next to the database that holds one Agent Skills folder per skill. Set `WARLOCK_SKILLS_DIR` to use a different folder. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |

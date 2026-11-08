@@ -1,3 +1,4 @@
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { loadGitHubToken } from "./modules/projects/github.ts";
@@ -10,6 +11,7 @@ const Env = z.object({
 		.string()
 		.min(1)
 		.default(fileURLToPath(new URL("../.data/warlock.db", import.meta.url))),
+	WARLOCK_SKILLS_DIR: z.string().min(1).optional(),
 	GITHUB_API_URL: z.url().default("https://api.github.com"),
 });
 
@@ -25,6 +27,9 @@ if (token === undefined) {
 const server = await start({
 	port: env.data.WARLOCK_PORT,
 	dbPath: env.data.WARLOCK_DB_PATH,
+	skillsDir:
+		env.data.WARLOCK_SKILLS_DIR ??
+		join(dirname(env.data.WARLOCK_DB_PATH), "skills"),
 	github: { apiUrl: new URL(env.data.GITHUB_API_URL), token },
 });
 console.log(`warlock server listening on ${server.url.href}`);

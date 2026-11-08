@@ -1,13 +1,10 @@
-import { type Context, Hono } from "hono";
-import { bodyLimit } from "hono/body-limit";
-import { createMiddleware } from "hono/factory";
+import { Hono } from "hono";
 import { z } from "zod";
-import { type ApiErrorBody, errorStatus, validate } from "../../http.ts";
+import { jsonBodyLimit, limitBody, validate } from "../../http.ts";
 import {
 	ArtifactId,
 	ContextId,
 	ContextInput,
-	maxJsonBodyBytes,
 	maxUploadBytes,
 	NewArtifact,
 	NewProject,
@@ -35,32 +32,6 @@ const AttachRepo = z.object({ repo: RepoName });
 
 const multipartOverheadBytes = 64 * 1024;
 
-function limitBody(maxSize: number, message: string) {
-	const tooLarge = (c: Context) =>
-		c.json(
-			{ error: { code: "too_large", message } } satisfies ApiErrorBody,
-			errorStatus.too_large,
-		);
-	const streamed = bodyLimit({ maxSize, onError: tooLarge });
-	return createMiddleware(async (c, next) => {
-		const declared = c.req.header("content-length");
-		// Hono's bodyLimit opens the body as a web stream first. Its backpressure
-		// stalls node-server's drain of the unread body, which then resets the
-		// connection the client reuses for its next request.
-		if (
-			declared !== undefined &&
-			c.req.header("transfer-encoding") === undefined
-		) {
-			return Number(declared) > maxSize ? tooLarge(c) : next();
-		}
-		return streamed(c, next);
-	});
-}
-
-const jsonBodyLimit = limitBody(
-	maxJsonBodyBytes,
-	`a request body can be at most ${maxJsonBodyBytes} bytes`,
-);
 const fileBodyLimit = limitBody(
 	maxUploadBytes + multipartOverheadBytes,
 	`a file can be at most ${maxUploadBytes} bytes`,

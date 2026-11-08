@@ -7,9 +7,9 @@ import type {
 } from "@warlock/server/api";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { useParams } from "react-router";
+import { Field } from "@/components/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { client, unwrap } from "@/lib/api";
 import { projectQueries } from "@/lib/queries";
@@ -421,23 +421,6 @@ function SingleFieldForm(props: {
 			</Field>
 			<FormError error={run.error} />
 		</form>
-	);
-}
-
-function Field({
-	id,
-	label,
-	children,
-}: {
-	id: string;
-	label: string;
-	children: ReactNode;
-}) {
-	return (
-		<div className="flex flex-col gap-1.5">
-			<Label htmlFor={id}>{label}</Label>
-			{children}
-		</div>
 	);
 }
 

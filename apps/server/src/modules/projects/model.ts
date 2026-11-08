@@ -77,8 +77,6 @@ export type NewProject = z.infer<typeof NewProject>;
 export const ProjectPatch = z.object({ name: ProjectName });
 
 export const maxUploadBytes = 25 * 1024 * 1024;
-// A 100,000-character context body escaped as \uXXXX is about 600 KB of JSON.
-export const maxJsonBodyBytes = 1024 * 1024;
 
 export const NewArtifact = z.discriminatedUnion("kind", [
 	z.object({

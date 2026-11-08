@@ -1,5 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
-import type { ValidationTargets } from "hono";
+import type { Context, ValidationTargets } from "hono";
+import { bodyLimit } from "hono/body-limit";
+import { createMiddleware } from "hono/factory";
 import type { z } from "zod";
 
 export interface ApiIssue {
@@ -80,3 +82,33 @@ export function notFound(what: string): ApiErrorBody {
 export const internalError: ApiErrorBody = {
 	error: { code: "internal", message: "internal error" },
 };
+
+export function limitBody(maxSize: number, message: string) {
+	const tooLarge = (c: Context) =>
+		c.json(
+			{ error: { code: "too_large", message } } satisfies ApiErrorBody,
+			errorStatus.too_large,
+		);
+	const streamed = bodyLimit({ maxSize, onError: tooLarge });
+	return createMiddleware(async (c, next) => {
+		const declared = c.req.header("content-length");
+		// Hono's bodyLimit opens the body as a web stream first. Its backpressure
+		// stalls node-server's drain of the unread body, which then resets the
+		// connection the client reuses for its next request.
+		if (
+			declared !== undefined &&
+			c.req.header("transfer-encoding") === undefined
+		) {
+			return Number(declared) > maxSize ? tooLarge(c) : next();
+		}
+		return streamed(c, next);
+	});
+}
+
+// A 100,000-character string field escaped as \uXXXX is about 600 KB of JSON.
+export const maxJsonBodyBytes = 1024 * 1024;
+
+export const jsonBodyLimit = limitBody(
+	maxJsonBodyBytes,
+	`a request body can be at most ${maxJsonBodyBytes} bytes`,
+);

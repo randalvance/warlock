@@ -5,17 +5,27 @@ import {
 } from "@tanstack/react-query";
 import type {
 	EventOf,
+	MinionId,
 	ProjectId,
 	ServerEventType,
 	StoredEvent,
 } from "@warlock/server/api";
 import type { StreamStatus } from "@warlock/server/events";
-import { client, unwrap } from "@/lib/api";
+import { ApiRequestError, client, unwrap } from "@/lib/api";
 import { subscribeServerEvents } from "@/lib/server-events";
 
 export const projectKeys = {
 	list: ["projects", "list"] as const,
 	detail: (id: ProjectId) => ["projects", "detail", id] as const,
+};
+
+export const agentKeys = {
+	warlock: ["warlock"] as const,
+	skills: ["skills"] as const,
+	minions: {
+		list: ["minions", "list"] as const,
+		detail: (id: MinionId) => ["minions", "detail", id] as const,
+	},
 };
 
 export const projectQueries = {
@@ -38,6 +48,41 @@ export const projectQueries = {
 		}),
 };
 
+export const agentQueries = {
+	warlock: () =>
+		queryOptions({
+			queryKey: agentKeys.warlock,
+			queryFn: async () => (await unwrap(client.api.warlock.$get())).warlock,
+		}),
+	skills: () =>
+		queryOptions({
+			queryKey: agentKeys.skills,
+			queryFn: async () => (await unwrap(client.api.skills.$get())).skills,
+		}),
+	minions: {
+		list: () =>
+			queryOptions({
+				queryKey: agentKeys.minions.list,
+				queryFn: async () => (await unwrap(client.api.minions.$get())).minions,
+			}),
+		detail: (id: MinionId) =>
+			queryOptions({
+				queryKey: agentKeys.minions.detail(id),
+				queryFn: async () =>
+					(
+						await unwrap(
+							client.api.minions[":minionId"].$get({
+								param: { minionId: id },
+							}),
+						)
+					).minion,
+				retry: (failures, error) =>
+					!(error instanceof ApiRequestError && error.status === 404) &&
+					failures < 3,
+			}),
+	},
+};
+
 export const staleAfter: {
 	[T in ServerEventType]: (event: EventOf<T>) => QueryKey[];
 } = {
@@ -45,6 +90,11 @@ export const staleAfter: {
 	"project.changed": (event) => [
 		projectKeys.list,
 		projectKeys.detail(event.projectId),
+	],
+	"warlock.changed": () => [agentKeys.warlock],
+	"minion.changed": (event) => [
+		agentKeys.minions.list,
+		agentKeys.minions.detail(event.minionId),
 	],
 };
 

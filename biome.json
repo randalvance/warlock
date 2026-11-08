@@ -40,6 +40,7 @@
 			"includes": [
 				"apps/server/src/events.ts",
 				"apps/server/src/events-wire.ts",
+				"apps/server/src/modules/agents/model.ts",
 				"apps/server/src/modules/projects/model.ts"
 			],
 			"linter": {

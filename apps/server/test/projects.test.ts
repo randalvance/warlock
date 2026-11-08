@@ -1,14 +1,13 @@
 import { hc } from "hono/client";
 import { expect, expectTypeOf, onTestFinished, test } from "vitest";
 import type { AppType } from "../src/app.ts";
-import type { ApiErrorBody } from "../src/http.ts";
+import { type ApiErrorBody, maxJsonBodyBytes } from "../src/http.ts";
 import {
-	maxJsonBodyBytes,
 	maxUploadBytes,
 	type ProjectId,
 } from "../src/modules/projects/model.ts";
 import { type StubRepo, startGitHubStub } from "./github-stub.ts";
-import { startFresh, tempDbPath } from "./support.ts";
+import { errorOf, headSeq, startFresh, tempDbPath } from "./support.ts";
 
 const readable = {
 	"acme/api": { defaultBranch: "main" },
@@ -43,21 +42,6 @@ async function readProject(api: Api, projectId: string) {
 		throw new Error(`get answered ${response.status}`);
 	}
 	return (await response.json()).project;
-}
-
-async function errorOf(response: Response): Promise<ApiErrorBody["error"]> {
-	return ((await response.json()) as ApiErrorBody).error;
-}
-
-async function headSeq(url: URL): Promise<number> {
-	const response = await fetch(new URL("/api/events", url));
-	const reader = response.body?.getReader();
-	if (!reader) throw new Error("the stream has no body");
-	const { value } = await reader.read();
-	await reader.cancel();
-	const match = /"cursor":(\d+)/.exec(new TextDecoder().decode(value));
-	if (!match) throw new Error("the stream did not open with ready");
-	return Number(match[1]);
 }
 
 test.each([

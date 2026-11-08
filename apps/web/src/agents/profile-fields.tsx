@@ -19,16 +19,23 @@ import { ApiRequestError } from "@/lib/api";
 import { agentQueries } from "@/lib/queries";
 import { FormError } from "@/projects/form-error";
 
-/** One MCP server as the editor holds it. It keeps the fields of both types, so switching type loses nothing. */
+type Pairs = readonly (readonly [string, string])[];
+
+/**
+ * One MCP server as the editor holds it. It keeps the fields of both types, so switching type loses nothing.
+ * A list left `undefined` is left out of the entry, so a stored empty list stays empty.
+ */
 interface ServerRow {
 	readonly key: number;
 	readonly name: string;
 	readonly type: "stdio" | "http";
+	/** A `.mcp.json` stdio entry may leave out its type, and one loaded that way keeps leaving it out. */
+	readonly typed: boolean;
 	readonly command: string;
-	readonly args: string;
-	readonly env: string;
+	readonly args: readonly string[] | undefined;
+	readonly env: Pairs | undefined;
 	readonly url: string;
-	readonly headers: string;
+	readonly headers: Pairs | undefined;
 }
 
 export interface ProfileDraft {
@@ -50,11 +57,12 @@ function blankServer(): ServerRow {
 		key: nextRowKey++,
 		name: "",
 		type: "stdio",
+		typed: true,
 		command: "",
-		args: "",
-		env: "",
+		args: undefined,
+		env: undefined,
 		url: "",
-		headers: "",
+		headers: undefined,
 	};
 }
 
@@ -69,12 +77,13 @@ export function toDraft(profile: AgentProfile): ProfileDraft {
 				? {
 						type: "http",
 						url: server.url,
-						headers: joinPairs(server.headers, ": "),
+						headers: server.headers && Object.entries(server.headers),
 					}
 				: {
+						typed: server.type === "stdio",
 						command: server.command,
-						args: (server.args ?? []).join("\n"),
-						env: joinPairs(server.env, "="),
+						args: server.args,
+						env: server.env && Object.entries(server.env),
 					}),
 		})),
 	};
@@ -92,56 +101,43 @@ export function fromDraft(draft: ProfileDraft): AgentProfile {
 
 function toServer(row: ServerRow): McpServerConfig {
 	if (row.type === "http") {
-		const headers = splitPairs(row.headers, ":");
-		return { type: "http", url: row.url, ...(headers ? { headers } : {}) };
+		return {
+			type: "http",
+			url: row.url,
+			...(row.headers ? { headers: Object.fromEntries(row.headers) } : {}),
+		};
 	}
-	const args = lines(row.args);
-	const env = splitPairs(row.env, "=");
 	return {
-		type: "stdio",
+		...(row.typed ? { type: "stdio" as const } : {}),
 		command: row.command,
-		...(args.length > 0 ? { args } : {}),
-		...(env ? { env } : {}),
+		...(row.args ? { args: [...row.args] } : {}),
+		...(row.env ? { env: Object.fromEntries(row.env) } : {}),
 	};
 }
 
-function lines(text: string): string[] {
-	return text
-		.split("\n")
-		.map((line) => line.trim())
-		.filter((line) => line !== "");
+/** A record keeps one entry per name, so saving a row that repeats an earlier name would drop a row. */
+function isRepeated(names: readonly string[], index: number): boolean {
+	const name = names[index] ?? "";
+	return name !== "" && names.indexOf(name) < index;
 }
 
-function joinPairs(
-	pairs: Readonly<Record<string, string>> | undefined,
-	separator: string,
-): string {
-	return Object.entries(pairs ?? {})
-		.map(([key, value]) => `${key}${separator}${value}`)
-		.join("\n");
+function anyRepeated(names: readonly string[]): boolean {
+	return names.some((_, index) => isRepeated(names, index));
 }
 
-function splitPairs(
-	text: string,
-	separator: string,
-): Record<string, string> | undefined {
-	const pairs = lines(text).map((line) => {
-		const at = line.indexOf(separator);
-		return at < 0
-			? [line, ""]
-			: [line.slice(0, at).trim(), line.slice(at + 1).trim()];
-	});
-	return pairs.length > 0 ? Object.fromEntries(pairs) : undefined;
+function keysOf(pairs: Pairs | undefined): string[] {
+	return (pairs ?? []).map(([key]) => key);
 }
 
-/** The servers record keeps one entry per name, so saving a row that repeats an earlier name would drop a row. */
-function isRepeated(servers: readonly ServerRow[], index: number): boolean {
-	const name = servers[index]?.name;
-	return name !== "" && servers.findIndex((row) => row.name === name) < index;
-}
-
-export function hasRepeatedServer(draft: ProfileDraft): boolean {
-	return draft.servers.some((_, index) => isRepeated(draft.servers, index));
+export function hasRepeatedName(draft: ProfileDraft): boolean {
+	return (
+		anyRepeated(draft.servers.map((row) => row.name)) ||
+		draft.servers.some((row) =>
+			row.type === "http"
+				? anyRepeated(keysOf(row.headers))
+				: anyRepeated(keysOf(row.env)),
+		)
+	);
 }
 
 export function issuesOf(error: Error | null): readonly ApiIssue[] {
@@ -319,6 +315,7 @@ function ServersField({
 	onChange: (next: ServerRow[]) => void;
 	issues: readonly ApiIssue[];
 }) {
+	const names = servers.map((row) => row.name);
 	return (
 		<section className="flex flex-col gap-2">
 			<h3 className="text-sm font-medium">MCP servers</h3>
@@ -337,7 +334,7 @@ function ServersField({
 						)
 					}
 					onRemove={() => onChange(servers.filter((r) => r.key !== row.key))}
-					repeated={isRepeated(servers, index)}
+					repeated={isRepeated(names, index)}
 					issues={issues}
 				/>
 			))}
@@ -371,6 +368,7 @@ function ServerFields({
 	repeated: boolean;
 	issues: readonly ApiIssue[];
 }) {
+	const path = `profile.mcpServers.${row.name}`;
 	return (
 		<fieldset
 			aria-label={label}
@@ -389,7 +387,10 @@ function ServerFields({
 						id={`${id}-type`}
 						value={row.type}
 						onChange={(e) =>
-							onChange({ type: e.target.value === "http" ? "http" : "stdio" })
+							onChange({
+								type: e.target.value === "http" ? "http" : "stdio",
+								typed: true,
+							})
 						}
 					>
 						<NativeSelectOption value="stdio">stdio</NativeSelectOption>
@@ -414,20 +415,14 @@ function ServerFields({
 							onChange={(e) => onChange({ command: e.target.value })}
 						/>
 					</Field>
-					<Field id={`${id}-args`} label="Arguments, one per line">
-						<Textarea
-							id={`${id}-args`}
-							value={row.args}
-							onChange={(e) => onChange({ args: e.target.value })}
-						/>
-					</Field>
-					<Field id={`${id}-env`} label="Environment, one KEY=value per line">
-						<Textarea
-							id={`${id}-env`}
-							value={row.env}
-							onChange={(e) => onChange({ env: e.target.value })}
-						/>
-					</Field>
+					<ArgsField args={row.args} onChange={(args) => onChange({ args })} />
+					<PairsField
+						heading="Environment"
+						item="environment variable"
+						pairs={row.env}
+						onChange={(env) => onChange({ env })}
+						repeatedPath={(key) => `${path}.env.${key}`}
+					/>
 				</>
 			) : (
 				<>
@@ -439,25 +434,146 @@ function ServerFields({
 							onChange={(e) => onChange({ url: e.target.value })}
 						/>
 					</Field>
-					<Field id={`${id}-headers`} label="Headers, one Name: value per line">
-						<Textarea
-							id={`${id}-headers`}
-							value={row.headers}
-							onChange={(e) => onChange({ headers: e.target.value })}
-						/>
-					</Field>
+					<PairsField
+						heading="Headers"
+						item="header"
+						pairs={row.headers}
+						onChange={(headers) => onChange({ headers })}
+						repeatedPath={(key) => `${path}.headers.${key}`}
+					/>
 				</>
 			)}
 			{repeated ? (
-				<IssueText
-					issue={{
-						path: `profile.mcpServers.${row.name}`,
-						message: "is already in this profile",
-					}}
-				/>
+				<IssueText issue={{ path, message: "is already in this profile" }} />
 			) : (
-				<Issues issues={issues} at={`profile.mcpServers.${row.name}`} />
+				<Issues issues={issues} at={path} />
 			)}
 		</fieldset>
+	);
+}
+
+function without<T>(
+	list: readonly T[],
+	index: number,
+): readonly T[] | undefined {
+	const next = list.filter((_, i) => i !== index);
+	return next.length > 0 ? next : undefined;
+}
+
+function ArgsField({
+	args = [],
+	onChange,
+}: {
+	args: readonly string[] | undefined;
+	onChange: (next: readonly string[] | undefined) => void;
+}) {
+	return (
+		<section className="flex flex-col gap-2">
+			<h4 className="text-sm font-medium">Arguments</h4>
+			<ol aria-label="Arguments" className="flex flex-col gap-2">
+				{args.map((arg, index) => (
+					<li key={index} className="flex items-start gap-2">
+						<Textarea
+							aria-label={`Argument ${index + 1}`}
+							rows={1}
+							className="min-h-9 font-mono"
+							value={arg}
+							onChange={(e) =>
+								onChange(args.map((a, i) => (i === index ? e.target.value : a)))
+							}
+						/>
+						<Button
+							type="button"
+							variant="ghost"
+							aria-label={`Remove argument ${index + 1}`}
+							onClick={() => onChange(without(args, index))}
+						>
+							Remove
+						</Button>
+					</li>
+				))}
+			</ol>
+			<div>
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					onClick={() => onChange([...args, ""])}
+				>
+					Add argument
+				</Button>
+			</div>
+		</section>
+	);
+}
+
+function PairsField({
+	heading,
+	item,
+	pairs = [],
+	onChange,
+	repeatedPath,
+}: {
+	heading: string;
+	item: string;
+	pairs: Pairs | undefined;
+	onChange: (next: Pairs | undefined) => void;
+	repeatedPath: (key: string) => string;
+}) {
+	const keys = keysOf(pairs);
+	const Item = item.charAt(0).toUpperCase() + item.slice(1);
+	const set = (index: number, pair: readonly [string, string]) =>
+		onChange(pairs.map((p, i) => (i === index ? pair : p)));
+	return (
+		<section className="flex flex-col gap-2">
+			<h4 className="text-sm font-medium">{heading}</h4>
+			<ol aria-label={heading} className="flex flex-col gap-2">
+				{pairs.map(([key, value], index) => (
+					<li key={index} className="flex flex-col gap-1">
+						<div className="flex items-start gap-2">
+							<Input
+								aria-label={`${Item} ${index + 1} name`}
+								className="w-48 shrink-0 font-mono"
+								value={key}
+								onChange={(e) => set(index, [e.target.value, value])}
+							/>
+							<Textarea
+								aria-label={`${Item} ${index + 1} value`}
+								rows={1}
+								className="min-h-9 font-mono"
+								value={value}
+								onChange={(e) => set(index, [key, e.target.value])}
+							/>
+							<Button
+								type="button"
+								variant="ghost"
+								aria-label={`Remove ${item} ${index + 1}`}
+								onClick={() => onChange(without(pairs, index))}
+							>
+								Remove
+							</Button>
+						</div>
+						{isRepeated(keys, index) && (
+							<IssueText
+								issue={{
+									path: repeatedPath(key),
+									message: "is already in this server",
+								}}
+							/>
+						)}
+					</li>
+				))}
+			</ol>
+			<div>
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					onClick={() => onChange([...pairs, ["", ""]])}
+				>
+					Add {item}
+				</Button>
+			</div>
+		</section>
 	);
 }

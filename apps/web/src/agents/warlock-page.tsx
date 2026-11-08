@@ -3,7 +3,7 @@ import type { AgentProfile } from "@warlock/server/api";
 import { type FormEvent, useState } from "react";
 import {
 	fromDraft,
-	hasRepeatedServer,
+	hasRepeatedName,
 	issuesOf,
 	ProfileFields,
 	profilePaths,
@@ -32,7 +32,7 @@ function WarlockEditor({ saved }: { saved: AgentProfile }) {
 	});
 	const submit = (event: FormEvent) => {
 		event.preventDefault();
-		if (!hasRepeatedServer(profile)) save.mutate();
+		if (!hasRepeatedName(profile)) save.mutate();
 	};
 	return (
 		<form onSubmit={submit} className="flex flex-col gap-4">

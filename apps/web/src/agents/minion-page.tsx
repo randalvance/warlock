@@ -6,7 +6,7 @@ import { MemoryNotes } from "@/agents/memory-notes";
 import {
 	blankDraft,
 	fromDraft,
-	hasRepeatedServer,
+	hasRepeatedName,
 	Issues,
 	issuesOf,
 	ProfileFields,
@@ -81,7 +81,7 @@ function MinionEditor({ minion }: { minion?: Minion }) {
 	const issues = issuesOf(save.error);
 	const submit = (event: FormEvent) => {
 		event.preventDefault();
-		if (!hasRepeatedServer(profile)) save.mutate();
+		if (!hasRepeatedName(profile)) save.mutate();
 	};
 	return (
 		<form onSubmit={submit} className="flex flex-col gap-4">

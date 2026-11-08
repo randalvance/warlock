@@ -65,8 +65,8 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 .wl-run .wl-t{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:18px;letter-spacing:.04em}
 .wl-run.af-card[data-state="queued"] .wl-t,.wl-run[data-state="queued"] .wl-r2{color:var(--ink-300,#8f8f96)}
 .wl-run[data-state="running"] .wl-id{color:var(--accent-bright,#ff7ae0)}
-.wl-r2{display:flex;align-items:center;gap:8px;margin-top:6px;min-height:20px;font:400 11px/1 'Azeret Mono',monospace;color:var(--ink-200,#c4c4c8);white-space:nowrap;overflow:hidden}
-.wl-r2 > span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.wl-r2{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:6px;min-height:20px;font:400 11px/1 'Azeret Mono',monospace;color:var(--ink-200,#c4c4c8)}
+.wl-r2 > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:100%}
 .wl-run.sel{background:linear-gradient(var(--accent-tint,rgba(255,61,205,.14)),var(--accent-tint,rgba(255,61,205,.14))),var(--surface-100,#141417);border-color:var(--line-300,#45454c)}
 .wl-run[data-state="passed"]{animation:none;box-shadow:var(--glow-done,0 0 0 1px #b6ff3d)}
 .wl-slot.arrive{animation:wl-slide .5s var(--ease,cubic-bezier(.2,.8,.2,1)) 1}
@@ -148,7 +148,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
               <sc-if value="{{lane.live}}" hint-placeholder-val="{{true}}"><i class="af-lane-bead" aria-hidden="true"></i></sc-if>
               <div class="{{lane.nodesCls}}">
                 <sc-for list="{{lane.stations}}" as="s" hint-placeholder-count="5">
-                  <button class="af-node" type="button" data-state="{{s.state}}" aria-label="{{s.aria}}" on-click="{{s.open}}">{{s.num}}<span class="af-node-label" aria-hidden="true">{{s.name}}</span></button>
+                  <button class="af-node" type="button" data-state="{{s.state}}" aria-label="{{s.aria}}" onClick="{{s.open}}">{{s.num}}<span class="af-node-label" aria-hidden="true">{{s.name}}</span></button>
                 </sc-for>
               </div>
             </div>
@@ -156,7 +156,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
               <sc-for list="{{lane.stations}}" as="s" hint-placeholder-count="5">
                 <div class="wl-col">
                   <sc-for list="{{s.cards}}" as="c" hint-placeholder-count="1">
-                    <div class="{{c.cls}}" tabindex="0" role="button" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" data-run="{{c.id}}" on-click="{{c.open}}">
+                    <div class="{{c.cls}}" tabindex="0" role="button" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" data-run="{{c.id}}" onClick="{{c.open}}">
                       <div class="{{c.cardCls}}" data-state="{{c.state}}">
                         <div class="af-card-head"><i class="af-lamp" aria-hidden="true"></i><span class="wl-id">{{c.id}}</span><span class="af-title wl-t">{{c.body}}</span></div>
                         <div class="wl-r2"><sc-if value="{{c.hasChip}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="{{c.tone}}">{{c.chip}}</x-import></sc-if><span>{{c.meta}}</span></div>
@@ -213,22 +213,22 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
         <div class="wl-confirm" role="group" aria-label="{{confirmAria}}">
           <span>Stop {{run.minion}} on run {{run.id}}? The run fails with reason cancelled, the worktree and branch stay, and you can rerun from here.</span>
-          <div><button class="wl-btn" type="button" id="keep-running" on-click="{{keepRunning}}">Keep running</button><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import></div>
+          <div><button class="wl-btn" type="button" id="keep-running" onClick="{{keepRunning}}">Keep running</button><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import></div>
         </div>
       </sc-if>
       <x-import component-from-global-scope="AgenticFactory.Log" rows="{{run.log}}"></x-import>
       <div class="wl-acts">
         <sc-if value="{{run.canCancel}}" hint-placeholder-val="{{true}}">
           <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askCancel}}">Cancel run</x-import>
-          <button class="wl-btn" type="button" title="Prototype control: plays the handoff to the next station" on-click="{{handoff}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="chevron-right" size="{{14}}"></x-import>Next station</button>
+          <button class="wl-btn" type="button" title="Prototype control: plays the handoff to the next station" onClick="{{handoff}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="chevron-right" size="{{14}}"></x-import>Next station</button>
         </sc-if>
         <sc-if value="{{run.failed}}" hint-placeholder-val="{{false}}">
           <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{rerun}}">Rerun</x-import>
-          <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
+          <button class="wl-btn" type="button" onClick="{{dismiss}}">Dismiss</button>
         </sc-if>
         <sc-if value="{{run.passed}}" hint-placeholder-val="{{false}}">
           <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="eye" on-click="{{review}}">Review</x-import>
-          <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
+          <button class="wl-btn" type="button" onClick="{{dismiss}}">Dismiss</button>
         </sc-if>
         <sc-if value="{{run.openable}}" hint-placeholder-val="{{true}}"><a href="Runtime.dc.html" class="wl-btn" style="margin-left: auto">Open run 31</a></sc-if>
       </div>
@@ -249,7 +249,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
         <div class="wl-row"><span class="wl-cap" style="width: 64px">Worktree</span><span class="wl-mono" style="font-size: 12px">{{res.worktree}}</span></div>
       </div>
       <x-import component-from-global-scope="AgenticFactory.Log" rows="{{res.log}}"></x-import>
-      <div class="wl-acts"><span class="wl-cap">In the Dock as shipped.</span><button class="wl-btn" type="button" style="margin-left: auto" on-click="{{closeInsp}}">Close</button></div>
+      <div class="wl-acts"><span class="wl-cap">In the Dock as shipped.</span><button class="wl-btn" type="button" style="margin-left: auto" onClick="{{closeInsp}}">Close</button></div>
     </sc-if>
     <sc-if value="{{showStation}}" hint-placeholder-val="{{false}}">
       <div>
@@ -264,11 +264,11 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
         <span class="wl-cap">A station alone has no brief. Spellbooks on this lane that brief {{st.name}}:</span>
         <div>
           <sc-for list="{{st.books}}" as="b" hint-placeholder-count="2">
-            <div class="wl-row"><span style="font-size: 13px; flex-grow: 1">{{b.name}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" on-click="{{b.open}}">Open</button></div>
+            <div class="wl-row"><span style="font-size: 13px; flex-grow: 1">{{b.name}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" onClick="{{b.open}}">Open</button></div>
           </sc-for>
         </div>
       </sc-if>
-      <div class="wl-acts"><button class="wl-btn" type="button" on-click="{{closeInsp}}">Close</button></div>
+      <div class="wl-acts"><button class="wl-btn" type="button" onClick="{{closeInsp}}">Close</button></div>
     </sc-if>
   </aside>
 </div>

@@ -82,7 +82,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
         <section aria-label="Command history" class="wl-card">
           <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Command history</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">persisted · {{historyCount}}</span></div>
           <sc-for list="{{history}}" as="h" hint-placeholder-count="4">
-            <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">{{h.time}}</span><span style="font-size: 13px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" on-click="{{h.reuse}}">Reuse</button></div>
+            <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">{{h.time}}</span><span style="font-size: 13px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" onClick="{{h.reuse}}">Reuse</button></div>
           </sc-for>
         </section>
 

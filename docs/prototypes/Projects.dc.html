@@ -85,7 +85,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
           <div style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 32px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
             <span class="wl-sig" style="font-size: 18px; color: var(--ink-200, #c4c4c8)">Project warlock deleted</span>
             <span style="font-size: 13px; color: var(--ink-300, #8f8f96); max-width: 520px">2 repos stay on GitHub. 3 artifacts and 2 context entries are gone, and run 31 was stopped. The event log keeps the history.</span>
-            <button id="undo-project" class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
+            <button id="undo-project" class="wl-btn" type="button" onClick="{{undo}}">Undo delete</button>
           </div>
         </sc-if>
         <sc-if value="{{alive}}" hint-placeholder-val="{{true}}">
@@ -95,7 +95,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
             <h2 class="wl-sig" style="margin: 0; font-size: 22px; line-height: 1; color: var(--ink-100, #f2f2f0)">warlock</h2>
             <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">2 repos · 3 artifacts · 2 context · run 31 running</span>
           </div>
-          <button id="edit-project" class="wl-btn" type="button" on-click="{{edit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit project</button>
+          <button id="edit-project" class="wl-btn" type="button" onClick="{{edit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit project</button>
         </div>
         </sc-if>
         <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
@@ -105,7 +105,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
             <input id="pname" class="wl-in" value="warlock" style="max-width: 360px">
           </div>
           <button class="wl-btn" type="button">Save</button>
-          <button id="done-project" class="wl-btn" type="button" on-click="{{done}}">Done</button>
+          <button id="done-project" class="wl-btn" type="button" onClick="{{done}}">Done</button>
           <span id="delete-project" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete project</x-import></span>
         </div>
         </sc-if>
@@ -113,7 +113,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
           <div role="group" aria-label="Confirm deleting project warlock" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px; background: var(--warn-tint, rgba(255,176,46,.14)); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px)">
             <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Delete project warlock? Its 2 repos stay on GitHub. 3 artifacts and 2 context entries are removed, and run 31 is stopped first.</span>
             <span style="flex-grow: 1"></span>
-            <button id="keep-project" class="wl-btn" type="button" on-click="{{keep}}">Keep project</button>
+            <button id="keep-project" class="wl-btn" type="button" onClick="{{keep}}">Keep project</button>
             <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmDelete}}">Delete project</x-import>
           </div>
         </sc-if>

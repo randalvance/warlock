@@ -56,10 +56,10 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <span class="af-meta">2 formations · 1 in use by 2 spellbooks</span>
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
-      <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button id="edit-formation" class="wl-btn" type="button" on-click="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit formation</button></sc-if>
+      <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button id="edit-formation" class="wl-btn" type="button" onClick="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit formation</button></sc-if>
       <sc-if value="{{saveOn}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save formation</x-import></sc-if>
       <sc-if value="{{saveOff}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save formation</x-import></sc-if>
-      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}"><button id="done-formation" class="wl-btn" type="button" on-click="{{finishEdit}}">Done</button></sc-if>
+      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}"><button id="done-formation" class="wl-btn" type="button" onClick="{{finishEdit}}">Done</button></sc-if>
     </header>
     <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
@@ -105,9 +105,9 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
         <div class="wl-card" style="padding: 16px 20px 20px">
           <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px"><span class="wl-sig" style="font-size: 14px">Graph</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">read only · click a station to see its transitions</span></div>
           <div style="display: grid; grid-template-columns: 170px minmax(80px, 1fr) 170px minmax(80px, 1fr) 170px; align-items: center; column-gap: 0">
-            <button type="button" class="wl-node {{implementCls}}" on-click="{{pickImplement}}" aria-pressed="{{implementOn}}"><span class="wl-sig" style="font-size: 15px">Implement</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Scout · entry</span></button>
+            <button type="button" class="wl-node {{implementCls}}" onClick="{{pickImplement}}" aria-pressed="{{implementOn}}"><span class="wl-sig" style="font-size: 15px">Implement</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Scout · entry</span></button>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 6px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">done</span><div style="width: 100%; display: flex; align-items: center"><div style="flex-grow: 1; height: 2px; background: var(--lane, #303036)"></div><svg aria-hidden="true" width="8" height="10" viewBox="0 0 8 10" style="display: block"><path d="M0 0 L8 5 L0 10 Z" fill="var(--lane, #303036)"></path></svg></div></div>
-            <button type="button" class="wl-node {{reviewCls}}" on-click="{{pickReview}}" aria-pressed="{{reviewOn}}"><span class="wl-sig" style="font-size: 15px">Review</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Ada</span></button>
+            <button type="button" class="wl-node {{reviewCls}}" onClick="{{pickReview}}" aria-pressed="{{reviewOn}}"><span class="wl-sig" style="font-size: 15px">Review</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">Ada</span></button>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 6px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">approved</span><div style="width: 100%; display: flex; align-items: center"><div style="flex-grow: 1; height: 2px; background: var(--lane, #303036)"></div><svg aria-hidden="true" width="8" height="10" viewBox="0 0 8 10" style="display: block"><path d="M0 0 L8 5 L0 10 Z" fill="var(--lane, #303036)"></path></svg></div></div>
             <div class="wl-node end" aria-label="End: done"><span class="wl-sig" style="font-size: 15px">Done</span><span class="wl-mono" style="font-size: 11px">end of run</span></div>
             <div style="grid-column: 1 / 4; margin: 0 85px; height: 36px; border: 2px solid var(--lane, #303036); border-top: none; border-radius: 0 0 10px 10px; position: relative; margin-top: 4px"><svg aria-hidden="true" width="10" height="8" viewBox="0 0 10 8" style="position: absolute; left: -6px; top: -8px"><path d="M0 8 L5 0 L10 8 Z" fill="var(--lane, #303036)"></path></svg></div>
@@ -138,8 +138,8 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
                 <div class="wl-row" style="background: {{t.bg}}"><span class="wl-mono" style="font-size: 12px; width: 90px">{{t.from}}</span><span class="wl-mono" style="font-size: 12px; width: 150px">{{t.outcome}}</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">{{t.to}}</span><sc-if value="{{t.dup}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">duplicate</x-import></sc-if></div>
               </sc-for>
               <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327); flex-wrap: wrap">
-                <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" on-click="{{addDup}}">Add review · approved · implement</button></sc-if>
-                <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" on-click="{{removeDup}}">Remove the duplicate</button></sc-if>
+                <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" onClick="{{addDup}}">Add review · approved · implement</button></sc-if>
+                <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" onClick="{{removeDup}}">Remove the duplicate</button></sc-if>
               </div>
             </div>
             <div class="wl-card">

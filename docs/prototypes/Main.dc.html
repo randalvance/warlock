@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Warlock shell</title>
+<title>Floor</title>
 <script src="./support.js"></script>
 <link rel="stylesheet" href="ds/agentic-factory/components/bundle.css">
 <script src="ds/agentic-factory/components/bundle.js"></script>
@@ -19,94 +19,647 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}
 .wl-nav:hover{color:var(--ink-100,#f2f2f0);background:var(--surface-200,#1b1b1f)}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
-.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none}
+.wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
-.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-in:focus-visible,.wl-sel:focus-visible,.wl-slot:focus-visible,.af-node:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
 .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wl-in{height:28px;box-sizing:border-box;padding:0 12px;background:var(--surface-100,#141417);border:1px solid var(--line-200,#303036);border-radius:var(--radius-pill,999px);color:var(--ink-100,#f2f2f0);font:400 13px/1 'Instrument Sans',sans-serif;min-width:0}
+.wl-in::placeholder{color:var(--ink-300,#8f8f96)}
+.wl-sel{height:28px;box-sizing:border-box;padding:0 28px 0 12px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-200,#303036);border-radius:var(--radius-pill,999px);color:var(--ink-200,#c4c4c8);font:400 11px/1 'Azeret Mono',monospace;text-transform:uppercase;letter-spacing:.04em;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238f8f96' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+
+.wl-shell{width:1360px;height:960px;box-sizing:border-box;display:grid;grid-template-columns:56px minmax(0,1fr) 320px;grid-template-rows:56px minmax(0,1fr) 56px;background:var(--bg-000,#09090b);color:var(--ink-100,#f2f2f0);font-family:'Instrument Sans',sans-serif;font-size:14px;line-height:1.4;overflow:hidden}
+.wl-shell.closed{grid-template-columns:56px minmax(0,1fr) 0}
+.wl-shell.closed .wl-insp{display:none}
+.wl-rail{grid-row:1/4;grid-column:1}
+.wl-top{grid-row:1;grid-column:2/4}
+.wl-floor{grid-row:2;grid-column:2;padding:20px 24px 16px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;overflow-y:auto;overflow-x:hidden;min-height:0}
+.wl-comp{grid-row:3;grid-column:2}
+.wl-insp{grid-row:2/4;grid-column:3}
+
+.wl-line{border-bottom:1px solid var(--line-100,#232327);padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.wl-strip{display:flex;align-items:center;gap:12px;height:28px}
+.wl-strip h2{margin:0;font-size:18px;line-height:1;color:var(--ink-100,#f2f2f0)}
+.wl-cap{font-size:11px;color:var(--ink-300,#8f8f96)}
+.wl-lane{display:flex;flex-direction:column;gap:8px}
+.wl-lane + .wl-lane{margin-top:6px;padding-top:12px;border-top:1px dashed var(--line-100,#232327)}
+.wl-nodes,.wl-cards{display:grid;gap:20px}
+.wl-n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.wl-n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.wl-n4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.wl-n5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.wl-n6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.wl-track{position:relative;height:36px;margin-bottom:22px}
+.wl-track::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--lane,#303036);transform:translateY(-50%)}
+.wl-nodes{position:relative;height:36px}
+.wl-nodes .af-node{justify-self:center;cursor:pointer;padding:0}
+.wl-nodes .af-node:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-nodes .af-node[data-state="running"]:hover{color:var(--glow-core,#ffd6f3)}
+.wl-lane.unlit .wl-track::before{background:var(--line-100,#232327)}
+.wl-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.wl-slot{border-radius:var(--shape-card,14px);cursor:pointer;min-width:0}
+.wl-run{padding:8px 10px}
+.wl-run .af-card-head{gap:8px;min-height:18px}
+.wl-run .wl-id{flex:none;font:500 11px/1 'Azeret Mono',monospace;color:var(--ink-300,#8f8f96);font-variant-numeric:tabular-nums}
+.wl-run .wl-t{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 13px/18px 'Instrument Sans',sans-serif;color:var(--ink-100,#f2f2f0)}
+.wl-run[data-state="queued"] .wl-t,.wl-run[data-state="queued"] .wl-r2{color:var(--ink-300,#8f8f96)}
+.wl-run[data-state="running"] .wl-id{color:var(--accent-bright,#ff7ae0)}
+.wl-r2{display:flex;align-items:center;gap:8px;margin-top:6px;min-height:20px;font:400 11px/1 'Azeret Mono',monospace;color:var(--ink-200,#c4c4c8);white-space:nowrap;overflow:hidden}
+.wl-r2 > span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.wl-run.sel{background:linear-gradient(var(--accent-tint,rgba(255,61,205,.14)),var(--accent-tint,rgba(255,61,205,.14))),var(--surface-100,#141417);border-color:var(--line-300,#45454c)}
+.wl-run[data-state="passed"]{animation:none;box-shadow:var(--glow-done,0 0 0 1px #b6ff3d)}
+.wl-slot.arrive{animation:wl-slide .5s var(--ease,cubic-bezier(.2,.8,.2,1)) 1}
+@keyframes wl-slide{from{transform:translateX(calc(-100% - 20px))}to{transform:translateX(0)}}
+.wl-hint{margin:0;font-size:12px;color:var(--ink-300,#8f8f96)}
+
+.wl-top .wl-search{height:32px;width:200px;box-sizing:border-box;padding:0 12px;background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-pill,999px);color:var(--ink-100,#f2f2f0);font:400 13px/1 'Instrument Sans',sans-serif}
+.wl-top .wl-search::placeholder{color:var(--ink-300,#8f8f96)}
+
+.wl-comp{box-sizing:border-box;height:56px;background:var(--surface-300,#1f1f24);border-top:1px solid var(--line-200,#303036);display:flex;flex-direction:column;justify-content:center;gap:4px;padding:4px 24px}
+.wl-comp form{display:flex;align-items:center;gap:10px;margin:0}
+.wl-comp .wl-in{flex:1 1 auto}
+.wl-reply{display:flex;align-items:center;gap:8px;height:16px;font-size:11px;color:var(--ink-200,#c4c4c8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wl-reply .af-icon{color:var(--accent,#ff3dcd)}
+
+.wl-insp{padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:hidden}
+.wl-insp .af-heading{font-size:17px}
+.wl-insp .af-log{flex:1 1 auto;min-height:0;overflow-y:auto}
+.wl-insp .wl-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:auto;padding-top:12px;border-top:1px solid var(--line-100,#232327)}
+.wl-insp .wl-brief{margin:0;font-size:13px;line-height:1.5;color:var(--ink-200,#c4c4c8);padding:10px 12px;background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px)}
+.wl-insp .wl-row{display:flex;align-items:center;gap:10px;min-height:36px;padding:0 2px;border-top:1px solid var(--line-100,#232327)}
+.wl-insp .wl-row:first-of-type{border-top:0}
+.wl-confirm{display:flex;flex-direction:column;gap:10px;padding:10px 12px;background:var(--warn-tint,rgba(255,176,46,.14));border-radius:var(--radius-md,8px);font-size:13px}
+.wl-confirm div{display:flex;gap:8px;justify-content:flex-end}
+.wl-dock{display:flex;flex-direction:column;gap:8px;padding-top:2px;margin-top:auto}
+.wl-dock .wl-strip{height:24px}
+.wl-dock .wl-strip h2{font-size:14px}
+.wl-dock .af-dock{background:var(--bg-100,#0f0f11)}
+@media (prefers-reduced-motion: reduce){.wl-slot.arrive{animation:none}}
 </style>
 </helmet>
-<div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
-  <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
+<div class="{{shellCls}}" onKeyDown="{{onKey}}">
+  <nav class="wl-rail" aria-label="Sections" style="box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
     <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
-    <a href="Projects.dc.html" class="wl-nav on" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
+    <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
     <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
-    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
-  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
-    <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
-      <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Projects</h1>
-      <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">local · sqlite ./warlock.db · events seq {{seq}}</span>
-      <span style="flex-grow: 1"></span>
-      <span role="status" aria-live="polite" style="display: inline-flex; align-items: center; gap: 8px">
-        <span style="font-size: 12px; color: var(--ink-300, #8f8f96)">Event stream</span>
-        <sc-if value="{{isLive}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import></sc-if>
-        <sc-if value="{{isReconnecting}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">reconnecting</x-import></sc-if>
-        <sc-if value="{{isOffline}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">offline</x-import></sc-if>
-      </span>
-      <a href="Warlock.dc.html" class="wl-btn"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal" size="{{14}}"></x-import>Command</a>
-    </header>
+  <header class="af-topbar wl-top">
+    <h1 class="af-heading">Floor</h1>
+    <x-import component-from-global-scope="AgenticFactory.Chip" tone="{{streamTone}}" plain="{{streamPlain}}">{{streamLabel}}</x-import>
+    <div class="af-tallies" aria-label="Floor tallies">
+      <x-import component-from-global-scope="AgenticFactory.Tally" value="{{tLines}}" label="lines" tone="plain"></x-import>
+      <x-import component-from-global-scope="AgenticFactory.Tally" value="{{tRunning}}" label="running"></x-import>
+      <x-import component-from-global-scope="AgenticFactory.Tally" value="{{tBlocked}}" label="blocked" tone="{{blockedTone}}"></x-import>
+      <x-import component-from-global-scope="AgenticFactory.Tally" value="{{tShipped}}" label="shipped" tone="ok"></x-import>
+    </div>
+    <label for="search" class="wl-sr">Search runs</label>
+    <input id="search" class="wl-search" type="search" placeholder="Search runs" autocomplete="off">
+    <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="plus" on-click="{{newTask}}">New task</x-import>
+  </header>
+  <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
-    <main style="padding: 24px; display: flex; flex-direction: column; gap: 24px; max-width: 1200px; box-sizing: border-box; width: 100%">
-      <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
-        <span class="wl-sig" style="font-size: 16px; color: var(--ink-100, #f2f2f0)">Projects</span>
-        <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">0 projects</span>
-      </div>
-
-      <section aria-label="No projects yet" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
-        <span class="wl-sig" style="font-size: 22px; color: var(--ink-200, #c4c4c8)">No projects yet</span>
-        <p style="margin: 0; max-width: 440px; color: var(--ink-300, #8f8f96)">A project owns repos, artifacts and context. Create one to give the warlock something to work on.</p>
-        <div style="margin-top: 8px">
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="layout-grid">New project</x-import>
+  <main class="wl-floor" aria-label="Floor">
+    <sc-for list="{{lines}}" as="ln" hint-placeholder-count="4">
+      <section class="wl-line" aria-label="{{ln.aria}}">
+        <div class="wl-strip">
+          <h2 class="wl-sig">{{ln.name}}</h2>
+          <sc-for list="{{ln.chips}}" as="fc" hint-placeholder-count="1">
+            <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{fc}}</x-import>
+          </sc-for>
+          <span class="wl-mono wl-cap">{{ln.count}}</span>
+          <span style="flex-grow: 1"></span>
+          <sc-if value="{{ln.idle}}" hint-placeholder-val="{{false}}">
+            <x-import component-from-global-scope="AgenticFactory.Sign" tone="ok">{{ln.shippedSign}}</x-import>
+          </sc-if>
+          <sc-if value="{{ln.busy}}" hint-placeholder-val="{{true}}">
+            <span class="wl-mono wl-cap">shipped {{ln.shipped}}</span>
+          </sc-if>
         </div>
+        <sc-for list="{{ln.lanes}}" as="lane" hint-placeholder-count="1">
+          <div class="{{lane.cls}}" role="group" aria-label="{{lane.aria}}">
+            <div class="wl-track">
+              <sc-if value="{{lane.live}}" hint-placeholder-val="{{true}}"><i class="af-lane-bead" aria-hidden="true"></i></sc-if>
+              <div class="{{lane.nodesCls}}">
+                <sc-for list="{{lane.stations}}" as="s" hint-placeholder-count="5">
+                  <button class="af-node" type="button" data-state="{{s.state}}" aria-label="{{s.aria}}" on-click="{{s.open}}">{{s.num}}<span class="af-node-label" aria-hidden="true">{{s.name}}</span></button>
+                </sc-for>
+              </div>
+            </div>
+            <div class="{{lane.cardsCls}}">
+              <sc-for list="{{lane.stations}}" as="s" hint-placeholder-count="5">
+                <div class="wl-col">
+                  <sc-for list="{{s.cards}}" as="c" hint-placeholder-count="1">
+                    <div class="{{c.cls}}" tabindex="0" role="button" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" data-run="{{c.id}}" on-click="{{c.open}}">
+                      <div class="{{c.cardCls}}" data-state="{{c.state}}">
+                        <div class="af-card-head"><i class="af-lamp" aria-hidden="true"></i><span class="wl-id">{{c.id}}</span><span class="wl-t">{{c.body}}</span></div>
+                        <div class="wl-r2"><sc-if value="{{c.hasChip}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="{{c.tone}}">{{c.chip}}</x-import></sc-if><span>{{c.meta}}</span></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ln.hasHint}}" hint-placeholder-val="{{false}}">
+          <p class="wl-hint">{{ln.hint}}</p>
+        </sc-if>
       </section>
+    </sc-for>
 
-      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
-        <section aria-label="Server" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 16px; display: flex; flex-direction: column; gap: 12px">
-          <div style="display: flex; align-items: baseline; gap: 12px">
-            <span class="wl-sig" style="font-size: 14px; color: var(--ink-100, #f2f2f0)">Server</span>
-            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">hono · sqlite · drizzle</span>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0">
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 56px">14:02:11</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">server.started</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seq 184</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 56px">14:02:11</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">db.commit · migrations 0000_events</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">ok</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: 13px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 56px">14:02:12</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8)">GET /api/events?after=183</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">replay 1 · stream open</span></div>
-          </div>
-          <p style="margin: 0; font-size: 12px; color: var(--ink-300, #8f8f96)">Every write goes through db.commit and appends its events in the same transaction. A client that reconnects asks for what it missed.</p>
-        </section>
+    <section class="wl-dock" aria-label="Shipped work">
+      <div class="wl-strip"><h2 class="wl-sig">Shipped</h2><span class="wl-mono wl-cap">{{dockMeta}}</span></div>
+      <x-import component-from-global-scope="AgenticFactory.Dock" orders="{{dock}}"></x-import>
+    </section>
+  </main>
 
-        <section aria-label="Checks" style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 16px; display: flex; flex-direction: column; gap: 12px">
-          <div style="display: flex; align-items: baseline; gap: 12px">
-            <span class="wl-sig" style="font-size: 14px; color: var(--ink-100, #f2f2f0)">Checks on main</span>
-            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">github actions · 5 of 5</span>
-          </div>
-          <div style="display: flex; flex-direction: column">
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Lint</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">biome · 0:09</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Typecheck</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">tsc · 0:21</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Migration check</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">drizzle · 0:04</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Server tests, restart included</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">vitest · 9 of 9 · 0:14</span></div>
-            <div style="display: flex; align-items: center; gap: 12px; min-height: 32px; border-top: 1px solid var(--line-100, #232327)"><x-import component-from-global-scope="AgenticFactory.Lamp" state="passed"></x-import><span style="flex-grow: 1">Browser smoke</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">playwright · 0:38</span></div>
-          </div>
-        </section>
-      </div>
-    </main>
+  <div class="wl-comp">
+    <sc-if value="{{hasReply}}" hint-placeholder-val="{{false}}">
+      <div class="wl-reply wl-mono"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap" size="{{12}}"></x-import><span>{{reply}}</span></div>
+    </sc-if>
+    <form onSubmit="{{send}}">
+      <label for="project" class="wl-sr">Project</label>
+      <select id="project" class="wl-sel" value="{{project}}" onChange="{{onProject}}">
+        <option value="warlock">warlock</option>
+        <option value="dotfiles">dotfiles</option>
+        <option value="blog">blog</option>
+      </select>
+      <label for="task" class="wl-sr">Tell the warlock what to do</label>
+      <input id="task" class="wl-in" placeholder="Tell the warlock what to do" value="{{draft}}" onChange="{{onDraft}}" autocomplete="off">
+      <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="send" type="submit" on-click="{{send}}">Send</x-import>
+      <a href="Warlock.dc.html" class="wl-btn" style="height: 28px">Open thread</a>
+    </form>
   </div>
+
+  <aside class="af-inspector wl-insp" aria-label="Inspector">
+    <sc-if value="{{showRun}}" hint-placeholder-val="{{true}}">
+      <div>
+        <h2 class="af-heading">Run {{run.id}}</h2>
+        <div class="af-wo-id">{{run.sub}}</div>
+      </div>
+      <p class="af-wo-desc">{{run.title}}</p>
+      <div class="af-chips">
+        <sc-for list="{{run.chips}}" as="ch" hint-placeholder-count="4">
+          <x-import component-from-global-scope="AgenticFactory.Chip" tone="{{ch.tone}}" plain="{{ch.plain}}">{{ch.label}}</x-import>
+        </sc-for>
+      </div>
+      <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
+        <div class="wl-confirm" role="group" aria-label="{{confirmAria}}">
+          <span>Stop {{run.minion}} on run {{run.id}}? The run fails with reason cancelled, the worktree and branch stay, and you can rerun from here.</span>
+          <div><button class="wl-btn" type="button" id="keep-running" on-click="{{keepRunning}}">Keep running</button><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import></div>
+        </div>
+      </sc-if>
+      <x-import component-from-global-scope="AgenticFactory.Log" rows="{{run.log}}"></x-import>
+      <div class="wl-acts">
+        <sc-if value="{{run.canCancel}}" hint-placeholder-val="{{true}}">
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askCancel}}">Cancel run</x-import>
+          <button class="wl-btn" type="button" title="Prototype control: plays the handoff to the next station" on-click="{{handoff}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="chevron-right" size="{{14}}"></x-import>Next station</button>
+        </sc-if>
+        <sc-if value="{{run.failed}}" hint-placeholder-val="{{false}}">
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{rerun}}">Rerun</x-import>
+          <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
+        </sc-if>
+        <sc-if value="{{run.passed}}" hint-placeholder-val="{{false}}">
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="eye" on-click="{{review}}">Review</x-import>
+          <button class="wl-btn" type="button" on-click="{{dismiss}}">Dismiss</button>
+        </sc-if>
+        <sc-if value="{{run.openable}}" hint-placeholder-val="{{true}}"><a href="Runtime.dc.html" class="wl-btn" style="margin-left: auto">Open run 31</a></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{showResult}}" hint-placeholder-val="{{false}}">
+      <div>
+        <h2 class="af-heading" tabindex="-1">Run {{res.id}} · result</h2>
+        <div class="af-wo-id">{{res.sub}}</div>
+      </div>
+      <p class="af-wo-desc">{{res.title}}</p>
+      <div class="af-chips">
+        <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">{{res.outcome}}</x-import>
+        <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{res.minion}}</x-import>
+      </div>
+      <div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Commit</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{res.commit}}</span></div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Branch</span><span class="wl-mono" style="font-size: 12px">{{res.branch}}</span></div>
+        <div class="wl-row"><span class="wl-cap" style="width: 64px">Worktree</span><span class="wl-mono" style="font-size: 12px">{{res.worktree}}</span></div>
+      </div>
+      <x-import component-from-global-scope="AgenticFactory.Log" rows="{{res.log}}"></x-import>
+      <div class="wl-acts"><span class="wl-cap">In the Dock as shipped.</span><button class="wl-btn" type="button" style="margin-left: auto" on-click="{{closeInsp}}">Close</button></div>
+    </sc-if>
+    <sc-if value="{{showStation}}" hint-placeholder-val="{{false}}">
+      <div>
+        <h2 class="af-heading">{{st.name}}</h2>
+        <div class="af-wo-id">{{st.sub}}</div>
+      </div>
+      <sc-if value="{{st.hasBrief}}" hint-placeholder-val="{{true}}">
+        <span class="wl-cap">Brief from the {{st.spellbook}} spellbook, read-only</span>
+        <p class="wl-brief">{{st.brief}}</p>
+      </sc-if>
+      <sc-if value="{{st.listing}}" hint-placeholder-val="{{false}}">
+        <span class="wl-cap">A station alone has no brief. Spellbooks on this lane that brief {{st.name}}:</span>
+        <div>
+          <sc-for list="{{st.books}}" as="b" hint-placeholder-count="2">
+            <div class="wl-row"><span style="font-size: 13px; flex-grow: 1">{{b.name}}</span><button class="wl-btn" type="button" style="height: 26px; padding: 0 10px" on-click="{{b.open}}">Open</button></div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div class="wl-acts"><button class="wl-btn" type="button" on-click="{{closeInsp}}">Close</button></div>
+    </sc-if>
+  </aside>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"stream":{"editor":"enum","options":["live","reconnecting","offline"],"default":"live","section":"Event stream"},"seq":{"editor":"int","default":184,"min":0,"section":"Event stream"},"$preview":{"width":1360,"height":960}}'>
+<script type="text/x-dc" data-dc-script data-props='{"stream":{"type":"enum","options":["live","reconnecting","offline"],"default":"live"},"$preview":{"width":1360,"height":960}}'>
+function roots() {
+  const r = [document];
+  const dc = document.querySelector('x-dc');
+  if (dc && dc.shadowRoot) r.push(dc.shadowRoot);
+  return r;
+}
+function findOne(selector) {
+  for (const r of roots()) { const el = r.querySelector(selector); if (el) return el; }
+  return null;
+}
+function findAll(selector) {
+  for (const r of roots()) { const list = r.querySelectorAll(selector); if (list.length) return Array.from(list); }
+  return [];
+}
+function focusLater(selector) {
+  requestAnimationFrame(() => { const el = findOne(selector); if (el && el.focus) el.focus(); });
+}
+
+const FORMATIONS = {
+  'feature-dev': { stations: ['Plan', 'Implement', 'Test', 'Review', 'Ship'] },
+  'implement-then-review': { stations: ['Implement', 'Review'] },
+  'content': { stations: ['Draft', 'Edit', 'Publish'] }
+};
+const SPELLBOOKS = [
+  { name: 'Feature', formation: 'feature-dev', briefs: {
+    Plan: 'Read the task and the project context. Write the plan as a numbered list of files to touch and the tests that prove it. Stop if the task needs a decision from the developer.',
+    Implement: 'Follow the plan. One commit per step with a Conventional Commit subject. Run pnpm lint and pnpm typecheck before each commit.',
+    Test: 'Run pnpm test and pnpm smoke. Add a test for every behaviour the task names. Hand off only when all five checks pass.',
+    Review: 'Read the diff as the repo owner would. Name every finding with the file and line. Approve, or send back with the list.',
+    Ship: 'Push the branch and open the PR against main. Paste the test output in the PR body.' } },
+  { name: 'Bug fix', formation: 'implement-then-review', briefs: {
+    Implement: 'Reproduce the bug with a failing test first. Fix it in the smallest change that makes the test pass. Commit with a fix: subject.',
+    Review: 'Confirm the failing test now passes and nothing else changed. Approve, or send back with the finding.' } },
+  { name: 'Refactor', formation: 'implement-then-review', briefs: {
+    Implement: 'Change structure, never behaviour. Keep every existing test green and add none.',
+    Review: 'Diff the public API before and after. Reject any change to it.' } },
+  { name: 'Post', formation: 'content', briefs: {
+    Draft: 'Write the post from the brief. Lead with the claim.', Edit: 'Cut a third. Check every link.', Publish: 'Open the PR to the site repo.' } }
+];
+
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      insp: { kind: 'run', id: 31 },
+      lastRun: 31,
+      tick: 0,
+      confirming: false,
+      arriving: null,
+      draft: '',
+      project: 'warlock',
+      reply: '',
+      seq: 187,
+      nextRun: 34,
+      announce: 'Run 31 open in the inspector. Scout at Implement, 0:38 elapsed.',
+      projects: [
+        { name: 'warlock', shipped: 12, lastFormation: 'feature-dev' },
+        { name: 'dotfiles', shipped: 4, lastFormation: 'implement-then-review' },
+        { name: 'blog', shipped: 3, lastFormation: 'content' }
+      ],
+      runs: [
+        { id: 33, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Plan', state: 'queued', title: 'Cache the repo list', wo: 'WO-16', minion: 'Scout', elapsed: 'queued', worktree: 'run-33', branch: 'warlock/run-33',
+          log: [{ seq: 186, time: '14:04', kind: 'said', text: 'run.queued · WO-16 · waiting for Scout' }] },
+        { id: 30, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Test', state: 'blocked', reason: 'needs you', title: 'Fix the flaky sync spec', wo: 'WO-12', minion: 'Mason', elapsed: '12m 40s', worktree: 'run-30', branch: 'warlock/run-30',
+          log: [
+            { seq: 171, time: '13:48', kind: 'said', text: 'run.started · WO-12 · Mason · worktree run-30' },
+            { seq: 174, time: '13:52', kind: 'said', text: 'handoff Plan → Implement' },
+            { seq: 178, time: '13:58', kind: 'bash', text: 'bash pnpm test · 1 failing' },
+            { seq: 179, time: '14:00', kind: 'said', text: 'handoff Implement → Test' },
+            { seq: 183, time: '14:03', kind: 'said', text: 'run.blocked · the spec needs the GitHub token you hold · reply in the thread' }
+          ] },
+        { id: 27, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Ship', state: 'failed', reason: 'push rejected', title: 'Add the agents table', wo: 'WO-10', minion: 'Mason', elapsed: '18m 02s', worktree: 'run-27', branch: 'warlock/run-27',
+          log: [
+            { seq: 150, time: '13:10', kind: 'said', text: 'run.started · WO-10 · Mason · worktree run-27' },
+            { seq: 164, time: '13:24', kind: 'said', text: 'handoff Review → Ship · Ada approved' },
+            { seq: 165, time: '13:27', kind: 'bash', text: 'bash git push · rejected: branch protection' },
+            { seq: 166, time: '13:28', kind: 'said', text: 'run.failed · reason: push rejected · worktree run-27 kept' }
+          ] },
+        { id: 31, project: 'warlock', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Add a line to the README', wo: 'WO-14', minion: 'Scout', elapsed: '0:38', worktree: 'run-31', branch: 'warlock/run-31',
+          log: [
+            { seq: 180, time: '14:02', kind: 'read', text: 'replayed from event #180' },
+            { seq: 180, time: '14:02', kind: 'said', text: 'run.started · WO-14 · Scout · worktree run-31' },
+            { seq: 182, time: '14:03', kind: 'edit', text: 'edit README.md' },
+            { seq: 184, time: '14:04', kind: 'bash', text: 'commit a1f3c2d docs: name the domain model in the README' },
+            { seq: 185, time: '14:04', kind: 'bash', text: 'bash pnpm lint', live: true }
+          ] },
+        { id: 29, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Trim the zsh startup', wo: 'WO-15', minion: 'Imp', elapsed: '1:12', worktree: 'run-29', branch: 'warlock/run-29',
+          log: [
+            { seq: 176, time: '13:55', kind: 'said', text: 'run.started · WO-15 · Imp · worktree run-29' },
+            { seq: 177, time: '13:56', kind: 'edit', text: 'edit .zshrc' },
+            { seq: 187, time: '14:05', kind: 'bash', text: 'bash hyperfine zsh -i -c exit', live: true }
+          ] },
+        { id: 28, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Review', state: 'passed', title: 'Pin the pnpm version', wo: 'WO-11', minion: 'Ada', elapsed: '3m 12s', worktree: 'run-28', branch: 'warlock/run-28',
+          log: [
+            { seq: 160, time: '13:30', kind: 'said', text: 'run.started · WO-11 · Imp · worktree run-28' },
+            { seq: 164, time: '13:31', kind: 'bash', text: 'commit 7c2e91a chore: pin pnpm to 10.22' },
+            { seq: 167, time: '13:32', kind: 'said', text: 'handoff Implement → Review · Ada' },
+            { seq: 170, time: '13:33', kind: 'said', text: 'run.succeeded · outcome done · 3m 12s · waiting for your review' }
+          ] }
+      ],
+      dock: [
+        { title: 'Name the event stream states', id: 'run 26', branch: 'warlock/run-26', agent: 'Scout', when: '13:02' },
+        { title: 'Add the projects table', id: 'run 25', branch: 'warlock/run-25', agent: 'Mason', when: '12:40' }
+      ]
+    };
+  }
+
+  run(id) { return this.state.runs.find((r) => r.id === id); }
+
+  say(patch) { this.setState({ ...patch, tick: (this.state.tick || 0) + 1 }); }
+
+  pad(n) { return String(n).padStart(2, '0'); }
+
+  now() {
+    const d = new Date();
+    return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
+  }
+
+  patchRun(id, patch, logRow) {
+    const seq = this.state.seq + 1;
+    const runs = this.state.runs.map((r) => {
+      if (r.id !== id) return r;
+      const log = r.log.map((l) => ({ ...l, live: false }));
+      if (logRow) log.push({ seq: seq, time: this.now(), ...logRow });
+      return { ...r, ...patch, log: log };
+    });
+    return { runs: runs, seq: seq };
+  }
+
+  openRun(id) {
+    const r = this.run(id);
+    this.say({ insp: { kind: 'run', id: id }, lastRun: id, confirming: false, project: r.project, announce: 'Run ' + id + ' open. ' + r.minion + ' at ' + r.station + ', ' + r.state + (r.state === 'running' ? ', ' + r.elapsed + ' elapsed.' : '.') });
+    focusLater('.wl-slot[data-run="' + id + '"]');
+  }
+
+  openStation(project, formation, station) {
+    this.say({ insp: { kind: 'station', project: project, formation: formation, station: station }, confirming: false, announce: station + ' on ' + project + ' open in the inspector.' });
+  }
+
   renderVals() {
-    const stream = this.props.stream ?? 'live';
+    const S = this.state;
+    const insp = S.insp;
+    const selId = insp && insp.kind === 'run' ? insp.id : null;
+    const selRun = selId != null ? this.run(selId) : null;
+    const lastRun = S.lastRun != null ? this.run(S.lastRun) : null;
+
+    const order = { blocked: 0, failed: 1, running: 2, passed: 3, queued: 4, idle: 5, empty: 6 };
+    const lines = S.projects.map((p) => {
+      const runs = S.runs.filter((r) => r.project === p.name);
+      const formations = [];
+      runs.forEach((r) => { if (!formations.includes(r.formation)) formations.push(r.formation); });
+      const idle = runs.length === 0 && p.lastFormation != null;
+      const empty = runs.length === 0 && p.lastFormation == null;
+      if (idle) formations.push(p.lastFormation);
+      const rank = runs.reduce((m, r) => Math.min(m, order[r.state]), idle ? order.idle : empty ? order.empty : 9);
+      const lanes = formations.map((f) => {
+        const names = FORMATIONS[f].stations;
+        const laneRuns = runs.filter((r) => r.formation === f);
+        const live = laneRuns.some((r) => r.state === 'running');
+        const stations = names.map((name, i) => {
+          const here = laneRuns.filter((r) => r.station === name);
+          const state = here.some((r) => r.state === 'running') ? 'running'
+            : here.some((r) => r.state === 'blocked') ? 'blocked'
+            : here.some((r) => r.state === 'failed') ? 'failed'
+            : here.some((r) => r.state === 'passed') ? 'passed' : 'queued';
+          const cards = here.map((r) => {
+            const selected = r.id === selId;
+            const chip = r.state === 'blocked' ? { label: 'blocked', tone: 'warn' }
+              : r.state === 'failed' ? { label: 'failed', tone: 'err' }
+              : r.state === 'passed' ? { label: 'succeeded', tone: 'ok' } : null;
+            const meta = r.state === 'queued' ? 'queued · ' + r.minion
+              : r.state === 'running' ? r.minion + ' · ' + r.elapsed
+              : r.state === 'passed' ? r.elapsed + ' · ' + r.minion
+              : r.reason;
+            return {
+              id: r.id,
+              state: r.state,
+              meta: meta,
+              body: r.title,
+              hasChip: !!chip, chip: chip ? chip.label : '', tone: chip ? chip.tone : undefined,
+              cardCls: selected ? 'af-card wl-run sel' : 'af-card wl-run',
+              pressed: selected ? 'true' : 'false',
+              cls: S.arriving === r.id ? 'wl-slot arrive' : 'wl-slot',
+              aria: 'Run ' + r.id + ', ' + r.title + ', ' + r.state + (r.reason ? ', ' + r.reason : '') + ' at ' + name + ', ' + r.minion + '. Enter opens it.',
+              open: () => this.openRun(r.id)
+            };
+          });
+          return {
+            name: name, num: this.pad(i + 1), state: state, cards: cards,
+            aria: name + ' station, ' + (here.length ? here.length + (here.length === 1 ? ' run' : ' runs') : 'no run') + '. Opens its brief.',
+            open: () => this.openStation(p.name, f, name)
+          };
+        });
+        return {
+          stations: stations, live: live, cls: live ? 'wl-lane' : 'wl-lane unlit', nodesCls: 'wl-nodes wl-n' + names.length, cardsCls: 'wl-cards wl-n' + names.length,
+          aria: p.name + ' · ' + f + ' lane · ' + names.join(', ')
+        };
+      });
+      const counts = {};
+      runs.forEach((r) => { counts[r.state] = (counts[r.state] || 0) + 1; });
+      const count = runs.length === 0 ? 'no runs' : runs.length + (runs.length === 1 ? ' run' : ' runs') + (counts.running ? ' · ' + counts.running + ' running' : '') + (counts.blocked ? ' · ' + counts.blocked + ' blocked' : '');
+      return {
+        name: p.name, chips: formations, count: count, shipped: p.shipped, shippedSign: 'Shipped ' + p.shipped, idle: idle, busy: !idle && !empty, lanes: lanes, rank: rank,
+        hasHint: idle || empty, hint: empty ? 'No run yet. Send a task to start a run.' : 'No runs on this line. The lane is its most recent formation, unlit.',
+        aria: p.name + ' line · ' + count
+      };
+    }).sort((a, b) => a.rank - b.rank);
+
+    const running = S.runs.filter((r) => r.state === 'running').length;
+    const blocked = S.runs.filter((r) => r.state === 'blocked').length;
+    const shipped = S.projects.reduce((n, p) => n + p.shipped, 0);
+
+    const stream = this.props.stream || 'live';
+    const streamLabel = stream === 'live' ? 'live · #' + S.seq : stream === 'reconnecting' ? 'reconnecting' : 'offline';
+
+    let run = null;
+    if (selRun) {
+      const r = selRun;
+      run = {
+        id: r.id, title: r.title, minion: r.minion,
+        sub: r.wo + ' · ' + r.spellbook + ' spellbook · ' + r.formation,
+        chips: [
+          { label: 'station: ' + r.station, tone: r.state === 'running' ? 'accent' : r.state === 'blocked' ? 'warn' : r.state === 'failed' ? 'err' : r.state === 'passed' ? 'ok' : undefined, plain: r.state === 'queued' },
+          { label: 'minion: ' + r.minion, plain: true },
+          { label: 'worktree: ' + r.worktree, plain: true },
+          { label: 'branch: ' + r.branch, plain: true }
+        ],
+        log: r.log.map((l) => ({ time: '#' + l.seq + ' ' + l.time, kind: l.kind, text: l.text, live: !!l.live })),
+        canCancel: (r.state === 'running' || r.state === 'blocked' || r.state === 'queued') && !S.confirming,
+        failed: r.state === 'failed',
+        passed: r.state === 'passed',
+        openable: r.id === 31
+      };
+    }
+
+    let res = null;
+    if (insp && insp.kind === 'result' && insp.run) {
+      const r = insp.run;
+      const commitRow = r.log.find((l) => /commit [0-9a-f]{7}/.test(l.text));
+      res = {
+        id: r.id, title: r.title, minion: r.minion,
+        sub: r.wo + ' · ' + r.spellbook + ' spellbook · ' + r.formation + ' · shipped ' + this.now(),
+        outcome: 'done · ' + r.elapsed,
+        commit: commitRow ? commitRow.text.replace(/^commit /, '') : 'see the branch',
+        branch: r.branch, worktree: r.worktree + ' · kept',
+        log: r.log.map((l) => ({ time: '#' + l.seq + ' ' + l.time, kind: l.kind, text: l.text, live: false }))
+      };
+    }
+
+    let st = null;
+    if (insp && insp.kind === 'station') {
+      const sameLane = lastRun && lastRun.project === insp.project && lastRun.formation === insp.formation;
+      const book = sameLane ? SPELLBOOKS.find((b) => b.name === lastRun.spellbook) : null;
+      const books = SPELLBOOKS.filter((b) => b.formation === insp.formation && b.briefs[insp.station]);
+      st = {
+        name: insp.station, sub: insp.project + ' · ' + insp.formation + ' lane',
+        hasBrief: !!book, spellbook: book ? book.name : '', brief: book ? book.briefs[insp.station] : '',
+        listing: !book,
+        books: books.map((b) => ({ name: b.name, open: () => this.say({ insp: { ...insp, book: b.name }, announce: b.name + ' brief for ' + insp.station + ' open.' }) }))
+      };
+      if (!book && insp.book) {
+        const chosen = SPELLBOOKS.find((b) => b.name === insp.book);
+        if (chosen) { st.hasBrief = true; st.listing = false; st.spellbook = chosen.name; st.brief = chosen.briefs[insp.station]; }
+      }
+    }
+
+    const send = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const text = (S.draft || '').trim();
+      if (!text) return;
+      const book = /fix|typo|bug|broken|flaky/i.test(text) ? SPELLBOOKS[1] : SPELLBOOKS[0];
+      const entry = FORMATIONS[book.formation].stations[0];
+      const id = S.nextRun;
+      const project = S.project;
+      const hadLane = S.runs.some((r) => r.project === project && r.formation === book.formation);
+      const seq = S.seq + 1;
+      const newRun = {
+        id: id, project: project, formation: book.formation, spellbook: book.name, station: entry, state: 'queued', title: text, wo: 'WO-' + (id - 17), minion: 'Scout', elapsed: 'queued', worktree: 'run-' + id, branch: 'warlock/run-' + id,
+        log: [{ seq: seq, time: this.now(), kind: 'said', text: 'run.queued · picked ' + book.name + ' · waiting for Scout' }]
+      };
+      const reply = 'warlock · picked ' + book.name + ' · run ' + id + ' queued at ' + entry + ' on ' + project + (hadLane ? '' : ' · new ' + book.formation + ' lane');
+      this.say({
+        runs: S.runs.concat([newRun]), nextRun: id + 1, seq: seq, draft: '', reply: reply, arriving: id,
+        announce: 'The warlock picked ' + book.name + '. Run ' + id + ' queued at ' + entry + ' on ' + project + '.'
+      });
+      setTimeout(() => this.setState({ arriving: null }), 700);
+      focusLater('#task');
+    };
+
+    const handoff = () => {
+      if (!selRun) return;
+      const names = FORMATIONS[selRun.formation].stations;
+      const i = names.indexOf(selRun.station);
+      const from = selRun.station;
+      if (i < 0 || i === names.length - 1) {
+        const p = this.patchRun(selRun.id, { state: 'passed', elapsed: '4m 10s' }, { kind: 'said', text: 'run.succeeded · outcome done · 4m 10s · waiting for your review' });
+        this.say({ ...p, arriving: selRun.id, announce: 'Run ' + selRun.id + ' succeeded at ' + from + '. Review is available.' });
+        setTimeout(() => this.setState({ arriving: null }), 700);
+        return;
+      }
+      const to = names[i + 1];
+      const p = this.patchRun(selRun.id, { station: to }, { kind: 'said', text: 'handoff ' + from + ' → ' + to });
+      const liveSeq = p.seq + 1;
+      p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: liveSeq, time: this.now(), kind: 'bash', text: 'bash pnpm test', live: true }]) } : r);
+      this.say({ ...p, seq: liveSeq, arriving: selRun.id, announce: 'Run ' + selRun.id + ' handed off from ' + from + ' to ' + to + '. Event #' + p.seq + '.' });
+      setTimeout(() => this.setState({ arriving: null }), 700);
+      focusLater('.wl-slot[data-run="' + selRun.id + '"]');
+    };
+
+    const onKey = (e) => {
+      const key = e.key;
+      if (key === 'Escape') {
+        if (insp) {
+          this.say({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' });
+          if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]');
+        }
+        return;
+      }
+      const slot = e.target && e.target.closest ? e.target.closest('.wl-slot') : null;
+      if (!slot) return;
+      const slots = findAll('.wl-slot');
+      const i = slots.indexOf(slot);
+      if (i < 0) return;
+      if (key === 'Enter' || key === ' ') { e.preventDefault(); this.openRun(Number(slot.getAttribute('data-run'))); return; }
+      if (key === 'ArrowRight' || key === 'ArrowDown') { e.preventDefault(); slots[(i + 1) % slots.length].focus(); return; }
+      if (key === 'ArrowLeft' || key === 'ArrowUp') { e.preventDefault(); slots[(i - 1 + slots.length) % slots.length].focus(); return; }
+      if (key === 'Home') { e.preventDefault(); slots[0].focus(); return; }
+      if (key === 'End') { e.preventDefault(); slots[slots.length - 1].focus(); }
+    };
+
+    const leave = (openResult) => {
+      if (!selRun) return;
+      const r = selRun;
+      const slots = findAll('.wl-slot');
+      const at = slots.findIndex((el) => el.getAttribute('data-run') === String(r.id));
+      const next = slots[at + 1] || slots[at - 1];
+      const p = S.projects.map((x) => x.name === r.project ? { ...x, shipped: x.shipped + (r.state === 'passed' ? 1 : 0), lastFormation: r.formation } : x);
+      const dock = r.state === 'passed' ? [{ title: r.title, id: 'run ' + r.id, branch: r.branch, agent: r.minion, when: this.now() }].concat(S.dock) : S.dock;
+      this.say({
+        runs: S.runs.filter((x) => x.id !== r.id), projects: p, dock: dock,
+        insp: openResult ? { kind: 'result', run: r } : null,
+        announce: openResult ? 'Run ' + r.id + ' result open in the inspector. The run moved to the Dock.'
+          : r.state === 'passed' ? 'Run ' + r.id + ' shipped. It moved to the Dock.' : 'Run ' + r.id + ' dismissed from the floor.'
+      });
+      if (openResult) focusLater('.wl-insp h2');
+      else if (next) focusLater('.wl-slot[data-run="' + next.getAttribute('data-run') + '"]'); else focusLater('#task');
+    };
+    const dismiss = () => leave(false);
+
     return {
-      seq: this.props.seq ?? 184,
-      isLive: stream === 'live',
-      isReconnecting: stream === 'reconnecting',
-      isOffline: stream === 'offline'
+      yes: true,
+      shellCls: insp ? 'wl-shell open' : 'wl-shell closed',
+      streamLabel: streamLabel, streamTone: stream === 'live' ? 'accent' : stream === 'reconnecting' ? 'warn' : 'err', streamPlain: false,
+      tLines: String(S.projects.length), tRunning: String(running), tBlocked: String(blocked), tShipped: String(shipped), blockedTone: blocked ? 'warn' : 'plain',
+      announce: S.announce + (S.tick % 2 ? ' ' : ''),
+      lines: lines,
+      dock: S.dock, dockMeta: 'today · ' + S.dock.length,
+      hasReply: !!S.reply, reply: S.reply,
+      project: S.project, draft: S.draft,
+      onProject: (e) => this.setState({ project: e.target.value }),
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      send: send,
+      newTask: () => { this.say({ announce: 'Composer focused. Name the project and tell the warlock what to do.' }); focusLater('#task'); },
+      onKey: onKey,
+      showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, failed: false, passed: false, minion: '' },
+      showStation: !!st, st: st || { name: '', sub: '', hasBrief: false, spellbook: '', brief: '', listing: false, books: [] },
+      showResult: !!res, res: res || { id: '', sub: '', title: '', minion: '', outcome: '', commit: '', branch: '', worktree: '', log: [] },
+      confirming: S.confirming, confirmAria: 'Confirm stopping run ' + (selId != null ? selId : ''),
+      askCancel: () => { this.say({ confirming: true, announce: 'Stop run ' + selId + '? Choose Stop run or Keep running.' }); focusLater('#keep-running'); },
+      keepRunning: () => { this.say({ confirming: false, announce: 'Run ' + selId + ' keeps running.' }); focusLater('.wl-slot[data-run="' + selId + '"]'); },
+      confirmCancel: () => {
+        if (!selRun) return;
+        const p = this.patchRun(selRun.id, { state: 'failed', reason: 'cancelled', elapsed: selRun.elapsed }, { kind: 'said', text: 'run.failed · reason: cancelled · by you · worktree ' + selRun.worktree + ' kept' });
+        this.say({ ...p, confirming: false, announce: 'Run ' + selRun.id + ' failed with reason cancelled, stopped by you. Worktree ' + selRun.worktree + ' kept. Rerun is available.' });
+        focusLater('.wl-slot[data-run="' + selRun.id + '"]');
+      },
+      rerun: () => {
+        if (!selRun) return;
+        const p = this.patchRun(selRun.id, { state: 'running', reason: undefined, elapsed: '0:00' }, { kind: 'said', text: 'run.started · rerun by you · ' + selRun.minion + ' resumes at ' + selRun.station });
+        const liveSeq = p.seq + 1;
+        p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: liveSeq, time: this.now(), kind: 'read', text: 'read context: Conventions, Architecture', live: true }]) } : r);
+        p.seq = liveSeq;
+        this.say({ ...p, announce: 'Run ' + selRun.id + ' rerunning. ' + selRun.minion + ' resumes at ' + selRun.station + '.' });
+      },
+      review: () => leave(true),
+      dismiss: dismiss,
+      handoff: handoff,
+      closeInsp: () => { this.say({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' }); if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]'); else focusLater('#task'); }
     };
   }
 }

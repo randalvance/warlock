@@ -21,6 +21,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:disabled{opacity:.4;cursor:default}
 .wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
 .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
@@ -30,6 +31,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-row:hover{background:var(--surface-200,#1b1b1f)}
 .wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
 .wl-head{display:flex;align-items:baseline;gap:12px;padding:14px 14px 10px}
+.wl-list{display:flex;flex-direction:column;border-bottom:1px solid var(--line-100,#232327)}
+.wl-prose{margin:0;font:400 13px/1.45 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8);max-width:72ch;white-space:pre-wrap}
+.wl-field{display:flex;flex-direction:column;gap:6px}
 </style>
 </helmet>
 <div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
@@ -40,9 +44,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
-    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
@@ -93,13 +96,21 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         </div>
       </section>
 
-      <section aria-label="Edit minion Scout" class="wl-card">
+      <section aria-label="Minion Scout" class="wl-card">
         <div class="wl-head" style="padding-bottom: 14px; border-bottom: 1px solid var(--line-100, #232327); flex-wrap: wrap; align-items: center">
           <span class="wl-sig" style="font-size: 16px">Scout</span>
           <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">minion · saved 13:58 · the running run keeps the profile it started with</span>
           <span style="flex-grow: 1"></span>
-          <span id="delete-minion" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import></span>
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save minion</x-import>
+          <sc-if value="{{viewingAlive}}" hint-placeholder-val="{{true}}">
+            <button id="edit-minion" class="wl-btn" type="button" on-click="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit minion</button>
+          </sc-if>
+          <sc-if value="{{editingAlive}}" hint-placeholder-val="{{false}}">
+            <span style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+              <span id="delete-minion" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import></span>
+              <x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save minion</x-import>
+              <button id="done-minion" class="wl-btn" type="button" disabled="{{confirming}}" title="{{doneTitle}}" on-click="{{finishEdit}}">Done</button>
+            </span>
+          </sc-if>
         </div>
         <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
           <div role="group" aria-label="Confirm deleting minion Scout" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; background: var(--warn-tint, rgba(255,176,46,.14)); border-bottom: 1px solid var(--line-100, #232327)">
@@ -116,10 +127,60 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <button id="undo-minion" class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
           </div>
         </sc-if>
-        <sc-if value="{{alive}}" hint-placeholder-val="{{true}}">
+        <sc-if value="{{reading}}" hint-placeholder-val="{{true}}">
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0">
           <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--line-100, #232327)">
-            <div style="display: flex; flex-direction: column; gap: 6px">
+            <div class="wl-field">
+              <span class="wl-lbl">System prompt</span>
+              <p class="wl-prose">You implement one task in one git worktree. Read the project context first. Keep commits small and name them after the change. When the brief is ambiguous, ask once, then pick the reading a careful colleague would. End the station with the outcome that fits what you did.</p>
+            </div>
+            <div class="wl-field">
+              <span class="wl-lbl">Skills · Agent Skills folders, each with a SKILL.md</span>
+              <div class="wl-list">
+                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/tdd/SKILL.md</span></div>
+                <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/pr/SKILL.md</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px">
+            <div class="wl-field">
+              <span class="wl-lbl">MCP servers · same shape as a Claude Code .mcp.json entry</span>
+              <div class="wl-list">
+                <div class="wl-row">
+                  <span class="wl-mono" style="font-size: 12px; width: 72px">github</span>
+                  <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">stdio</x-import>
+                  <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">npx -y @modelcontextprotocol/server-github</span>
+                </div>
+                <div class="wl-row">
+                  <span class="wl-mono" style="font-size: 12px; width: 72px">docs</span>
+                  <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">http</x-import>
+                  <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">https://docs.internal/mcp</span>
+                </div>
+                <div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14))">
+                  <span class="wl-mono" style="font-size: 12px; width: 72px">linear</span>
+                  <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">http</x-import>
+                  <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); flex-grow: 1">no url</span>
+                  <x-import component-from-global-scope="AgenticFactory.Chip" tone="err">invalid</x-import>
+                </div>
+                <div style="padding: 8px 14px 10px; font-size: 12px; color: var(--err, #ff4d4d)">mcpServers.linear.url is required for an http server. Edit minion to fix it.</div>
+              </div>
+            </div>
+            <div class="wl-field">
+              <span class="wl-lbl">Memory · markdown notes Scout reads at start and appends to</span>
+              <div class="wl-list">
+                <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/2026-11-07.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">appended by run 31 · 14:05</span></div>
+                <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/2026-11-06.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">appended by run 29 · yesterday</span></div>
+                <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/conventions.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">written by you</span></div>
+                <div style="padding: 10px 14px; border-top: 1px solid var(--line-100, #232327); font-size: 12px; color: var(--ink-300, #8f8f96)">3 notes · 4.2k tokens at start of a run · persists across runs and restarts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{editingAlive}}" hint-placeholder-val="{{false}}">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0">
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--line-100, #232327)">
+            <div class="wl-field">
               <label for="mname" class="wl-lbl">Name</label>
               <input id="mname" class="wl-in" value="Scout" style="max-width: 280px">
             </div>
@@ -129,7 +190,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             </div>
             <div style="display: flex; flex-direction: column; gap: 6px">
               <span class="wl-lbl">Skills · Agent Skills folders, each with a SKILL.md</span>
-              <div class="wl-card">
+              <div class="wl-list">
                 <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/tdd/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px" aria-label="Remove skill skills/tdd">Remove</button></div>
                 <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text" size="{{14}}"></x-import><span class="wl-mono" style="font-size: 12px; flex-grow: 1">skills/pr/SKILL.md</span><button class="wl-btn" type="button" style="height: 28px" aria-label="Remove skill skills/pr">Remove</button></div>
                 <div style="display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line-100, #232327)"><input class="wl-in" placeholder="skills/<name>" aria-label="Skill folder" style="max-width: 260px"><button class="wl-btn" type="button">Add skill</button></div>
@@ -139,7 +200,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px">
             <div style="display: flex; flex-direction: column; gap: 6px">
               <span class="wl-lbl">MCP servers · same shape as a Claude Code .mcp.json entry</span>
-              <div class="wl-card">
+              <div class="wl-list">
                 <div class="wl-row">
                   <span class="wl-mono" style="font-size: 12px; width: 72px">github</span>
                   <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">stdio</x-import>
@@ -171,7 +232,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             </div>
             <div style="display: flex; flex-direction: column; gap: 6px">
               <span class="wl-lbl">Memory · markdown notes Scout reads at start and appends to</span>
-              <div class="wl-card">
+              <div class="wl-list">
                 <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/2026-11-07.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">appended by run 31 · 14:05</span></div>
                 <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/2026-11-06.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">appended by run 29 · yesterday</span></div>
                 <div class="wl-row"><span class="wl-mono" style="font-size: 12px; flex-grow: 1">memory/scout/conventions.md</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">written by you</span></div>
@@ -197,27 +258,36 @@ function focusLater(selector) {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { phase: 'alive' };
+    this.state = { phase: 'alive', editing: false, notice: '' };
   }
   renderVals() {
     const phase = this.state.phase;
+    const editing = this.state.editing;
     const confirming = phase === 'confirm';
     const deleted = phase === 'deleted';
+    const alive = !deleted;
     const announce = confirming
       ? 'Delete minion Scout? Run 31 keeps its profile; 3 memory notes go. Choose Delete minion or Keep minion.'
       : deleted
         ? 'Minion Scout deleted. Undo delete is available.'
-        : '';
+        : this.state.notice;
     return {
       yes: true,
-      alive: !deleted,
+      alive: alive,
+      editing: editing,
+      viewingAlive: alive && !editing,
+      reading: alive && !editing,
+      editingAlive: alive && editing,
       confirming: confirming,
+      doneTitle: confirming ? 'Choose Delete minion or Keep minion first' : '',
       deleted: deleted,
       announce: announce,
-      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('#keep-minion'); },
-      keep: () => { this.setState({ phase: 'alive' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); },
-      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('#undo-minion'); },
-      undo: () => { this.setState({ phase: 'alive' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); }
+      startEdit: () => { this.setState({ editing: true, notice: 'Editing minion Scout' }); focusLater('#mname'); },
+      finishEdit: () => { if (this.state.phase === 'confirm') return; this.setState({ editing: false, notice: 'Viewing minion Scout' }); focusLater('#edit-minion'); },
+      askDelete: () => { this.setState({ phase: 'confirm', notice: '' }); focusLater('#keep-minion'); },
+      keep: () => { this.setState({ phase: 'alive', notice: '' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); },
+      confirmDelete: () => { this.setState({ phase: 'deleted', notice: '' }); focusLater('#undo-minion'); },
+      undo: () => { this.setState({ phase: 'alive', notice: '' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); }
     };
   }
 }

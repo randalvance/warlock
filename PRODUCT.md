@@ -45,7 +45,7 @@ One door, the warlock. The human only ever talks to the warlock. Spellbooks, for
 ## Evidence on Hand
 
 - docs/domain.md: the glossary, data shape and rules.
-- docs/prototypes/*.dc.html and canvas.json: nine clickable prototype artboards (Main, Projects, Agents, Runtime, Formations, Spellbooks, Warlock, Board, Factory), published at https://claude.ai/artifact/1kJmvVZKgLnUy38ktcvFCS.
+- docs/prototypes/*.dc.html and canvas.json: eight clickable prototype artboards (Main as the floor, Projects, Agents, Runtime, Formations, Spellbooks, Warlock, Board; the Factory artboard was retired into the floor on 2026-11-08), published at https://claude.ai/artifact/1kJmvVZKgLnUy38ktcvFCS.
 - README.md and docs/adr/0001-stack.md: the stack and how to run it.
 - Absent, never to be fabricated: customers, testimonials, benchmarks, pricing, a logo beyond the zap glyph.
 

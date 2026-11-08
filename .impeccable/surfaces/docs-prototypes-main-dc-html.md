@@ -2,12 +2,12 @@
 version: 1
 slug: "docs-prototypes-main-dc-html"
 primary_target: "docs/prototypes/Main.dc.html"
-related_targets: ["docs/prototypes/Board.dc.html","docs/prototypes/Formations.dc.html","docs/prototypes/Projects.dc.html","docs/prototypes/Agents.dc.html","docs/prototypes/Spellbooks.dc.html","docs/prototypes/Runtime.dc.html","docs/prototypes/Warlock.dc.html","docs/prototypes/Factory.dc.html"]
+related_targets: ["docs/prototypes/Board.dc.html","docs/prototypes/Formations.dc.html","docs/prototypes/Projects.dc.html","docs/prototypes/Agents.dc.html","docs/prototypes/Spellbooks.dc.html","docs/prototypes/Runtime.dc.html","docs/prototypes/Warlock.dc.html"]
 ---
 
 # Surface brief: the home (the floor)
 
-Primary target: docs/prototypes/Main.dc.html. Related: Board, Formations, Projects, Agents, Spellbooks, Runtime, Warlock, Factory artboards. Mode: Operate. Build path: code-led, into the Design-canvas prototypes first, then apps/web.
+Primary target: docs/prototypes/Main.dc.html. Related: Board, Formations, Projects, Agents, Spellbooks, Runtime, Warlock artboards (Factory retired on 2026-11-08). Mode: Operate. Build path: code-led, into the Design-canvas prototypes first, then apps/web; an Operate surface is code-led whatever `.impeccable/config.json` records as the standing default, so the comp-led default there is not in play here. Vocabulary: formation, station and spellbook are the prototypes' presentation labels for the domain model's workflow, step and playbook; the artboards keep the labels, the model terms apply in code, and the prototypes README records that.
 
 ## 1. Job and audience
 
@@ -40,7 +40,7 @@ One developer, solo, between other tasks. They open the home to answer three que
 - Formations per line: 1 to 3 lanes in use. An idle line with past runs expands to one unlit lane, the formation of its most recently run spellbook. A project with no run yet has no lane: its line is the Console strip alone with the hint "Send a task to start a run", and the first lane appears with the first run.
 - Stations per formation: 2 to 8; a lane scrolls horizontally past 6 at 1360 wide.
 - Runs per line: 0 to 12. Idle line (0 runs): collapsed to its Console strip with a lime SHIPPED count sign. More than 3 runs at one station: 3 cards and one compact row listing the rest as "run-id · minion" chips, so every running run's station and minion stays readable in one viewport; the row expands into cards on click.
-- Run states: queued (unlit title), running (magenta tube, one per card), blocked (amber chip, line sorts to top), failed (red chip, stays lit until rerun or dismissed), succeeded (lime 1.2s then flat, then leaves for the Dock).
+- Run states: queued (unlit title), running (magenta tube, one per card), blocked (amber chip, line sorts to top), failed (red chip, stays lit until rerun or dismissed), succeeded (lime held steady until Review or Dismiss, then leaves for the Dock; decision 3).
 - Titles truncate with an ellipsis; full title in the inspector. Elapsed is 0:00 upward live, "3m 12s" once done.
 - After a server restart the inspector log shows "replayed from event #n".
 
@@ -57,8 +57,22 @@ One developer, solo, between other tasks. They open the home to answer three que
 
 - Platform web, dark only, local single-user. Components only from Agentic Factory: Line, Station, Console, WorkOrder, Dock, AgentCard, Sign, Chip, Lamp, Tally, Bar, Button, Icon.
 - Accessibility: every lamp, sign and chip carries its word; handoffs announced through the existing live region; focus-visible on every control.
-- Open decisions a builder must not invent:
-  1. What the Factory artboard becomes: the home with the inspector closed, or retired.
-  2. Whether the station-visit cap (12) is shown on the line.
-  3. Whether a succeeded run leaves the line immediately for the Dock or waits for the developer's review.
-  4. Whether the composer names the target project explicitly or the warlock infers it.
+- Decisions taken by the owner on 2026-11-08, before the build:
+  1. Factory is retired: the home with the inspector closed is the factory view. Factory.dc.html leaves the canvas and its README row points at Main.
+  2. The station-visit cap (12) is not shown on the line; it is not in the domain model yet. The inspector log still shows visits.
+  3. A succeeded run waits for review: its card holds at its last station lit lime with a Review action, and leaves for the Dock when the developer dismisses it or opens the result.
+  4. The composer names the target project explicitly: a project chip, preset to the line last opened. The warlock never guesses where a task goes.
+
+## Direction contract
+
+THESIS: The home is the floor: one line per project, each run a lit card at the station it is at. It refuses the dashboard-of-cards arrangement (status tiles, a feed, a CTA) that the current Main and Factory artboards share.
+
+OWN-WORLD: Agentic Factory, unchanged. Near-black ground, matte surface-100 cards with 1px hairlines, one magenta accent that is the only light: a tube on the running card, a pill travelling the lane, the outlined primary button. Lime only on SHIPPED and a succeeded card. Barlow Condensed 600 uppercase for signage, Instrument Sans for text, Azeret Mono for ids, times and the log.
+
+STORY: The developer reads blocked, then running, then shipped, in one look. They open a run card and the inspector shows its log with sequence numbers. They give the warlock the next task from the composer, with the project named, and watch the queued card land under the entry station. They leave.
+
+FIRST VIEWPORT: 1360x960. Rail 56 left. Top bar 56: FLOOR, tallies (lines, running, blocked, shipped), search, NEW TASK as the one outlined tube. Floor from x=56 to x=1040: project lines stacked, blocked first; each line a Console strip (project, formation chips, run count, SHIPPED sign when idle) over a lane of station nodes with run cards under them, the lit one magenta. Inspector 320 on the right: run id, title, chips (station, minion, worktree, branch), the log with its one shimmer line, Cancel run and Rerun. Composer docked along the floor's bottom edge, 56 tall: project chip, input, Send, Open thread.
+
+FORM: One line per project, position 6 of 7 on my ordered list; locked from the dealt hand as .impeccable/mocks/decision/project-rail-home.html. seed:c3c3aecca41836ec. Signature interaction: the handoff, the card sliding to the next station along the lane (cascade timing) while its event lands in the inspector log and the live region announces it. Motion grammar: flicker on once, hum while running, the pill on every lane, cascade for log rows, everything instant under reduced motion.
+
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.

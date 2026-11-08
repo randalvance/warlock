@@ -41,9 +41,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav on" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
-    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
@@ -53,6 +52,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">synced 14:05</x-import>
       <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">next in 0:42</span>
+      <sc-if value="{{viewing}}" hint-placeholder-val="{{true}}"><button class="wl-btn" type="button" id="edit-board" on-click="{{startEditing}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit board</button></sc-if>
+      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}"><button class="wl-btn" type="button" id="done-editing" on-click="{{stopEditing}}">Done</button></sc-if>
       <button class="wl-btn" type="button">Import issues</button>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{syncNow}}">Sync now</x-import>
     </header>
@@ -68,13 +69,15 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
                 <article class="wl-task" aria-label="{{t.title}}">
                   <div style="display: flex; align-items: center; gap: 8px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{t.id}}</span><span style="flex-grow: 1"></span><sc-if value="{{t.hasIssue}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.issue}}</x-import></sc-if></div>
                   <span style="font-size: 13px; font-weight: 500; color: var(--ink-100, #f2f2f0)">{{t.title}}</span>
-                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 28px">
                     <sc-if value="{{t.running}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">{{t.runLabel}}</x-import></sc-if>
                     <sc-if value="{{t.passed}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">{{t.runLabel}}</x-import></sc-if>
                     <sc-if value="{{t.hasBook}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.book}}</x-import></sc-if>
                     <span style="flex-grow: 1"></span>
-                    <button class="wl-mv" type="button" aria-label="{{t.backLabel}}" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
-                    <button class="wl-mv" type="button" aria-label="{{t.fwdLabel}}" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+                    <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+                      <button class="wl-mv" type="button" aria-label="{{t.backLabel}}" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+                      <button class="wl-mv" type="button" aria-label="{{t.fwdLabel}}" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+                    </sc-if>
                   </div>
                 </article>
               </sc-for>
@@ -93,7 +96,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         <section aria-label="Rules" class="wl-card">
           <div style="display: flex; align-items: baseline; gap: 12px; padding: 12px 14px 8px"><span class="wl-sig" style="font-size: 14px">Rules</span></div>
           <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">Each imported issue becomes one task, linked by repo and number. Importing again changes nothing.</span></div>
-          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">A run moves its task: start → in_progress, review station → in_review, succeeded → done.</span></div>
+          <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">A run moves its task: start → in_progress, review step → in_review, succeeded → done.</span></div>
           <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">When both sides changed since the last sync, the later write wins and the log says so.</span></div>
           <div class="wl-row" style="align-items: flex-start; padding-top: 8px; padding-bottom: 8px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">token scope: repo, project · gh auth refresh -s project</span></div>
         </section>
@@ -103,6 +106,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+function focusLater(sel) {
+  requestAnimationFrame(() => { const el = document.querySelector(sel) || (document.querySelector('x-dc')?.shadowRoot?.querySelector(sel)); el?.focus(); });
+}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -123,7 +129,8 @@ class Component extends DCLogic {
         { time: '13:58', text: 'import · randalvance/warlock · 9 open issues · 2 new tasks, 7 already linked' },
         { time: '13:40', text: 'sync · WO-13 moved to ready on the board · pushed to GitHub Projects' }
       ],
-      announce: ''
+      announce: '',
+      editing: false
     };
   }
   renderVals() {
@@ -167,6 +174,10 @@ class Component extends DCLogic {
       columns: columns,
       log: log,
       announce: this.state.announce,
+      editing: this.state.editing,
+      viewing: !this.state.editing,
+      startEditing: () => { this.setState({ editing: true, announce: 'Editing the board: Move arrows shown' }); focusLater('.wl-mv:not(:disabled)'); },
+      stopEditing: () => { this.setState({ editing: false, announce: 'Viewing the board' }); focusLater('#edit-board'); },
       syncNow: () => this.setState({ log: [{ time: '14:06', text: 'sync · ' + this.state.tasks.length + ' tasks · 0 changes · nothing to write' }].concat(this.state.log), announce: 'Synced ' + this.state.tasks.length + ' tasks with GitHub Projects. Nothing to write.' })
     };
   }

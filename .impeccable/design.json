@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-08T12:30:00Z",
+  "title": "Design System: Warlock",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Magenta Tube", "canonical": "#ff3dcd", "tonalRamp": ["#2b0a22", "#55143f", "#8a1f66", "#c12c90", "#ff3dcd", "#ff7ae0", "#ffb0ec", "#ffd6f3"] },
+      "accent-bright": { "role": "primary", "displayName": "Accent as Text", "canonical": "#ff7ae0", "tonalRamp": ["#2b0a22", "#55143f", "#8a1f66", "#c12c90", "#ff3dcd", "#ff7ae0", "#ffb0ec", "#ffd6f3"] },
+      "accent-tint": { "role": "primary", "displayName": "Accent Wash", "canonical": "rgba(255, 61, 205, 0.14)", "tonalRamp": ["#1f0d1c", "#2c0f24", "#3a122d", "#4a1538", "#5c1844", "#731c54", "#8c2166", "#a8277a"] },
+      "glow-core": { "role": "primary", "displayName": "Filament", "canonical": "#ffd6f3", "tonalRamp": ["#2b0a22", "#55143f", "#8a1f66", "#c12c90", "#ff3dcd", "#ff7ae0", "#ffb0ec", "#ffd6f3"] },
+      "glow-halo": { "role": "primary", "displayName": "Halo", "canonical": "rgba(255, 61, 205, 0.5)", "tonalRamp": ["#2b0a22", "#55143f", "#8a1f66", "#c12c90", "#ff3dcd", "#ff7ae0", "#ffb0ec", "#ffd6f3"] },
+      "ok": { "role": "tertiary", "displayName": "Lime Done", "canonical": "#b6ff3d", "tonalRamp": ["#172b06", "#2b4f0c", "#447a14", "#62a81e", "#86d62b", "#b6ff3d", "#d2ff86", "#ecffc4"] },
+      "warn": { "role": "tertiary", "displayName": "Amber Needs You", "canonical": "#ffb02e", "tonalRamp": ["#2e1c03", "#553508", "#88540e", "#bf7716", "#f09a22", "#ffb02e", "#ffcd7a", "#ffe8c2"] },
+      "warn-tint": { "role": "tertiary", "displayName": "Amber Wash", "canonical": "rgba(255, 176, 46, 0.14)", "tonalRamp": ["#1f1a0f", "#2c2212", "#3a2c15", "#4a3718", "#5c431c", "#735221", "#8c6427", "#a8782e"] },
+      "err": { "role": "tertiary", "displayName": "Red Failed", "canonical": "#ff4d4d", "tonalRamp": ["#2e0808", "#551111", "#881a1a", "#bf2626", "#f03a3a", "#ff4d4d", "#ff8a8a", "#ffc8c8"] },
+      "bg-000": { "role": "neutral", "displayName": "Floor", "canonical": "#09090b", "tonalRamp": ["#09090b", "#0f0f11", "#141417", "#1b1b1f", "#1f1f24", "#232327", "#303036", "#45454c"] },
+      "bg-100": { "role": "neutral", "displayName": "Chrome", "canonical": "#0f0f11", "tonalRamp": ["#09090b", "#0f0f11", "#141417", "#1b1b1f", "#1f1f24", "#232327", "#303036", "#45454c"] },
+      "surface-100": { "role": "neutral", "displayName": "Surface", "canonical": "#141417", "tonalRamp": ["#09090b", "#0f0f11", "#141417", "#1b1b1f", "#1f1f24", "#232327", "#303036", "#45454c"] },
+      "surface-200": { "role": "neutral", "displayName": "Nested Surface", "canonical": "#1b1b1f", "tonalRamp": ["#09090b", "#0f0f11", "#141417", "#1b1b1f", "#1f1f24", "#232327", "#303036", "#45454c"] },
+      "surface-300": { "role": "neutral", "displayName": "Strongest Neutral", "canonical": "#1f1f24", "tonalRamp": ["#09090b", "#0f0f11", "#141417", "#1b1b1f", "#1f1f24", "#232327", "#303036", "#45454c"] },
+      "line-100": { "role": "neutral", "displayName": "Hairline", "canonical": "#232327", "tonalRamp": ["#09090b", "#141417", "#1f1f24", "#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96"] },
+      "line-200": { "role": "neutral", "displayName": "Hover Hairline", "canonical": "#303036", "tonalRamp": ["#09090b", "#141417", "#1f1f24", "#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96"] },
+      "line-300": { "role": "neutral", "displayName": "Open Hairline", "canonical": "#45454c", "tonalRamp": ["#09090b", "#141417", "#1f1f24", "#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96"] },
+      "ink-100": { "role": "neutral", "displayName": "Ink", "canonical": "#f2f2f0", "tonalRamp": ["#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96", "#c4c4c8", "#e0e0df", "#f2f2f0"] },
+      "ink-200": { "role": "neutral", "displayName": "Secondary Ink", "canonical": "#c4c4c8", "tonalRamp": ["#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96", "#c4c4c8", "#e0e0df", "#f2f2f0"] },
+      "ink-300": { "role": "neutral", "displayName": "Meta Ink", "canonical": "#8f8f96", "tonalRamp": ["#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96", "#c4c4c8", "#e0e0df", "#f2f2f0"] },
+      "ink-400": { "role": "neutral", "displayName": "Decoration Ink", "canonical": "#5c5c63", "tonalRamp": ["#232327", "#303036", "#45454c", "#5c5c63", "#8f8f96", "#c4c4c8", "#e0e0df", "#f2f2f0"] }
+    },
+    "typographyMeta": {
+      "heading": { "displayName": "Heading", "purpose": "The page name in the top bar; 17px in the inspector." },
+      "title": { "displayName": "Title", "purpose": "A line's project name in its Console strip; 14px on the Dock strip." },
+      "section": { "displayName": "Section", "purpose": "Card and panel heads, board column names (wl-sig helper)." },
+      "sign": { "displayName": "Sign", "purpose": "One word in a 24px tube, and primary/danger button labels at +0.08em." },
+      "body": { "displayName": "Body", "purpose": "Shell default and thread messages; prose panels 13px/1.45 capped at 72ch." },
+      "label": { "displayName": "Label", "purpose": "Quiet button labels, run card titles, form labels." },
+      "caption": { "displayName": "Caption", "purpose": "Hints and key columns; station node labels at 11px." },
+      "tally": { "displayName": "Tally", "purpose": "Counts in the top bar (18px) and console strips (22px) with an uppercase sans word beneath." },
+      "mono": { "displayName": "Mono", "purpose": "Ids, timers, log rows, branches, worktrees, strip captions, the composer reply." },
+      "chip": { "displayName": "Chip", "purpose": "Chip labels and station node numerals." }
+    },
+    "shadows": [
+      { "name": "glow-running", "value": "var(--glow-running)", "purpose": "The magenta tube on the running card and avatar; DS token resolved by the canvas runtime." },
+      { "name": "glow-running-node", "value": "0 0 0 1px var(--glow-body), 0 0 10px var(--glow-body), 0 0 24px var(--glow-halo)", "purpose": "The running station node." },
+      { "name": "glow-running-bright", "value": "0 0 0 1px var(--accent), 0 0 14px var(--glow-body), 0 0 40px var(--glow-halo)", "purpose": "Peak of the hum loop." },
+      { "name": "glow-attention", "value": "var(--glow-attention)", "purpose": "The amber tube on a blocked card, with a warn-tint wash; 0 0 8px var(--warn-glow) on a blocked node or lamp." },
+      { "name": "glow-danger", "value": "var(--glow-danger)", "purpose": "The red tube on a failed card; 0 0 8px var(--err-glow) on a failed node or lamp." },
+      { "name": "glow-done", "value": "var(--glow-done, 0 0 0 1px #b6ff3d)", "purpose": "The SHIPPED sign, and held steady on a succeeded run card until Review or Dismiss." },
+      { "name": "glow-button", "value": "var(--glow-button)", "purpose": "The one outlined primary button, lit inside and out." },
+      { "name": "mark-halo", "value": "drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))", "purpose": "Filter on the zap mark at the top of the rail." },
+      { "name": "lamp-running", "value": "0 0 6px var(--glow-body), 0 0 18px var(--glow-body)", "purpose": "The 8px lamp on a running card." },
+      { "name": "lane-pill", "value": "0 0 8px var(--glow-body), 0 0 20px var(--glow-halo)", "purpose": "The 60x3px pill travelling a live lane." },
+      { "name": "bezel", "value": "var(--bezel)", "purpose": "Resting card bezel supplied by the DS; depth without meaning." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(.2,.8,.2,1)", "purpose": "The one easing for every state transition and the card slide." },
+      { "name": "overshoot", "value": "cubic-bezier(.2,.8,.3,1.4)", "purpose": "Pop-ins under 500ms only (af-pop 350ms)." },
+      { "name": "af-neon-on", "value": "1.2s steps(1, end) 1", "purpose": "Flicker on once when a card or avatar turns running." },
+      { "name": "af-hum", "value": "3.2s ease-in-out 1.2s infinite", "purpose": "The running tube breathing between glow-running and glow-running-bright." },
+      { "name": "af-attention", "value": "2.4s ease-in-out infinite", "purpose": "Opacity pulse on the blocked card." },
+      { "name": "af-travel", "value": "3s linear infinite", "purpose": "The lane pill from left -80px to 100%." },
+      { "name": "af-shimmer", "value": "1.8s linear infinite", "purpose": "The one live log row." },
+      { "name": "wl-slide", "value": "0.5s var(--ease) 1, from translateX(calc(-100% - 20px))", "purpose": "A run card arriving at a new station or landing from the composer; cleared after 700ms." },
+      { "name": "reduced-motion", "value": "animation: none; lane pill parked at 45%; shimmer flat ink-200", "purpose": "Everything instant under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "artboard", "value": "1360px x 960px (fixed; no responsive breakpoints built)" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one outlined, lit control on a screen: New task, Send, Rerun, Review.",
+      "html": "<button class=\"ds-btn-primary\"><svg aria-hidden=\"true\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg>New task</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: transparent; border: 1px solid var(--accent, #ff3dcd); color: var(--accent-bright, #ff7ae0); font: 600 13px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .08em; box-shadow: var(--glow-button, 0 0 0 1px rgba(255,61,205,.5), 0 0 10px rgba(255,61,205,.5), 0 0 28px rgba(255,61,205,.3), inset 0 0 8px rgba(255,61,205,.25)); text-shadow: 0 0 6px var(--glow-halo, rgba(255,61,205,.5)); cursor: pointer; transition: border-color .2s cubic-bezier(.2,.8,.2,1), background .2s cubic-bezier(.2,.8,.2,1); } .ds-btn-primary:hover { border-color: var(--accent-bright, #ff7ae0); } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-btn-primary:disabled { opacity: .4; box-shadow: none; text-shadow: none; cursor: default; }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Cancel run, Stop run: the primary's construction in red, without a tube.",
+      "html": "<button class=\"ds-btn-danger\"><svg aria-hidden=\"true\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/></svg>Cancel run</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: transparent; border: 1px solid var(--err, #ff4d4d); color: var(--err, #ff4d4d); font: 600 13px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .08em; text-shadow: 0 0 6px var(--err-glow, rgba(255,77,77,.5)); cursor: pointer; } .ds-btn-danger:hover { border-color: #ff8a8a; } .ds-btn-danger:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-btn-danger:disabled { opacity: .4; text-shadow: none; cursor: default; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Every secondary action: Dismiss, Keep running, Open thread, Edit board.",
+      "html": "<button class=\"ds-btn-quiet\">Open thread</button>",
+      "css": ".ds-btn-quiet { height: 32px; box-sizing: border-box; padding: 0 12px; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; border: 1px solid var(--line-200, #303036); background: transparent; color: var(--ink-100, #f2f2f0); font: 500 13px/1 'Instrument Sans', sans-serif; white-space: nowrap; cursor: pointer; } .ds-btn-quiet:hover { border-color: var(--line-300, #45454c); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-btn-quiet:disabled { opacity: .4; cursor: default; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "A status or attribute token with a dot; toned chips tint 14% and drop the border; plain chips drop the dot.",
+      "html": "<span class=\"ds-chip\">feature-dev</span> <span class=\"ds-chip ds-chip-warn\">blocked</span> <span class=\"ds-chip ds-chip-accent\">live · #187</span> <span class=\"ds-chip ds-chip-ok\">succeeded</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--surface-200, #1b1b1f); border: 1px solid var(--line-100, #232327); font: 500 11px/1 'Azeret Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-300, #8f8f96); white-space: nowrap; box-sizing: border-box; } .ds-chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--queued, #5c5c63); } .ds-chip-warn { background: var(--warn-tint, rgba(255,176,46,.14)); color: var(--warn, #ffb02e); border-color: transparent; } .ds-chip-warn::before { background: var(--warn, #ffb02e); } .ds-chip-ok { background: var(--ok-tint, rgba(182,255,61,.14)); color: var(--ok, #b6ff3d); border-color: transparent; } .ds-chip-ok::before { background: var(--ok, #b6ff3d); } .ds-chip-err { background: var(--err-tint, rgba(255,77,77,.14)); color: var(--err, #ff4d4d); border-color: transparent; } .ds-chip-err::before { background: var(--err, #ff4d4d); } .ds-chip-accent { background: var(--accent-tint, rgba(255,61,205,.14)); color: var(--accent-bright, #ff7ae0); border-color: transparent; } .ds-chip-accent::before { background: var(--glow-body, #ff3dcd); box-shadow: 0 0 6px var(--glow-halo, rgba(255,61,205,.5)); }"
+    },
+    {
+      "name": "Sign",
+      "kind": "custom",
+      "refersTo": "sign-ok",
+      "description": "One word in a tube; lime SHIPPED is the one tube that stays lit on a finished thing.",
+      "html": "<span class=\"ds-sign\">Shipped 12</span>",
+      "css": ".ds-sign { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 12px; border-radius: 999px; border: 1px solid currentColor; font: 600 13px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .12em; color: var(--ok, #b6ff3d); box-shadow: var(--glow-done, 0 0 0 1px #b6ff3d, 0 0 10px rgba(182,255,61,.5), 0 0 28px rgba(182,255,61,.3)); text-shadow: 0 0 8px var(--ok-glow, rgba(182,255,61,.5)); white-space: nowrap; box-sizing: border-box; }"
+    },
+    {
+      "name": "Run Card",
+      "kind": "card",
+      "refersTo": "card-run",
+      "description": "A run at its station on the floor: lamp, mono id, truncating title, then a state chip and mono meta. The running one wears the magenta tube.",
+      "html": "<div class=\"ds-run\" data-state=\"running\" role=\"button\" tabindex=\"0\" aria-pressed=\"true\"><div class=\"ds-run-head\"><i class=\"ds-lamp\" aria-hidden=\"true\"></i><span class=\"ds-run-id\">31</span><span class=\"ds-run-t\">Add a line to the README</span></div><div class=\"ds-run-r2\"><span>Scout · 0:38</span></div></div><div class=\"ds-run\" data-state=\"blocked\" role=\"button\" tabindex=\"0\"><div class=\"ds-run-head\"><i class=\"ds-lamp\" aria-hidden=\"true\"></i><span class=\"ds-run-id\">30</span><span class=\"ds-run-t\">Fix the flaky sync spec</span></div><div class=\"ds-run-r2\"><span class=\"ds-run-chip\">blocked</span><span>needs you</span></div></div>",
+      "css": ".ds-run { position: relative; overflow: hidden; width: 220px; margin: 12px 0; background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: 14px; padding: 8px 10px; box-sizing: border-box; color: var(--ink-100, #f2f2f0); cursor: pointer; transition: border-color .2s cubic-bezier(.2,.8,.2,1), box-shadow .3s cubic-bezier(.2,.8,.2,1); } .ds-run:hover { border-color: var(--line-200, #303036); } .ds-run:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-run[aria-pressed='true'] { background: linear-gradient(var(--accent-tint, rgba(255,61,205,.14)), var(--accent-tint, rgba(255,61,205,.14))), var(--surface-100, #141417); border-color: var(--line-300, #45454c); } .ds-run-head { display: flex; align-items: center; gap: 8px; min-height: 18px; } .ds-lamp { width: 8px; height: 8px; border-radius: 50%; background: var(--queued, #5c5c63); flex: none; } .ds-run-id { flex: none; font: 500 11px/1 'Azeret Mono', monospace; color: var(--ink-300, #8f8f96); font-variant-numeric: tabular-nums; } .ds-run-t { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 500 13px/18px 'Instrument Sans', sans-serif; } .ds-run-r2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; min-height: 20px; font: 400 11px/1 'Azeret Mono', monospace; color: var(--ink-200, #c4c4c8); white-space: nowrap; overflow: hidden; } .ds-run-chip { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--warn-tint, rgba(255,176,46,.14)); color: var(--warn, #ffb02e); font: 500 11px/1 'Azeret Mono', monospace; letter-spacing: .08em; text-transform: uppercase; } .ds-run[data-state='queued'] .ds-run-t, .ds-run[data-state='queued'] .ds-run-r2 { color: var(--ink-300, #8f8f96); } .ds-run[data-state='running'] { border-color: transparent; box-shadow: var(--glow-running, 0 0 0 1px #ff3dcd, 0 0 10px rgba(255,61,205,.6), 0 0 28px rgba(255,61,205,.35)); animation: ds-neon-on 1.2s steps(1, end) 1, ds-hum 3.2s ease-in-out 1.2s infinite; } .ds-run[data-state='running'] .ds-run-id { color: var(--accent-bright, #ff7ae0); } .ds-run[data-state='running'] .ds-lamp { background: var(--glow-body, #ff3dcd); box-shadow: 0 0 6px var(--glow-body, #ff3dcd), 0 0 18px var(--glow-body, #ff3dcd); } .ds-run[data-state='blocked'] { border-color: transparent; background: linear-gradient(var(--warn-tint, rgba(255,176,46,.14)), var(--warn-tint, rgba(255,176,46,.14))), var(--surface-100, #141417); box-shadow: var(--glow-attention, 0 0 0 1px #ffb02e, 0 0 10px rgba(255,176,46,.5), 0 0 28px rgba(255,176,46,.3)); animation: ds-attention 2.4s ease-in-out infinite; } .ds-run[data-state='blocked'] .ds-lamp { background: var(--warn, #ffb02e); box-shadow: 0 0 8px var(--warn-glow, rgba(255,176,46,.5)); } .ds-run[data-state='failed'] { border-color: transparent; box-shadow: var(--glow-danger, 0 0 0 1px #ff4d4d, 0 0 10px rgba(255,77,77,.5), 0 0 28px rgba(255,77,77,.3)); } .ds-run[data-state='passed'] { box-shadow: var(--glow-done, 0 0 0 1px #b6ff3d, 0 0 10px rgba(182,255,61,.5)); } @keyframes ds-neon-on { 0% { opacity: .4; } 8% { opacity: 1; } 12% { opacity: .5; } 20% { opacity: 1; } 100% { opacity: 1; } } @keyframes ds-hum { 0%, 100% { box-shadow: var(--glow-running, 0 0 0 1px #ff3dcd, 0 0 10px rgba(255,61,205,.6), 0 0 28px rgba(255,61,205,.35)); } 50% { box-shadow: 0 0 0 1px var(--accent, #ff3dcd), 0 0 14px var(--glow-body, #ff3dcd), 0 0 40px var(--glow-halo, rgba(255,61,205,.5)); } } @keyframes ds-attention { 0%, 100% { opacity: 1; } 50% { opacity: .86; } } @media (prefers-reduced-motion: reduce) { .ds-run { animation: none !important; } }"
+    },
+    {
+      "name": "Lane",
+      "kind": "custom",
+      "refersTo": "station-node",
+      "description": "Station nodes on a 2px track with the pill of light travelling; the running node wears the filament.",
+      "html": "<div class=\"ds-lane\"><i class=\"ds-bead\" aria-hidden=\"true\"></i><div class=\"ds-nodes\"><button class=\"ds-node\" data-state=\"passed\" aria-label=\"Plan station\">01<span class=\"ds-node-label\" aria-hidden=\"true\">Plan</span></button><button class=\"ds-node\" data-state=\"running\" aria-label=\"Implement station, 1 run\">02<span class=\"ds-node-label\" aria-hidden=\"true\">Implement</span></button><button class=\"ds-node\" data-state=\"queued\" aria-label=\"Test station\">03<span class=\"ds-node-label\" aria-hidden=\"true\">Test</span></button><button class=\"ds-node\" data-state=\"queued\" aria-label=\"Review station\">04<span class=\"ds-node-label\" aria-hidden=\"true\">Review</span></button></div></div>",
+      "css": ".ds-lane { position: relative; height: 36px; width: 440px; margin: 8px 0 28px; overflow: hidden; } .ds-lane::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--lane, #303036); transform: translateY(-50%); } .ds-bead { position: absolute; top: 50%; left: -80px; height: 3px; width: 60px; border-radius: 999px; transform: translateY(-50%); background: var(--glow-body, #ff3dcd); box-shadow: 0 0 8px var(--glow-body, #ff3dcd), 0 0 20px var(--glow-halo, rgba(255,61,205,.5)); animation: ds-travel 3s linear infinite; } .ds-nodes { position: relative; height: 36px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; } .ds-node { position: relative; z-index: 1; justify-self: center; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border-radius: 8px; background: var(--surface-200, #1b1b1f); border: 1px solid var(--line-200, #303036); font: 500 11px/1 'Azeret Mono', monospace; color: var(--ink-300, #8f8f96); cursor: pointer; } .ds-node:hover { border-color: var(--line-300, #45454c); color: var(--ink-100, #f2f2f0); } .ds-node:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-node[data-state='running'] { border-color: transparent; color: var(--glow-core, #ffd6f3); box-shadow: 0 0 0 1px var(--glow-body, #ff3dcd), 0 0 10px var(--glow-body, #ff3dcd), 0 0 24px var(--glow-halo, rgba(255,61,205,.5)); text-shadow: 0 0 6px var(--glow-body, #ff3dcd); } .ds-node[data-state='passed'] { border-color: var(--ok, #b6ff3d); color: var(--ok, #b6ff3d); } .ds-node[data-state='blocked'] { border-color: var(--warn, #ffb02e); color: var(--warn, #ffb02e); box-shadow: 0 0 8px var(--warn-glow, rgba(255,176,46,.5)); } .ds-node[data-state='failed'] { border-color: var(--err, #ff4d4d); color: var(--err, #ff4d4d); box-shadow: 0 0 8px var(--err-glow, rgba(255,77,77,.5)); } .ds-node[data-state='queued'] { color: var(--ink-400, #5c5c63); } .ds-node-label { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 6px; font: 400 11px/1.2 'Instrument Sans', sans-serif; color: var(--ink-300, #8f8f96); white-space: nowrap; } @keyframes ds-travel { from { left: -80px; } to { left: 100%; } } @media (prefers-reduced-motion: reduce) { .ds-bead { animation: none; left: 45%; } }"
+    },
+    {
+      "name": "Composer",
+      "kind": "input",
+      "refersTo": "input-composer",
+      "description": "The one door: project select, task input and Send, docked 56px along the floor's bottom.",
+      "html": "<div class=\"ds-comp\"><form class=\"ds-comp-form\" onsubmit=\"return false\"><label class=\"ds-sr\" for=\"ds-project\">Project</label><select id=\"ds-project\" class=\"ds-sel\"><option>warlock</option><option>dotfiles</option></select><label class=\"ds-sr\" for=\"ds-task\">Tell the warlock what to do</label><input id=\"ds-task\" class=\"ds-in\" placeholder=\"Tell the warlock what to do\"><button class=\"ds-comp-send\" type=\"submit\">Send</button></form></div>",
+      "css": ".ds-comp { box-sizing: border-box; height: 56px; width: 560px; background: var(--surface-300, #1f1f24); border-top: 1px solid var(--line-200, #303036); display: flex; flex-direction: column; justify-content: center; padding: 4px 24px; } .ds-comp-form { display: flex; align-items: center; gap: 10px; margin: 0; } .ds-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .ds-sel { height: 28px; box-sizing: border-box; padding: 0 28px 0 12px; background: var(--surface-200, #1b1b1f); border: 1px solid var(--line-200, #303036); border-radius: 999px; color: var(--ink-200, #c4c4c8); font: 400 11px/1 'Azeret Mono', monospace; text-transform: uppercase; letter-spacing: .04em; appearance: none; -webkit-appearance: none; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238f8f96' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; } .ds-in { flex: 1 1 auto; height: 28px; box-sizing: border-box; padding: 0 12px; background: var(--surface-100, #141417); border: 1px solid var(--line-200, #303036); border-radius: 999px; color: var(--ink-100, #f2f2f0); font: 400 13px/1 'Instrument Sans', sans-serif; min-width: 0; } .ds-in::placeholder { color: var(--ink-300, #8f8f96); } .ds-in:focus-visible, .ds-sel:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; } .ds-comp-send { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 999px; background: transparent; border: 1px solid var(--accent, #ff3dcd); color: var(--accent-bright, #ff7ae0); font: 600 13px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .08em; box-shadow: var(--glow-button, 0 0 0 1px rgba(255,61,205,.5), 0 0 10px rgba(255,61,205,.5), 0 0 28px rgba(255,61,205,.3)); text-shadow: 0 0 6px var(--glow-halo, rgba(255,61,205,.5)); cursor: pointer; } .ds-comp-send:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; }"
+    },
+    {
+      "name": "Form Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Text fields on the editor artboards (Projects, Agents, Formations, Spellbooks).",
+      "html": "<div class=\"ds-field\"><label class=\"ds-lbl\" for=\"ds-name\">Name</label><input id=\"ds-name\" class=\"ds-fin\" value=\"Scout\"></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; width: 280px; } .ds-lbl { font: 500 13px/1 'Instrument Sans', sans-serif; color: var(--ink-200, #c4c4c8); } .ds-fin { height: 32px; box-sizing: border-box; padding: 0 10px; background: var(--surface-200, #1b1b1f); border: 1px solid var(--line-100, #232327); border-radius: 8px; color: var(--ink-100, #f2f2f0); font: 400 14px/1 'Instrument Sans', sans-serif; width: 100%; } .ds-fin:hover { border-color: var(--line-200, #303036); } .ds-fin:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; }"
+    },
+    {
+      "name": "Rail",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "The 56px rail: zap mark with its halo, then 44px icon tiles; the current one sits on an accent wash.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Sections\"><a class=\"ds-mark\" href=\"#\" aria-label=\"Warlock home\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\"/></svg></a><a class=\"ds-nav ds-nav-on\" href=\"#\" aria-label=\"Projects\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\"/><rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\"/></svg></a><a class=\"ds-nav\" href=\"#\" aria-label=\"Agents\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/></svg></a></nav>",
+      "css": ".ds-rail { width: 56px; height: 220px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px; } .ds-mark { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5))); } .ds-nav { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--ink-300, #8f8f96); text-decoration: none; } .ds-nav:hover { color: var(--ink-100, #f2f2f0); background: var(--surface-200, #1b1b1f); } .ds-nav-on { color: var(--accent-bright, #ff7ae0); background: var(--accent-tint, rgba(255,61,205,.14)); } .ds-nav:focus-visible, .ds-mark:focus-visible { outline: 2px solid var(--accent, #ff3dcd); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Floor at Night",
+    "overview": "Warlock is one developer's software factory, and its interface is the factory floor seen after hours. The ground is near-black, every surface is matte, and structure is drawn with 1px hairlines rather than fills. Nothing glows by default. Light is signage: a magenta tube around the card that is running right now, a pill of light travelling the lane under it, an amber chip on the run that needs you, a lime SHIPPED sign on finished work. Because the floor is dark and quiet, the three or four lit things on a 1360x960 screen say what is running, what needs you and what shipped in one look.\n\nThe visual authority is the Agentic Factory design system, used unchanged. This build adds composition: the home is stacked Lines, one per project, each a strip over a lane of station nodes with the run cards under the station they are at; an inspector on the right for the opened run; a composer docked along the floor's bottom. Density is high and the tone is operational: tabular numerals, sequence numbers, worktree and branch names, uppercase condensed signage for names and sentence-case Instrument Sans for everything else. Confirmed rejections: no light theme, no second accent, no gradients as light, no emoji or glyph icons in chrome, no synonyms for the domain words.",
+    "keyCharacteristics": [
+      "Near-black ground (`bg-000`), chrome one step up (`bg-100`), actionable things on `surface-100` behind a 1px `line-100` hairline.",
+      "One accent, magenta, which is also the only interactive colour: the running tube, the lane pill, the outlined primary button, active nav, the focus ring.",
+      "Lime means done and shipped; amber means needs you; red means failed. Each always carries its word.",
+      "Three faces with fixed jobs: Barlow Condensed 600 uppercase for signage, Instrument Sans for text, Azeret Mono for anything the machine produced.",
+      "Depth is a tube (box-shadow), never a border thicker than 1px and never a lift."
+    ],
+    "rules": [
+      { "name": "The One Light Rule", "body": "Magenta is the only light that means now: one tube on the running card, one pill on each live lane, one outlined primary button per screen. Lime is reserved for done and shipped so success is never a second magenta.", "section": "colors" },
+      { "name": "The Word Rule", "body": "A lamp, node, chip, sign or tally never carries status by colour alone; the word (running, blocked, failed, succeeded, shipped) is in the chip, the sign or the aria label beside it.", "section": "colors" },
+      { "name": "The Black Behind Every Tube Rule", "body": "Tubes sit on `surface-100` over `bg-000`. A wash (`accent-tint`, `warn-tint`) is the only tinted ground, and it is layered over `surface-100` with a gradient of itself, never a flat tinted fill.", "section": "colors" },
+      { "name": "The Style Does the Casing Rule", "body": "Uppercase comes from the signage styles, never from the string. Signage is the only uppercase; buttons' quiet labels, hints and log lines are sentence case or lowercase mono.", "section": "typography" },
+      { "name": "The Machine Wrote It Rule", "body": "Anything produced by the system (ids, sequence numbers, times, elapsed, branches, worktrees, event text) is Azeret Mono with tabular numerals. Elapsed reads `0:38` while live and `3m 12s` once done.", "section": "typography" },
+      { "name": "The Tube Is a Shadow Rule", "body": "State light is always box-shadow or text-shadow; the border under it goes transparent. Borders stay 1px and never change colour to show state (a node's border is the exception: `ok`, `warn` or `err` on its 1px edge).", "section": "elevation" },
+      { "name": "The One Tube Per Card Rule", "body": "A card carries one tube. A running card with a blocked detail shows the magenta tube and an amber chip, never two tubes.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do put every actionable thing on `surface-100` behind a 1px `line-100` hairline over the `bg-000` floor, and step nested fills up one surface at a time.",
+      "Do show state as a tube (box-shadow in the state's colour) with the border under it transparent, and keep the word in a chip, sign or aria-label beside it.",
+      "Do set signage in Barlow Condensed 600 uppercase through the style, and set every id, time, count, branch and log line in Azeret Mono with tabular numerals.",
+      "Do keep one primary (outlined, lit) button per screen and use quiet pill buttons for everything else.",
+      "Do make every lamp, node, chip and card reachable by keyboard with a 2px `accent` focus outline, and announce handoffs through the live region.",
+      "Do hold every animation to the DS grammar: flicker on once, hum while running, the pill on a live lane, cascade for log rows, a 0.5s slide for an arriving card, and nothing moving under `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "Don't introduce a second accent or use magenta for success; lime is done and shipped, amber is needs you, red is failed.",
+      "Don't fill a surface with `accent`, `glow-core`, `glow-body` or `glow-halo`, or set body text in them; they live in shadows, lamps, the lane pill and the bar.",
+      "Don't lift, scale or shadow a surface on hover; hover is a hairline step (`line-200`) or a `surface-200` row tint.",
+      "Don't draw a border thicker than 1px or square a corner; the only 2px strokes are the lane rail and the focus outline.",
+      "Don't type uppercase, emoji, exclamation marks or glyph icons into chrome, and don't coin synonyms for the domain words (formation, station, spellbook on these artboards).",
+      "Don't add a light theme, multi-user hints, or hand-operated run controls on the floor beyond the hardened Cancel run and Rerun."
+    ]
+  }
+}

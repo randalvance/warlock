@@ -32,6 +32,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-plist{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 14px;border-top:1px solid var(--line-100,#232327);text-decoration:none;color:var(--ink-100,#f2f2f0)}
 .wl-plist:hover{background:var(--surface-200,#1b1b1f);color:var(--ink-100,#f2f2f0)}
 .wl-plist.on{background:var(--accent-tint,rgba(255,61,205,.14));box-shadow:inset 2px 0 0 var(--accent,#ff3dcd)}
+.wl-kv{display:flex;align-items:flex-start;gap:12px;padding:8px 14px;border-top:1px solid var(--line-100,#232327)}
+.wl-k{flex:0 0 112px;font-family:'Azeret Mono',monospace;font-size:11px;line-height:1.45;color:var(--ink-300,#8f8f96);padding-top:1px}
+.wl-v{flex:1 1 auto;min-width:0;font-size:13px;line-height:1.45;color:var(--ink-200,#c4c4c8)}
 </style>
 </helmet>
 <div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
@@ -42,30 +45,65 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav on" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
-    <a href="Factory.dc.html" class="wl-nav" aria-label="Factory" title="Factory"><x-import component-from-global-scope="AgenticFactory.Icon" name="eye"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Command panel" title="Command panel"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
     <header style="min-height: 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-bottom: 1px solid var(--line-100, #232327); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 8px 20px">
       <h1 class="wl-sig" style="margin: 0; font-size: 20px; color: var(--ink-100, #f2f2f0)">Spellbooks</h1>
       <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">2 seeds · 1 draft · eval 5 of 5</span>
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
-      <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save spellbook</x-import>
+      <sc-if value="{{reading}}" hint-placeholder-val="{{true}}">
+        <button id="edit-spellbook" class="wl-btn" type="button" on-click="{{startEdit}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="pencil" size="{{14}}"></x-import>Edit spellbook</button>
+      </sc-if>
+      <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+        <button id="done-spellbook" class="wl-btn" type="button" on-click="{{done}}">Done</button>
+        <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save spellbook</x-import>
+      </sc-if>
     </header>
 
     <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
       <section aria-label="Spellbook list" class="wl-card" style="flex: 1 1 220px; max-width: 280px">
         <div class="wl-head"><span class="wl-sig" style="font-size: 14px">All spellbooks</span></div>
-        <div class="wl-plist" aria-label="Bug fix, not opened in this prototype"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Bug fix</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · Implement then review</span></span><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">3 runs</x-import></div>
-        <div class="wl-plist" aria-label="Feature, not opened in this prototype"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Feature</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · Implement then review</span></span><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">1 run</x-import></div>
+        <div class="wl-plist" aria-label="Bug fix, seed"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Bug fix</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · Implement then review</span></span><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">3 runs</x-import></div>
+        <div class="wl-plist" aria-label="Feature, seed"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Feature</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · Implement then review</span></span><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">1 run</x-import></div>
         <a href="#editor" class="wl-plist on"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Refactor</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">draft · Implement then review</span></span><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">invalid</x-import></a>
         <div style="padding: 12px 14px; border-top: 1px solid var(--line-100, #232327)"><button class="wl-btn" type="button">New spellbook</button></div>
       </section>
 
-      <section id="editor" aria-label="Edit spellbook Refactor" style="flex: 999 1 560px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start">
+      <section id="editor" aria-label="{{sectionLabel}}" style="flex: 999 1 560px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start">
+        <sc-if value="{{reading}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div class="wl-card">
+            <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Refactor</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">draft · not yet picked for any task</span></div>
+            <div class="wl-kv"><span class="wl-k">fits</span><span class="wl-v">Changes that move or rename code without changing behaviour. No new endpoints, screens or flags. Tests already cover the area.</span></div>
+            <div class="wl-kv"><span class="wl-k">formation</span><span class="wl-v">Implement then review · Scout, then Ada</span></div>
+            <div class="wl-kv"><span class="wl-k">implement · Scout</span><span class="wl-v">Move the code first, then rename. Keep every commit green. Do not change public signatures without a note in the handoff.</span></div>
+            <div class="wl-kv"><span class="wl-k" style="color: var(--err, #ff4d4d)">review · Ada</span><span class="wl-v" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><x-import component-from-global-scope="AgenticFactory.Chip" tone="err">missing</x-import><span>A spellbook needs a brief for every station in its formation.</span></span></div>
+          </div>
+
+          <div class="wl-card">
+            <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Bug fix</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · 3 runs · last run 31</span></div>
+            <div class="wl-kv"><span class="wl-k">fits</span><span class="wl-v">A task that names a wrong behaviour in code that already exists and asks for nothing new.</span></div>
+            <div class="wl-kv"><span class="wl-k">formation</span><span class="wl-v">Implement then review · Scout, then Ada</span></div>
+            <div class="wl-kv"><span class="wl-k">implement · Scout</span><span class="wl-v">Reproduce with a failing test, then fix the smallest thing that makes it pass.</span></div>
+            <div class="wl-kv"><span class="wl-k">review · Ada</span><span class="wl-v">Check the test fails without the fix and passes with it. No edits outside the task.</span></div>
+          </div>
+
+          <div class="wl-card">
+            <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Feature</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">seed · 1 run · last run 28</span></div>
+            <div class="wl-kv"><span class="wl-k">fits</span><span class="wl-v">A task that asks for new behaviour: an endpoint, a screen, a flag or a command.</span></div>
+            <div class="wl-kv"><span class="wl-k">formation</span><span class="wl-v">Implement then review · Scout, then Ada</span></div>
+            <div class="wl-kv"><span class="wl-k">implement · Scout</span><span class="wl-v">Write the acceptance test from the task body before any code. Keep the handoff under one screen.</span></div>
+            <div class="wl-kv"><span class="wl-k">review · Ada</span><span class="wl-v">Check the acceptance test matches the task body. Flag any new public name without a note.</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
         <div class="wl-card" style="display: flex; flex-direction: column; gap: 14px; padding: 16px">
           <div style="display: flex; align-items: baseline; gap: 12px"><span class="wl-sig" style="font-size: 14px">Refactor</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">draft · not yet picked for any task</span></div>
           <div style="display: flex; flex-direction: column; gap: 6px"><label for="sname" class="wl-lbl">Name</label><input id="sname" class="wl-in" value="Refactor"></div>
@@ -77,6 +115,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <div style="display: flex; flex-direction: column; gap: 6px"><label for="brev" class="wl-mono" style="font-size: 11px; color: var(--err, #ff4d4d)">review · Ada · missing</label><textarea id="brev" class="wl-ta" rows="3" placeholder="What Ada should check at the review station" aria-invalid="true" aria-describedby="brev-err" style="border-color: var(--err, #ff4d4d)"></textarea><span id="brev-err" style="font-size: 12px; color: var(--err, #ff4d4d)">A spellbook needs a brief for every station in its formation. Missing: review.</span></div>
           </div>
         </div>
+        </sc-if>
 
         <div style="display: flex; flex-direction: column; gap: 20px">
           <div class="wl-card">
@@ -115,9 +154,34 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+function focusLater(sel) {
+  requestAnimationFrame(() => {
+    const el = document.querySelector(sel) || (document.querySelector('x-dc')?.shadowRoot?.querySelector(sel));
+    el?.focus();
+  });
+}
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { editing: false, announce: '' };
+  }
   renderVals() {
-    return { yes: true };
+    const editing = this.state.editing;
+    return {
+      yes: true,
+      editing: editing,
+      reading: !editing,
+      announce: this.state.announce,
+      sectionLabel: editing ? 'Edit spellbook Refactor' : 'Spellbooks, read-only',
+      startEdit: () => {
+        this.setState({ editing: true, announce: 'Editing spellbook Refactor. Save is disabled until the review brief is written.' });
+        focusLater('#sfits');
+      },
+      done: () => {
+        this.setState({ editing: false, announce: 'Spellbook Refactor is read-only again. The review brief is still missing.' });
+        focusLater('#edit-spellbook');
+      }
+    };
   }
 }
 </script>

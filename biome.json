@@ -12,6 +12,7 @@
 			"!**/*.md",
 			"!apps/server/drizzle/meta",
 			"!docs/prototypes",
+			"!.impeccable",
 			"!.devcontainer/devcontainer-lock.json"
 		]
 	},

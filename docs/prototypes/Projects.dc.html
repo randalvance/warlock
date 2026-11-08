@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
 .wl-ta{box-sizing:border-box;padding:8px 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 13px/1.45 'Instrument Sans',sans-serif;width:100%;resize:vertical}
 .wl-lbl{font:500 13px/1 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8)}
@@ -52,6 +54,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="layout-grid">New project</x-import>
     </header>
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
     <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
       <section aria-label="Project list" style="flex: 1 1 260px; max-width: 320px; background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); overflow: hidden">
@@ -75,14 +78,30 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       </section>
 
       <section id="detail" aria-label="Project warlock" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <sc-if value="{{deleted}}" hint-placeholder-val="{{false}}">
+          <div style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 32px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+            <span class="wl-sig" style="font-size: 18px; color: var(--ink-200, #c4c4c8)">Project warlock deleted</span>
+            <span style="font-size: 13px; color: var(--ink-300, #8f8f96); max-width: 520px">2 repos stay on GitHub. 3 artifacts and 2 context entries are gone, and run 31 was stopped. The event log keeps the history.</span>
+            <button class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{alive}}" hint-placeholder-val="{{true}}">
         <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap">
           <div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 6px">
             <label for="pname" class="wl-lbl">Project name</label>
             <input id="pname" class="wl-in" value="warlock" style="max-width: 360px">
           </div>
           <button class="wl-btn" type="button">Save</button>
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square">Delete project</x-import>
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete project</x-import>
         </div>
+        <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
+          <div role="group" aria-label="Confirm deleting project warlock" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px; background: var(--warn-tint, rgba(255,176,46,.14)); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px)">
+            <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Delete project warlock? Its 2 repos stay on GitHub. 3 artifacts and 2 context entries are removed, and run 31 is stopped first.</span>
+            <span style="flex-grow: 1"></span>
+            <button class="wl-btn" type="button" on-click="{{keep}}">Keep project</button>
+            <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmDelete}}">Delete project</x-import>
+          </div>
+        </sc-if>
 
         <div style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); overflow: hidden">
           <div style="display: flex; align-items: baseline; gap: 12px; padding: 14px 14px 10px">
@@ -93,18 +112,18 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <span class="wl-mono" style="font-size: 12px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">randalvance/warlock</span>
             <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">default main</span>
             <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">readable</x-import>
-            <button class="wl-btn" type="button" style="height: 28px">Remove</button>
+            <button class="wl-btn" type="button" style="height: 28px" aria-label="Remove repo randalvance/warlock">Remove</button>
           </div>
           <div class="wl-row">
             <span class="wl-mono" style="font-size: 12px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">randalvance/warlock-docs</span>
             <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">default main</span>
             <x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">readable</x-import>
-            <button class="wl-btn" type="button" style="height: 28px">Remove</button>
+            <button class="wl-btn" type="button" style="height: 28px" aria-label="Remove repo randalvance/warlock-docs">Remove</button>
           </div>
           <div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14))">
             <span class="wl-mono" style="font-size: 12px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">randalvance/old-site</span>
             <x-import component-from-global-scope="AgenticFactory.Chip" tone="err">not added</x-import>
-            <button class="wl-btn" type="button" style="height: 28px">Retry</button>
+            <button class="wl-btn" type="button" style="height: 28px" aria-label="Retry repo randalvance/old-site">Retry</button>
           </div>
           <div style="padding: 0 14px 12px; font-size: 12px; color: var(--err, #ff4d4d)">Repo randalvance/old-site does not exist, or the token cannot read it.</div>
           <div style="display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line-100, #232327); flex-wrap: wrap; align-items: center">
@@ -124,17 +143,17 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <div class="wl-row">
               <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">file</x-import>
               <span class="wl-mono" style="font-size: 12px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">docs/domain.md</span>
-              <span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63)">you</span>
+              <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">you</span>
             </div>
             <div class="wl-row">
               <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">link</x-import>
               <span class="wl-mono" style="font-size: 12px; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">github.com/randalvance/warlock/pull/11</span>
-              <span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63)">you</span>
+              <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">you</span>
             </div>
             <div class="wl-row">
               <x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">note</x-import>
               <span style="flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">Review findings on the event schema</span>
-              <span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63)">run 29</span>
+              <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">run 29</span>
             </div>
             <div style="display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line-100, #232327); flex-wrap: wrap">
               <button class="wl-btn" type="button">Upload file</button>
@@ -153,14 +172,14 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
                 <span style="font-weight: 500">Conventions</span>
                 <span style="font-size: 12px; color: var(--ink-300, #8f8f96)">Every write goes through db.commit. Biome for lint. Tabs in TypeScript.</span>
               </span>
-              <button class="wl-btn" type="button" style="height: 28px">Edit</button>
+              <button class="wl-btn" type="button" style="height: 28px" aria-label="Edit context Conventions">Edit</button>
             </div>
             <div class="wl-row" style="align-items: flex-start; padding-top: 10px; padding-bottom: 10px">
               <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
                 <span style="font-weight: 500">Architecture</span>
                 <span style="font-size: 12px; color: var(--ink-300, #8f8f96)">Hono server on SQLite with an append-only events table. React shell on Vite.</span>
               </span>
-              <button class="wl-btn" type="button" style="height: 28px">Edit</button>
+              <button class="wl-btn" type="button" style="height: 28px" aria-label="Edit context Architecture">Edit</button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line-100, #232327)">
               <label for="ctxtitle" class="wl-lbl">New context entry</label>
@@ -170,6 +189,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             </div>
           </div>
         </div>
+        </sc-if>
       </section>
     </main>
   </div>
@@ -177,8 +197,30 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { phase: 'alive' };
+  }
   renderVals() {
-    return { yes: true };
+    const phase = this.state.phase;
+    const confirming = phase === 'confirm';
+    const deleted = phase === 'deleted';
+    const announce = confirming
+      ? 'Delete project warlock? Repos stay on GitHub; artifacts, context and run 31 go. Choose Delete project or Keep project.'
+      : deleted
+        ? 'Project warlock deleted. Undo delete is available.'
+        : '';
+    return {
+      yes: true,
+      alive: !deleted,
+      confirming: confirming,
+      deleted: deleted,
+      announce: announce,
+      askDelete: () => this.setState({ phase: 'confirm' }),
+      keep: () => this.setState({ phase: 'alive' }),
+      confirmDelete: () => this.setState({ phase: 'deleted' }),
+      undo: () => this.setState({ phase: 'alive' })
+    };
   }
 }
 </script>

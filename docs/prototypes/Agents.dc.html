@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
 .wl-ta{box-sizing:border-box;padding:8px 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 13px/1.45 'Instrument Sans',sans-serif;width:100%;resize:vertical}
 .wl-lbl{font:500 13px/1 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8)}
@@ -51,6 +53,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="users">New minion</x-import>
     </header>
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
     <main style="padding: 24px; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box; width: 100%">
       <section aria-label="The warlock" style="display: flex; flex-direction: column; gap: 12px">
@@ -84,9 +87,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">the lit disc is the one at work</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
-          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Scout" role="Implementer · Fable 5.1, high effort" state="running" on="Implement · WO-14 · 0:38" glyph="pencil"></x-import>
-          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Ada" role="Reviewer · Opus 5.5" state="idle" on="Last reviewed WO-12 · 13:52" glyph="eye"></x-import>
-          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Mason" role="Builder · Sonnet 5.5" state="idle" on="Never ran" glyph="hammer"></x-import>
+          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Scout" role="Implementer · Fable 5.1, high effort" state="running" state-label="Running" on="Implement · WO-14 · 0:38" glyph="pencil"></x-import>
+          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Ada" role="Reviewer · Opus 5.5" state="idle" state-label="Idle" on="Last reviewed WO-12 · 13:52" glyph="eye"></x-import>
+          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Mason" role="Builder · Sonnet 5.5" state="idle" state-label="Idle" on="Never ran" glyph="hammer"></x-import>
         </div>
       </section>
 
@@ -95,9 +98,25 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <span class="wl-sig" style="font-size: 16px">Scout</span>
           <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">minion · saved 13:58 · the running run keeps the profile it started with</span>
           <span style="flex-grow: 1"></span>
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square">Delete minion</x-import>
+          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import>
           <x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save minion</x-import>
         </div>
+        <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
+          <div role="group" aria-label="Confirm deleting minion Scout" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; background: var(--warn-tint, rgba(255,176,46,.14)); border-bottom: 1px solid var(--line-100, #232327)">
+            <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Delete Scout? Run 31 keeps the profile it started with until it ends. The 3 memory notes are deleted with the minion.</span>
+            <span style="flex-grow: 1"></span>
+            <button class="wl-btn" type="button" on-click="{{keep}}">Keep minion</button>
+            <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmDelete}}">Delete minion</x-import>
+          </div>
+        </sc-if>
+        <sc-if value="{{deleted}}" hint-placeholder-val="{{false}}">
+          <div style="padding: 32px 16px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+            <span class="wl-sig" style="font-size: 16px; color: var(--ink-200, #c4c4c8)">Scout deleted</span>
+            <span style="font-size: 13px; color: var(--ink-300, #8f8f96); max-width: 520px">Run 31 finishes on the profile it started with. The 3 memory notes are gone. The event log keeps every run Scout did.</span>
+            <button class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{alive}}" hint-placeholder-val="{{true}}">
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0">
           <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--line-100, #232327)">
             <div style="display: flex; flex-direction: column; gap: 6px">
@@ -161,6 +180,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             </div>
           </div>
         </div>
+        </sc-if>
       </section>
     </main>
   </div>
@@ -168,8 +188,30 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { phase: 'alive' };
+  }
   renderVals() {
-    return { yes: true };
+    const phase = this.state.phase;
+    const confirming = phase === 'confirm';
+    const deleted = phase === 'deleted';
+    const announce = confirming
+      ? 'Delete minion Scout? Run 31 keeps its profile; 3 memory notes go. Choose Delete minion or Keep minion.'
+      : deleted
+        ? 'Minion Scout deleted. Undo delete is available.'
+        : '';
+    return {
+      yes: true,
+      alive: !deleted,
+      confirming: confirming,
+      deleted: deleted,
+      announce: announce,
+      askDelete: () => this.setState({ phase: 'confirm' }),
+      keep: () => this.setState({ phase: 'alive' }),
+      confirmDelete: () => this.setState({ phase: 'deleted' }),
+      undo: () => this.setState({ phase: 'alive' })
+    };
   }
 }
 </script>

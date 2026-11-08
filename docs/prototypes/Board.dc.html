@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-btn:disabled{opacity:.4;cursor:default}
 .wl-mv{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-pill,999px);border:1px solid var(--line-100,#232327);background:transparent;color:var(--ink-300,#8f8f96);cursor:pointer;padding:0}
 .wl-mv:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
@@ -54,6 +56,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <button class="wl-btn" type="button">Import issues</button>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{syncNow}}">Sync now</x-import>
     </header>
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
     <main style="padding: 24px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; width: 100%">
       <div style="overflow-x: auto">
@@ -70,8 +73,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
                     <sc-if value="{{t.passed}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">{{t.runLabel}}</x-import></sc-if>
                     <sc-if value="{{t.hasBook}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">{{t.book}}</x-import></sc-if>
                     <span style="flex-grow: 1"></span>
-                    <button class="wl-mv" type="button" aria-label="Move back" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
-                    <button class="wl-mv" type="button" aria-label="Move forward" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+                    <button class="wl-mv" type="button" aria-label="{{t.backLabel}}" on-click="{{t.back}}" disabled="{{t.first}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+                    <button class="wl-mv" type="button" aria-label="{{t.fwdLabel}}" on-click="{{t.fwd}}" disabled="{{t.last}}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
                   </div>
                 </article>
               </sc-for>
@@ -84,7 +87,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         <section aria-label="Sync log" class="wl-card">
           <div style="display: flex; align-items: baseline; gap: 12px; padding: 12px 14px 8px"><span class="wl-sig" style="font-size: 14px">Sync log</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">two way · status field only · last write wins</span></div>
           <sc-for list="{{log}}" as="l" hint-placeholder-count="5">
-            <div class="wl-row" style="background: {{l.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">{{l.time}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{l.text}}</span><sc-if value="{{l.conflict}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">conflict</x-import></sc-if></div>
+            <div class="wl-row" style="background: {{l.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">{{l.time}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{l.text}}</span><sc-if value="{{l.conflict}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">conflict</x-import></sc-if></div>
           </sc-for>
         </section>
         <section aria-label="Rules" class="wl-card">
@@ -119,7 +122,8 @@ class Component extends DCLogic {
         { time: '14:02', text: 'run 31 started · WO-14 → in_progress · pushed to GitHub Projects' },
         { time: '13:58', text: 'import · randalvance/warlock · 9 open issues · 2 new tasks, 7 already linked' },
         { time: '13:40', text: 'sync · WO-13 moved to ready on the board · pushed to GitHub Projects' }
-      ]
+      ],
+      announce: ''
     };
   }
   renderVals() {
@@ -134,7 +138,7 @@ class Component extends DCLogic {
       });
       const moved = tasks.find((t) => t.id === id);
       const log = [{ time: '14:06', text: moved.id + ' → ' + moved.status + ' on the board · pushed to GitHub Projects Status' }].concat(this.state.log);
-      this.setState({ tasks: tasks, log: log });
+      this.setState({ tasks: tasks, log: log, announce: moved.id + ' moved to ' + labels[moved.status] + '. Pushed to GitHub Projects.' });
     };
     const decorate = (t) => {
       const i = order.indexOf(t.status);
@@ -146,6 +150,8 @@ class Component extends DCLogic {
         passed: t.run === 'passed',
         first: i === 0,
         last: i === order.length - 1,
+        backLabel: i === 0 ? 'Move ' + t.id + ' back' : 'Move ' + t.id + ' back to ' + labels[order[i - 1]],
+        fwdLabel: i === order.length - 1 ? 'Move ' + t.id + ' forward' : 'Move ' + t.id + ' forward to ' + labels[order[i + 1]],
         back: () => move(t.id, -1),
         fwd: () => move(t.id, 1)
       };
@@ -160,7 +166,8 @@ class Component extends DCLogic {
       count: this.state.tasks.length,
       columns: columns,
       log: log,
-      syncNow: () => this.setState({ log: [{ time: '14:06', text: 'sync · ' + this.state.tasks.length + ' tasks · 0 changes · nothing to write' }].concat(this.state.log) })
+      announce: this.state.announce,
+      syncNow: () => this.setState({ log: [{ time: '14:06', text: 'sync · ' + this.state.tasks.length + ' tasks · 0 changes · nothing to write' }].concat(this.state.log), announce: 'Synced ' + this.state.tasks.length + ' tasks with GitHub Projects. Nothing to write.' })
     };
   }
 }

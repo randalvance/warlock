@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
 .wl-lbl{font:500 13px/1 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8)}
 .wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
@@ -55,6 +57,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <sc-if value="{{valid}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save formation</x-import></sc-if>
       <sc-if value="{{invalid}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary" disabled="{{yes}}">Save formation</x-import></sc-if>
     </header>
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
     <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
       <section aria-label="Formation list" class="wl-card" style="flex: 1 1 220px; max-width: 280px">
@@ -125,10 +128,10 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 
         <div class="wl-card">
           <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Run engine</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">state machine · last run of this formation</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:40</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · implement → review on done · handoff 1 · 2 artifacts</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:52</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → implement on changes_requested · handoff 2 · 1 artifact</span></div>
-          <div class="wl-row" style="background: var(--surface-200, #1b1b1f)"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">13:58</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">server restarted · run 29 resumed from handoff 2 · no duplicate handoff written</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">resumed</x-import></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 44px">14:10</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → done on approved · handoff 4 · 4 station visits of 12</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">succeeded</x-import></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">13:40</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · implement → review on done · handoff 1 · 2 artifacts</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">13:52</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → implement on changes_requested · handoff 2 · 1 artifact</span></div>
+          <div class="wl-row" style="background: var(--surface-200, #1b1b1f)"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">13:58</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">server restarted · run 29 resumed from handoff 2 · no duplicate handoff written</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">resumed</x-import></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 44px">14:10</span><span class="wl-mono" style="font-size: 12px; flex-grow: 1">run 29 · review → done on approved · handoff 4 · 4 station visits of 12</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="ok">succeeded</x-import></div>
         </div>
       </section>
     </main>
@@ -155,6 +158,7 @@ class Component extends DCLogic {
       yes: true,
       valid: !dup,
       invalid: dup,
+      announce: dup ? 'Formation invalid: review has two transitions for approved. Save is disabled until one is removed.' : 'Formation valid. Save is enabled.',
       transitions: transitions,
       selName: sel,
       selTransitions: all.filter((t) => t.from === sel),

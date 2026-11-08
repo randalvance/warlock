@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
 .wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
 .wl-head{display:flex;align-items:baseline;gap:12px;padding:12px 14px 8px}
@@ -48,13 +50,22 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
       <span style="flex-grow: 1"></span>
       <div style="display: flex; gap: 24px; align-items: flex-end">
         <sc-if value="{{running}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Tally" value="{{elapsed}}" label="elapsed"></x-import></sc-if>
-        <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Tally" value="{{elapsed}}" label="failed" tone="err"></x-import></sc-if>
+        <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Tally" value="{{elapsed}}" label="stopped" tone="warn"></x-import></sc-if>
         <x-import component-from-global-scope="AgenticFactory.Tally" value="3" label="files" tone="plain"></x-import>
         <x-import component-from-global-scope="AgenticFactory.Tally" value="12k" label="tokens" tone="plain"></x-import>
       </div>
-      <sc-if value="{{running}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{cancel}}">Cancel run</x-import></sc-if>
+      <sc-if value="{{canCancel}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askCancel}}">Cancel run</x-import></sc-if>
       <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="rotate-ccw" on-click="{{restart}}">Rerun</x-import></sc-if>
     </header>
+    <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
+    <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
+      <div role="group" aria-label="Confirm stopping run 31" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 20px; background: var(--warn-tint, rgba(255,176,46,.14)); border-bottom: 1px solid var(--line-100, #232327)">
+        <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Stop Scout on run 31? The run is marked cancelled, the worktree and commit a1f3c2d stay, and you can rerun from here.</span>
+        <span style="flex-grow: 1"></span>
+        <button class="wl-btn" type="button" on-click="{{keepRunning}}">Keep running</button>
+        <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmCancel}}">Stop run</x-import>
+      </div>
+    </sc-if>
 
     <main style="padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; box-sizing: border-box; width: 100%; align-items: flex-start">
       <div class="wl-inspector" style="flex: 1 1 480px; min-width: 0">
@@ -79,7 +90,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <div class="wl-row"><x-import component-from-global-scope="AgenticFactory.Lamp" state="queued"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">blocked</span><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">cannot finish without you</span></div>
           </sc-if>
           <sc-if value="{{cancelled}}" hint-placeholder-val="{{false}}">
-            <div class="wl-row" style="background: var(--err-tint, rgba(255,77,77,.14))"><x-import component-from-global-scope="AgenticFactory.Lamp" state="failed"></x-import><span class="wl-mono" style="font-size: 12px; width: 150px">failed</span><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">reason: cancelled · no outcome reported</span></div>
+            <div class="wl-row" style="background: var(--warn-tint, rgba(255,176,46,.14))"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">cancelled</x-import><span style="font-size: 12px; color: var(--ink-200, #c4c4c8)">stopped by you at 14:05 · no outcome reported · worktree run-31 kept</span></div>
           </sc-if>
         </section>
 
@@ -92,7 +103,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         <section aria-label="Persisted events" class="wl-card">
           <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Events</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">persisted · replay in order after a restart</span></div>
           <sc-for list="{{events}}" as="ev" hint-placeholder-count="6">
-            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">{{ev.seq}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); width: 120px">{{ev.type}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ev.detail}}</span></div>
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">{{ev.seq}}</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); width: 120px">{{ev.type}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ev.detail}}</span></div>
           </sc-for>
         </section>
       </div>
@@ -104,10 +115,15 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { cancelled: false };
+    this.state = { phase: 'running', reruns: 0 };
   }
   renderVals() {
-    const cancelled = this.state.cancelled;
+    const phase = this.state.phase;
+    const cancelled = phase === 'cancelled';
+    const confirming = phase === 'confirm';
+    const running = !cancelled;
+    const rerun = this.state.reruns > 0;
+    const elapsed = cancelled ? '0:41' : (rerun ? '0:04' : '0:38');
     const baseLog = [
       { time: '14:02', kind: 'read', text: 'read context: Conventions, Architecture' },
       { time: '14:02', kind: 'read', text: 'read memory/scout/conventions.md' },
@@ -117,12 +133,16 @@ class Component extends DCLogic {
       { time: '14:04', kind: 'bash', text: 'bash git commit -am "docs: name the domain model in the README"' },
       { time: '14:04', kind: 'bash', text: 'bash pnpm lint' }
     ];
+    const stopLine = { time: '14:05', kind: 'said', text: 'stopped by you · Scout halted · worktree run-31 kept' };
+    const checkLine = (time) => ({ time: time, kind: 'bash', text: 'running biome check…', live: true });
     const log = cancelled
-      ? baseLog.concat([{ time: '14:05', kind: 'said', text: 'cancelled by you · minion stopped' }])
-      : baseLog.concat([{ time: '14:05', kind: 'bash', text: 'running biome check…', live: true }]);
+      ? baseLog.concat([stopLine])
+      : rerun
+        ? baseLog.concat([stopLine, { time: '14:06', kind: 'said', text: 'rerun by you · Scout resumes from commit a1f3c2d' }, checkLine('14:06')])
+        : baseLog.concat([checkLine('14:05')]);
     const chips = cancelled
-      ? [{ label: 'failed · cancelled', tone: 'err' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]
-      : [{ label: 'running 0:38', tone: 'accent' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }];
+      ? [{ label: 'cancelled · by you', tone: 'warn' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }]
+      : [{ label: 'running ' + elapsed, tone: 'accent' }, { label: 'Implement', plain: true }, { label: 'warlock/run-31', plain: true }];
     const baseEvents = [
       { seq: 180, type: 'run.started', detail: 'run 31 · WO-14 · Scout · worktree run-31' },
       { seq: 181, type: 'agent.message', detail: 'adding one line under the first paragraph' },
@@ -131,19 +151,34 @@ class Component extends DCLogic {
       { seq: 184, type: 'artifact.added', detail: 'commit a1f3c2d on warlock/run-31' },
       { seq: 185, type: 'tool.call', detail: 'bash pnpm lint' }
     ];
+    const cancelEvent = { seq: 186, type: 'run.cancelled', detail: 'by you · worktree run-31 kept' };
     const events = cancelled
-      ? baseEvents.concat([{ seq: 186, type: 'run.failed', detail: 'reason: cancelled · by you' }])
-      : baseEvents;
+      ? baseEvents.concat([cancelEvent])
+      : rerun
+        ? baseEvents.concat([cancelEvent, { seq: 187, type: 'run.resumed', detail: 'rerun by you · from commit a1f3c2d' }])
+        : baseEvents;
+    const announce = confirming
+      ? 'Stop run 31? Scout halts and the run is marked cancelled. Choose Stop run or Keep running.'
+      : cancelled
+        ? 'Run 31 cancelled by you after 0:41. Worktree run-31 kept. Rerun is available.'
+        : rerun
+          ? 'Run 31 rerunning. Scout resumes from commit a1f3c2d.'
+          : 'Run 31 running at Implement, 0:38 elapsed.';
     return {
       yes: true,
-      running: !cancelled,
+      running: running,
       cancelled: cancelled,
-      elapsed: cancelled ? '0:41' : '0:38',
+      confirming: confirming,
+      canCancel: running && !confirming,
+      elapsed: elapsed,
       chips: chips,
       log: log,
       events: events,
-      cancel: () => this.setState({ cancelled: true }),
-      restart: () => this.setState({ cancelled: false })
+      announce: announce,
+      askCancel: () => this.setState({ phase: 'confirm' }),
+      keepRunning: () => this.setState({ phase: 'running' }),
+      confirmCancel: () => this.setState({ phase: 'cancelled' }),
+      restart: () => this.setState({ phase: 'running', reruns: this.state.reruns + 1 })
     };
   }
 }

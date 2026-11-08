@@ -12,8 +12,10 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-body{margin:0;background:#09090b}
-a{color:#ff7ae0}a:hover{color:#f2f2f0}
+body{margin:0;background:var(--bg-000,#09090b);scrollbar-width:thin;scrollbar-color:var(--line-300,#45454c) transparent}
+a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
+::selection{background:var(--accent,#ff3dcd);color:var(--bg-000,#09090b)}
+.wl-in,.wl-ta,.wl-search{caret-color:var(--accent,#ff3dcd)}
 .wl-sig{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .wl-mono{font-family:'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
 .wl-nav{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md,8px);color:var(--ink-300,#8f8f96);text-decoration:none}

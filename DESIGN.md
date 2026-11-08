@@ -249,6 +249,8 @@ A black-and-hairline neutral ramp with one magenta accent and three status colou
 
 **The Word Rule.** A lamp, node, chip, sign or tally never carries status by colour alone; the word (running, blocked, failed, succeeded, shipped) is in the chip, the sign or the aria label beside it.
 
+**The Browser Surfaces Rule.** The parts the browser draws take the palette too: text selection is `accent` with `bg-000` text, the caret in every field is `accent`, scrollbars are thin `line-300` on a transparent track (set once on `body` and inherited), and placeholders are `ink-300`.
+
 **The Black Behind Every Tube Rule.** Tubes sit on `surface-100` over `bg-000`. A wash (`accent-tint`, `warn-tint`) is the only tinted ground, and it is layered over `surface-100` with a gradient of itself, never a flat tinted fill.
 
 ## Typography
@@ -340,7 +342,7 @@ Buttons are 32px pills with 12px side padding, flat at rest; the primary is the 
 
 ### Navigation
 - **Rail:** 56px, `bg-100`, `line-100` right edge, 10px vertical padding, 4px gaps. The zap mark sits first at 44px in `accent` with the mark halo. Items are 44px tiles, 8px radius, 24px Lucide icons in `ink-300`; hover `ink-100` on `surface-200`; current `accent-bright` on `accent-tint`. Each tile carries an aria-label and title; no visible text.
-- **Top bar:** 56px, `bg-100`, `line-100` bottom edge, 16 to 20px gaps, 20px side padding: heading, a mono caption or stream chip, tallies, then actions with the primary button last.
+- **Top bar:** the DS `af-topbar` on every artboard: 56px, `bg-100`, `line-100` bottom edge, 20px gaps and side padding: `af-heading`, an `af-meta` caption or stream chip, tallies, then actions with the primary button last.
 
 ### Line (signature)
 A Console strip over a lane. Strip: 36px, project name in Title signage at 30px, formation chips (plain), a mono count caption ("2 runs · 1 running · 1 blocked"), and at the right a lime SHIPPED sign when idle or a mono "shipped n" when busy. Lane: a 48px track with the 2px `lane` rail; station nodes (36px, 8px radius, `surface-200`, `line-200`, mono numeral, 11px sans label 6px below) centred per column; on a live lane the `af-lane-bead` pill (60x3px, `glow-body`) travels left to right over 3s on a loop. Node state follows the runs at it: running (filament numeral, magenta tube, border transparent), blocked (`warn` edge and glow), failed (`err`), passed (`ok` edge), queued (`ink-400` numeral). Nodes are buttons: click opens the station's brief in the inspector.

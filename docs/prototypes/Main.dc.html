@@ -220,6 +220,8 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
       <div class="wl-acts">
         <sc-if value="{{run.canCancel}}" hint-placeholder-val="{{true}}">
           <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askCancel}}">Cancel run</x-import>
+        </sc-if>
+        <sc-if value="{{run.canHandoff}}" hint-placeholder-val="{{true}}">
           <button class="wl-btn" type="button" title="Prototype control: plays the handoff to the next station" onClick="{{handoff}}"><x-import component-from-global-scope="AgenticFactory.Icon" name="chevron-right" size="{{14}}"></x-import>Next station</button>
         </sc-if>
         <sc-if value="{{run.failed}}" hint-placeholder-val="{{false}}">
@@ -503,6 +505,7 @@ class Component extends DCLogic {
         ],
         log: r.log.map((l) => ({ time: '#' + l.seq + ' ' + l.time, kind: l.kind, text: l.text, live: !!l.live })),
         canCancel: (r.state === 'running' || r.state === 'blocked' || r.state === 'queued') && !S.confirming,
+        canHandoff: r.state === 'running' && !S.confirming,
         failed: r.state === 'failed',
         passed: r.state === 'passed',
         openable: r.id === 31
@@ -564,7 +567,7 @@ class Component extends DCLogic {
     };
 
     const handoff = () => {
-      if (!selRun) return;
+      if (!selRun || selRun.state !== 'running') return;
       const names = FORMATIONS[selRun.formation].stations;
       const i = names.indexOf(selRun.station);
       const from = selRun.station;
@@ -639,7 +642,7 @@ class Component extends DCLogic {
       send: send,
       newTask: () => { this.say({ announce: 'Composer focused. Name the project and tell the warlock what to do.' }); focusLater('#task'); },
       onKey: onKey,
-      showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, failed: false, passed: false, minion: '' },
+      showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, canHandoff: false, failed: false, passed: false, minion: '' },
       showStation: !!st, st: st || { name: '', sub: '', hasBrief: false, spellbook: '', brief: '', listing: false, books: [] },
       showResult: !!res, res: res || { id: '', sub: '', title: '', minion: '', outcome: '', commit: '', branch: '', worktree: '', log: [] },
       confirming: S.confirming, confirmAria: 'Confirm stopping run ' + (selId != null ? selId : ''),

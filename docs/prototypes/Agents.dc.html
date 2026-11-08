@@ -98,7 +98,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <span class="wl-sig" style="font-size: 16px">Scout</span>
           <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">minion · saved 13:58 · the running run keeps the profile it started with</span>
           <span style="flex-grow: 1"></span>
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import>
+          <span id="delete-minion" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete minion</x-import></span>
           <x-import component-from-global-scope="AgenticFactory.Button" variant="primary">Save minion</x-import>
         </div>
         <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
@@ -187,8 +187,11 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
-function focusLater(id) {
-  const find = () => document.getElementById(id) || (document.querySelector('x-dc') && document.querySelector('x-dc').shadowRoot && document.querySelector('x-dc').shadowRoot.getElementById(id));
+function focusLater(selector) {
+  const roots = [document];
+  const dc = document.querySelector('x-dc');
+  if (dc && dc.shadowRoot) roots.push(dc.shadowRoot);
+  const find = () => { for (const r of roots) { const el = r.querySelector(selector); if (el) return el; } return null; };
   requestAnimationFrame(() => { const el = find(); if (el && el.focus) el.focus(); });
 }
 class Component extends DCLogic {
@@ -211,10 +214,10 @@ class Component extends DCLogic {
       confirming: confirming,
       deleted: deleted,
       announce: announce,
-      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('keep-minion'); },
-      keep: () => this.setState({ phase: 'alive' }),
-      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('undo-minion'); },
-      undo: () => this.setState({ phase: 'alive' })
+      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('#keep-minion'); },
+      keep: () => { this.setState({ phase: 'alive' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); },
+      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('#undo-minion'); },
+      undo: () => { this.setState({ phase: 'alive' }); focusLater('#delete-minion button, #delete-minion [tabindex], #delete-minion > *'); }
     };
   }
 }

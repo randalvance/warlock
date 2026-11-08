@@ -61,12 +61,13 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
         <div style="display: flex; align-items: baseline; gap: 12px; padding: 14px 14px 10px">
           <span class="wl-sig" style="font-size: 14px">All projects</span>
         </div>
-        <a href="#detail" class="wl-plist on">
+        <a href="#detail" class="{{plistClass}}">
           <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
             <span style="font-weight: 500">warlock</span>
             <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">2 repos · 3 artifacts · 2 context</span>
           </span>
-          <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">1 running</x-import>
+          <sc-if value="{{alive}}" hint-placeholder-val="{{true}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">1 running</x-import></sc-if>
+          <sc-if value="{{deleted}}" hint-placeholder-val="{{false}}"><x-import component-from-global-scope="AgenticFactory.Chip" tone="warn">deleted · run 31 stopped</x-import></sc-if>
         </a>
         <div class="wl-plist" aria-label="docs-site, not opened in this prototype">
           <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
@@ -92,7 +93,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <input id="pname" class="wl-in" value="warlock" style="max-width: 360px">
           </div>
           <button class="wl-btn" type="button">Save</button>
-          <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete project</x-import>
+          <span id="delete-project" style="display: contents"><x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{askDelete}}">Delete project</x-import></span>
         </div>
         <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
           <div role="group" aria-label="Confirm deleting project warlock" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px; background: var(--warn-tint, rgba(255,176,46,.14)); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px)">
@@ -196,8 +197,11 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
-function focusLater(id) {
-  const find = () => document.getElementById(id) || (document.querySelector('x-dc') && document.querySelector('x-dc').shadowRoot && document.querySelector('x-dc').shadowRoot.getElementById(id));
+function focusLater(selector) {
+  const roots = [document];
+  const dc = document.querySelector('x-dc');
+  if (dc && dc.shadowRoot) roots.push(dc.shadowRoot);
+  const find = () => { for (const r of roots) { const el = r.querySelector(selector); if (el) return el; } return null; };
   requestAnimationFrame(() => { const el = find(); if (el && el.focus) el.focus(); });
 }
 class Component extends DCLogic {
@@ -219,11 +223,12 @@ class Component extends DCLogic {
       alive: !deleted,
       confirming: confirming,
       deleted: deleted,
+      plistClass: deleted ? 'wl-plist' : 'wl-plist on',
       announce: announce,
-      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('keep-project'); },
-      keep: () => this.setState({ phase: 'alive' }),
-      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('undo-project'); },
-      undo: () => this.setState({ phase: 'alive' })
+      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('#keep-project'); },
+      keep: () => { this.setState({ phase: 'alive' }); focusLater('#delete-project button, #delete-project [tabindex], #delete-project > *'); },
+      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('#undo-project'); },
+      undo: () => { this.setState({ phase: 'alive' }); focusLater('#delete-project button, #delete-project [tabindex], #delete-project > *'); }
     };
   }
 }

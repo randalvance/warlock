@@ -37,9 +37,9 @@ One developer, solo, between other tasks. They open the home to answer three que
 ## 5. States and ranges
 
 - Projects (lines): 0 to 6. Zero projects: one placeholder line with "Add a project" as the only action besides the composer.
-- Formations per line: 1 to 3 lanes in use. An idle line shows one unlit lane, the formation of the project's most recently run spellbook.
+- Formations per line: 1 to 3 lanes in use. An idle line with past runs expands to one unlit lane, the formation of its most recently run spellbook. A project with no run yet has no lane: its line is the Console strip alone with the hint "Send a task to start a run", and the first lane appears with the first run.
 - Stations per formation: 2 to 8; a lane scrolls horizontally past 6 at 1360 wide.
-- Runs per line: 0 to 12. Idle line (0 runs): collapsed to its Console strip with a lime SHIPPED count sign. More than 3 runs at one station: 3 cards and a "+n" row.
+- Runs per line: 0 to 12. Idle line (0 runs): collapsed to its Console strip with a lime SHIPPED count sign. More than 3 runs at one station: 3 cards and one compact row listing the rest as "run-id · minion" chips, so every running run's station and minion stays readable in one viewport; the row expands into cards on click.
 - Run states: queued (unlit title), running (magenta tube, one per card), blocked (amber chip, line sorts to top), failed (red chip, stays lit until rerun or dismissed), succeeded (lime 1.2s then flat, then leaves for the Dock).
 - Titles truncate with an ellipsis; full title in the inspector. Elapsed is 0:00 upward live, "3m 12s" once done.
 - After a server restart the inspector log shows "replayed from event #n".
@@ -47,7 +47,7 @@ One developer, solo, between other tasks. They open the home to answer three que
 ## 6. Interaction and layout
 
 - Shell: 56 rail, 56 top bar, the floor, 320 inspector, composer across the floor only (never under the inspector).
-- Click a run card: inspector opens on it. Click a station node: a station alone has no brief, so with a run open the inspector shows that station's brief from the open run's spellbook, read-only; with no run open it lists the spellbooks on that lane that brief the station and opens the one chosen. Arrow keys move between cards, Enter opens, Escape closes the inspector.
+- Click a run card: inspector opens on it. Click a station node: a station alone has no brief, so with a run open whose formation is the clicked lane's, the inspector shows that station's brief from that run's spellbook, read-only; otherwise it lists the spellbooks on that lane that brief the station and opens the one chosen. Arrow keys move between cards, Enter opens, Escape closes the inspector.
 - Handoff: the card slides to the next station (cascade timing), the lane pill keeps moving, the log row appears with its sequence number, the live region announces it.
 - Composer: Enter sends to the warlock. The reply appears as a line in the composer's strip, a new queued card appears on that project's line under the entry station of the formation of the spellbook the warlock picked (a new lane if that formation had none), and "Open thread" expands to the Warlock view.
 - Observe-first artboards: Formations shows the formation as a Line with its transitions; Edit switches to the editor in place. Projects, Agents, Spellbooks the same.

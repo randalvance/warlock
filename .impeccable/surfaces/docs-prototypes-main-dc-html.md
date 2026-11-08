@@ -7,7 +7,7 @@ related_targets: ["docs/prototypes/Board.dc.html","docs/prototypes/Formations.dc
 
 # Surface brief: the home (the floor)
 
-Primary target: docs/prototypes/Main.dc.html. Related: Board, Formations, Projects, Agents, Spellbooks, Runtime, Warlock artboards (Factory retired on 2026-11-08). Mode: Operate. Build path: code-led, into the Design-canvas prototypes first, then apps/web; an Operate surface is code-led whatever `.impeccable/config.json` records as the standing default, so the comp-led default there is not in play here. Vocabulary: the artboards keep formation, station and spellbook, the names they were drawn with; the domain model has since renamed them workflow, step and playbook, and the prototypes README records that exception until the artboards are renamed with the app.
+Primary target: docs/prototypes/Main.dc.html. Related: Board, Formations, Projects, Agents, Spellbooks, Runtime, Warlock artboards (Factory retired on 2026-11-08). Mode: Operate. Build path: code-led, into the Design-canvas prototypes first, then apps/web; an Operate surface is code-led whatever `.impeccable/config.json` records as the standing default, so the comp-led default there is not in play here. Vocabulary: formation, station and spellbook are the prototypes' presentation labels for the domain model's workflow, step and playbook; the artboards keep the labels, the model terms apply in code, and the prototypes README records that.
 
 ## 1. Job and audience
 
@@ -40,7 +40,7 @@ One developer, solo, between other tasks. They open the home to answer three que
 - Formations per line: 1 to 3 lanes in use. An idle line with past runs expands to one unlit lane, the formation of its most recently run spellbook. A project with no run yet has no lane: its line is the Console strip alone with the hint "Send a task to start a run", and the first lane appears with the first run.
 - Stations per formation: 2 to 8; a lane scrolls horizontally past 6 at 1360 wide.
 - Runs per line: 0 to 12. Idle line (0 runs): collapsed to its Console strip with a lime SHIPPED count sign. More than 3 runs at one station: 3 cards and one compact row listing the rest as "run-id · minion" chips, so every running run's station and minion stays readable in one viewport; the row expands into cards on click.
-- Run states: queued (unlit title), running (magenta tube, one per card), blocked (amber chip, line sorts to top), failed (red chip, stays lit until rerun or dismissed), succeeded (lime 1.2s then flat, then leaves for the Dock).
+- Run states: queued (unlit title), running (magenta tube, one per card), blocked (amber chip, line sorts to top), failed (red chip, stays lit until rerun or dismissed), succeeded (lime held steady until Review or Dismiss, then leaves for the Dock; decision 3).
 - Titles truncate with an ellipsis; full title in the inspector. Elapsed is 0:00 upward live, "3m 12s" once done.
 - After a server restart the inspector log shows "replayed from event #n".
 

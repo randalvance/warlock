@@ -180,7 +180,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 
   <div class="wl-comp">
     <sc-if value="{{hasReply}}" hint-placeholder-val="{{false}}">
-      <div class="wl-reply wl-mono" role="status"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap" size="{{12}}"></x-import><span>{{reply}}</span></div>
+      <div class="wl-reply wl-mono"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap" size="{{12}}"></x-import><span>{{reply}}</span></div>
     </sc-if>
     <form onSubmit="{{send}}">
       <label for="project" class="wl-sr">Project</label>
@@ -318,6 +318,7 @@ class Component extends DCLogic {
     this.state = {
       insp: { kind: 'run', id: 31 },
       lastRun: 31,
+      tick: 0,
       confirming: false,
       arriving: null,
       draft: '',
@@ -380,6 +381,8 @@ class Component extends DCLogic {
 
   run(id) { return this.state.runs.find((r) => r.id === id); }
 
+  say(patch) { this.setState({ ...patch, tick: (this.state.tick || 0) + 1 }); }
+
   pad(n) { return String(n).padStart(2, '0'); }
 
   now() {
@@ -400,12 +403,12 @@ class Component extends DCLogic {
 
   openRun(id) {
     const r = this.run(id);
-    this.setState({ insp: { kind: 'run', id: id }, lastRun: id, confirming: false, project: r.project, announce: 'Run ' + id + ' open. ' + r.minion + ' at ' + r.station + ', ' + r.state + (r.state === 'running' ? ', ' + r.elapsed + ' elapsed.' : '.') });
+    this.say({ insp: { kind: 'run', id: id }, lastRun: id, confirming: false, project: r.project, announce: 'Run ' + id + ' open. ' + r.minion + ' at ' + r.station + ', ' + r.state + (r.state === 'running' ? ', ' + r.elapsed + ' elapsed.' : '.') });
     focusLater('.wl-slot[data-run="' + id + '"]');
   }
 
   openStation(project, formation, station) {
-    this.setState({ insp: { kind: 'station', project: project, formation: formation, station: station }, confirming: false, announce: station + ' on ' + project + ' open in the inspector.' });
+    this.say({ insp: { kind: 'station', project: project, formation: formation, station: station }, confirming: false, announce: station + ' on ' + project + ' open in the inspector.' });
   }
 
   renderVals() {
@@ -527,7 +530,7 @@ class Component extends DCLogic {
         name: insp.station, sub: insp.project + ' · ' + insp.formation + ' lane',
         hasBrief: !!book, spellbook: book ? book.name : '', brief: book ? book.briefs[insp.station] : '',
         listing: !book,
-        books: books.map((b) => ({ name: b.name, open: () => this.setState({ insp: { ...insp, book: b.name }, announce: b.name + ' brief for ' + insp.station + ' open.' }) }))
+        books: books.map((b) => ({ name: b.name, open: () => this.say({ insp: { ...insp, book: b.name }, announce: b.name + ' brief for ' + insp.station + ' open.' }) }))
       };
       if (!book && insp.book) {
         const chosen = SPELLBOOKS.find((b) => b.name === insp.book);
@@ -550,7 +553,7 @@ class Component extends DCLogic {
         log: [{ seq: seq, time: this.now(), kind: 'said', text: 'run.queued · picked ' + book.name + ' · waiting for Scout' }]
       };
       const reply = 'warlock · picked ' + book.name + ' · run ' + id + ' queued at ' + entry + ' on ' + project + (hadLane ? '' : ' · new ' + book.formation + ' lane');
-      this.setState({
+      this.say({
         runs: S.runs.concat([newRun]), nextRun: id + 1, seq: seq, draft: '', reply: reply, arriving: id,
         announce: 'The warlock picked ' + book.name + '. Run ' + id + ' queued at ' + entry + ' on ' + project + '.'
       });
@@ -565,14 +568,15 @@ class Component extends DCLogic {
       const from = selRun.station;
       if (i < 0 || i === names.length - 1) {
         const p = this.patchRun(selRun.id, { state: 'passed', elapsed: '4m 10s' }, { kind: 'said', text: 'run.succeeded · outcome done · 4m 10s · waiting for your review' });
-        this.setState({ ...p, arriving: selRun.id, announce: 'Run ' + selRun.id + ' succeeded at ' + from + '. Review is available.' });
+        this.say({ ...p, arriving: selRun.id, announce: 'Run ' + selRun.id + ' succeeded at ' + from + '. Review is available.' });
         setTimeout(() => this.setState({ arriving: null }), 700);
         return;
       }
       const to = names[i + 1];
       const p = this.patchRun(selRun.id, { station: to }, { kind: 'said', text: 'handoff ' + from + ' → ' + to });
-      p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: p.seq, time: this.now(), kind: 'bash', text: 'bash pnpm test', live: true }]) } : r);
-      this.setState({ ...p, arriving: selRun.id, announce: 'Run ' + selRun.id + ' handed off from ' + from + ' to ' + to + '. Event #' + p.seq + '.' });
+      const liveSeq = p.seq + 1;
+      p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: liveSeq, time: this.now(), kind: 'bash', text: 'bash pnpm test', live: true }]) } : r);
+      this.say({ ...p, seq: liveSeq, arriving: selRun.id, announce: 'Run ' + selRun.id + ' handed off from ' + from + ' to ' + to + '. Event #' + p.seq + '.' });
       setTimeout(() => this.setState({ arriving: null }), 700);
       focusLater('.wl-slot[data-run="' + selRun.id + '"]');
     };
@@ -581,7 +585,7 @@ class Component extends DCLogic {
       const key = e.key;
       if (key === 'Escape') {
         if (insp) {
-          this.setState({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' });
+          this.say({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' });
           if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]');
         }
         return;
@@ -606,7 +610,7 @@ class Component extends DCLogic {
       const next = slots[at + 1] || slots[at - 1];
       const p = S.projects.map((x) => x.name === r.project ? { ...x, shipped: x.shipped + (r.state === 'passed' ? 1 : 0), lastFormation: r.formation } : x);
       const dock = r.state === 'passed' ? [{ title: r.title, id: 'run ' + r.id, branch: r.branch, agent: r.minion, when: this.now() }].concat(S.dock) : S.dock;
-      this.setState({
+      this.say({
         runs: S.runs.filter((x) => x.id !== r.id), projects: p, dock: dock,
         insp: openResult ? { kind: 'result', run: r } : null,
         announce: openResult ? 'Run ' + r.id + ' result open in the inspector. The run moved to the Dock.'
@@ -622,7 +626,7 @@ class Component extends DCLogic {
       shellCls: insp ? 'wl-shell open' : 'wl-shell closed',
       streamLabel: streamLabel, streamTone: stream === 'live' ? 'accent' : stream === 'reconnecting' ? 'warn' : 'err', streamPlain: false,
       tLines: String(S.projects.length), tRunning: String(running), tBlocked: String(blocked), tShipped: String(shipped), blockedTone: blocked ? 'warn' : 'plain',
-      announce: S.announce,
+      announce: S.announce + (S.tick % 2 ? ' ' : ''),
       lines: lines,
       dock: S.dock, dockMeta: 'today · ' + S.dock.length,
       hasReply: !!S.reply, reply: S.reply,
@@ -630,30 +634,32 @@ class Component extends DCLogic {
       onProject: (e) => this.setState({ project: e.target.value }),
       onDraft: (e) => this.setState({ draft: e.target.value }),
       send: send,
-      newTask: () => { this.setState({ announce: 'Composer focused. Name the project and tell the warlock what to do.' }); focusLater('#task'); },
+      newTask: () => { this.say({ announce: 'Composer focused. Name the project and tell the warlock what to do.' }); focusLater('#task'); },
       onKey: onKey,
       showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, failed: false, passed: false, minion: '' },
       showStation: !!st, st: st || { name: '', sub: '', hasBrief: false, spellbook: '', brief: '', listing: false, books: [] },
       showResult: !!res, res: res || { id: '', sub: '', title: '', minion: '', outcome: '', commit: '', branch: '', worktree: '', log: [] },
       confirming: S.confirming, confirmAria: 'Confirm stopping run ' + (selId != null ? selId : ''),
-      askCancel: () => { this.setState({ confirming: true, announce: 'Stop run ' + selId + '? Choose Stop run or Keep running.' }); focusLater('#keep-running'); },
-      keepRunning: () => { this.setState({ confirming: false, announce: 'Run ' + selId + ' keeps running.' }); focusLater('.wl-slot[data-run="' + selId + '"]'); },
+      askCancel: () => { this.say({ confirming: true, announce: 'Stop run ' + selId + '? Choose Stop run or Keep running.' }); focusLater('#keep-running'); },
+      keepRunning: () => { this.say({ confirming: false, announce: 'Run ' + selId + ' keeps running.' }); focusLater('.wl-slot[data-run="' + selId + '"]'); },
       confirmCancel: () => {
         if (!selRun) return;
         const p = this.patchRun(selRun.id, { state: 'failed', reason: 'cancelled', elapsed: selRun.elapsed }, { kind: 'said', text: 'run.failed · reason: cancelled · by you · worktree ' + selRun.worktree + ' kept' });
-        this.setState({ ...p, confirming: false, announce: 'Run ' + selRun.id + ' failed with reason cancelled, stopped by you. Worktree ' + selRun.worktree + ' kept. Rerun is available.' });
+        this.say({ ...p, confirming: false, announce: 'Run ' + selRun.id + ' failed with reason cancelled, stopped by you. Worktree ' + selRun.worktree + ' kept. Rerun is available.' });
         focusLater('.wl-slot[data-run="' + selRun.id + '"]');
       },
       rerun: () => {
         if (!selRun) return;
         const p = this.patchRun(selRun.id, { state: 'running', reason: undefined, elapsed: '0:00' }, { kind: 'said', text: 'run.started · rerun by you · ' + selRun.minion + ' resumes at ' + selRun.station });
-        p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: p.seq, time: this.now(), kind: 'read', text: 'read context: Conventions, Architecture', live: true }]) } : r);
-        this.setState({ ...p, announce: 'Run ' + selRun.id + ' rerunning. ' + selRun.minion + ' resumes at ' + selRun.station + '.' });
+        const liveSeq = p.seq + 1;
+        p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: liveSeq, time: this.now(), kind: 'read', text: 'read context: Conventions, Architecture', live: true }]) } : r);
+        p.seq = liveSeq;
+        this.say({ ...p, announce: 'Run ' + selRun.id + ' rerunning. ' + selRun.minion + ' resumes at ' + selRun.station + '.' });
       },
       review: () => leave(true),
       dismiss: dismiss,
       handoff: handoff,
-      closeInsp: () => { this.setState({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' }); if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]'); else focusLater('#task'); }
+      closeInsp: () => { this.say({ insp: null, confirming: false, announce: 'Inspector closed. The floor fills the view.' }); if (S.lastRun != null) focusLater('.wl-slot[data-run="' + S.lastRun + '"]'); else focusLater('#task'); }
     };
   }
 }

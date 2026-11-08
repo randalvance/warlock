@@ -293,9 +293,9 @@ function focusLater(selector) {
 }
 
 const FORMATIONS = {
-  'feature-dev': { stations: ['Plan', 'Implement', 'Test', 'Review', 'Ship'] },
-  'implement-then-review': { stations: ['Implement', 'Review'] },
-  'content': { stations: ['Draft', 'Edit', 'Publish'] }
+  'feature-dev': { stations: ['Plan', 'Implement', 'Test', 'Review', 'Ship'], minions: { Plan: 'Scout', Implement: 'Scout', Test: 'Mason', Review: 'Ada', Ship: 'Mason' } },
+  'implement-then-review': { stations: ['Implement', 'Review'], minions: { Implement: 'Scout', Review: 'Ada' } },
+  'content': { stations: ['Draft', 'Edit', 'Publish'], minions: { Draft: 'Scout', Edit: 'Ada', Publish: 'Mason' } }
 };
 const SPELLBOOKS = [
   { name: 'Feature', formation: 'feature-dev', briefs: {
@@ -575,10 +575,11 @@ class Component extends DCLogic {
         return;
       }
       const to = names[i + 1];
-      const p = this.patchRun(selRun.id, { station: to }, { kind: 'said', text: 'handoff ' + from + ' → ' + to });
+      const minion = FORMATIONS[selRun.formation].minions[to] || selRun.minion;
+      const p = this.patchRun(selRun.id, { station: to, minion: minion }, { kind: 'said', text: 'handoff ' + from + ' → ' + to + ' · ' + minion });
       const liveSeq = p.seq + 1;
       p.runs = p.runs.map((r) => r.id === selRun.id ? { ...r, log: r.log.concat([{ seq: liveSeq, time: this.now(), kind: 'bash', text: 'bash pnpm test', live: true }]) } : r);
-      this.say({ ...p, seq: liveSeq, arriving: selRun.id, announce: 'Run ' + selRun.id + ' handed off from ' + from + ' to ' + to + '. Event #' + p.seq + '.' });
+      this.say({ ...p, seq: liveSeq, arriving: selRun.id, announce: 'Run ' + selRun.id + ' handed off from ' + from + ' to ' + to + '. ' + minion + ' takes it. Event #' + p.seq + '.' });
       setTimeout(() => this.setState({ arriving: null }), 700);
       focusLater('.wl-slot[data-run="' + selRun.id + '"]');
     };

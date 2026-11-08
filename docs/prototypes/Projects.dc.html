@@ -82,7 +82,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <div style="background: var(--surface-100, #141417); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px); padding: 32px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
             <span class="wl-sig" style="font-size: 18px; color: var(--ink-200, #c4c4c8)">Project warlock deleted</span>
             <span style="font-size: 13px; color: var(--ink-300, #8f8f96); max-width: 520px">2 repos stay on GitHub. 3 artifacts and 2 context entries are gone, and run 31 was stopped. The event log keeps the history.</span>
-            <button class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
+            <button id="undo-project" class="wl-btn" type="button" on-click="{{undo}}">Undo delete</button>
           </div>
         </sc-if>
         <sc-if value="{{alive}}" hint-placeholder-val="{{true}}">
@@ -98,7 +98,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <div role="group" aria-label="Confirm deleting project warlock" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px; background: var(--warn-tint, rgba(255,176,46,.14)); border: 1px solid var(--line-100, #232327); border-radius: var(--radius-xl, 14px)">
             <span style="font-size: 13px; color: var(--ink-100, #f2f2f0)">Delete project warlock? Its 2 repos stay on GitHub. 3 artifacts and 2 context entries are removed, and run 31 is stopped first.</span>
             <span style="flex-grow: 1"></span>
-            <button class="wl-btn" type="button" on-click="{{keep}}">Keep project</button>
+            <button id="keep-project" class="wl-btn" type="button" on-click="{{keep}}">Keep project</button>
             <x-import component-from-global-scope="AgenticFactory.Button" variant="danger" icon="square" on-click="{{confirmDelete}}">Delete project</x-import>
           </div>
         </sc-if>
@@ -196,6 +196,10 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":960}}'>
+function focusLater(id) {
+  const find = () => document.getElementById(id) || (document.querySelector('x-dc') && document.querySelector('x-dc').shadowRoot && document.querySelector('x-dc').shadowRoot.getElementById(id));
+  requestAnimationFrame(() => { const el = find(); if (el && el.focus) el.focus(); });
+}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -216,9 +220,9 @@ class Component extends DCLogic {
       confirming: confirming,
       deleted: deleted,
       announce: announce,
-      askDelete: () => this.setState({ phase: 'confirm' }),
+      askDelete: () => { this.setState({ phase: 'confirm' }); focusLater('keep-project'); },
       keep: () => this.setState({ phase: 'alive' }),
-      confirmDelete: () => this.setState({ phase: 'deleted' }),
+      confirmDelete: () => { this.setState({ phase: 'deleted' }); focusLater('undo-project'); },
       undo: () => this.setState({ phase: 'alive' })
     };
   }

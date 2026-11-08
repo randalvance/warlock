@@ -21,7 +21,7 @@ One door, the warlock. The human only ever talks to the warlock. Spellbooks, for
 ## Operating Context
 
 - Projects own one or more GitHub repos, plus artifacts (files, links, notes) and context entries that every agent reads.
-- Tasks mirror GitHub issues and sync their status with a GitHub Projects board; last write wins and the sync log says so.
+- A task can mirror a GitHub issue. For those tasks, status syncs with a GitHub Projects board; last write wins and the sync log says so. A task without an issue is valid and syncs nothing.
 - Minions run on the Claude Agent SDK with their own system prompt, skills (Agent Skills folders), MCP servers and markdown memory.
 - Each run works in its own git worktree and branch. Two runs never share a checkout.
 - Every state change is an appended event in a local SQLite file; the UI's views are replayable from the event log, including after a server restart.

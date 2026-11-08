@@ -12,13 +12,13 @@ body{background:#09090b;color:#f2f2f0;font:400 14px/20px 'Instrument Sans',sans-
 .spark{width:24px;height:24px;background:#ff3dcd;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);margin-bottom:12px}
 .ic{width:24px;height:24px;border-radius:8px;border:1px solid #232327;background:#1b1b1f}
 .ic.on{border-color:#ff3dcd;background:rgba(255,61,205,.14)}
-.rail i{font:600 9px 'Barlow Condensed';letter-spacing:.05em;color:#8f8f96;text-transform:uppercase;font-style:normal;margin-top:-8px}
+.rail i{font:600 9px 'Barlow Condensed',sans-serif;letter-spacing:.05em;color:#8f8f96;text-transform:uppercase;font-style:normal;margin-top:-8px}
 .rail i.on{color:#ff3dcd}
 .top{grid-area:top;background:#0f0f11;border-bottom:1px solid #232327;display:flex;align-items:center;gap:20px;padding:0 24px}
 .top h1{margin:0;font-size:22px;letter-spacing:.12em;line-height:24px}
 .sel{height:32px;padding:0 12px;border:1px solid #232327;border-radius:999px;color:#c4c4c8;display:flex;align-items:center;font-size:13px;font-weight:500}
 .tal{display:flex;align-items:baseline;gap:6px;margin-left:12px}
-.tal b{font:500 22px 'Azeret Mono';font-variant-numeric:tabular-nums}
+.tal b{font:500 22px 'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
 .tal span{font-size:11px;color:#8f8f96;text-transform:uppercase;letter-spacing:.05em;margin-right:12px}
 .sp{flex:1}
 .btn{height:32px;padding:0 16px;border-radius:999px;display:flex;align-items:center;font-size:14px;color:#c4c4c8;border:1px solid #232327;background:transparent}
@@ -28,7 +28,7 @@ body{background:#09090b;color:#f2f2f0;font:400 14px/20px 'Instrument Sans',sans-
 .card{background:#141417;border:1px solid #232327;border-radius:14px;overflow:hidden}
 .row{display:grid;grid-template-columns:300px repeat(5,1fr) 88px;align-items:center;height:44px;border-bottom:1px solid #232327;padding:0 16px 0 14px;border-left:2px solid transparent}
 .row:last-child{border-bottom:0}
-.row.hd{height:36px;font:600 13px 'Barlow Condensed';letter-spacing:.05em;text-transform:uppercase;color:#8f8f96;background:#0f0f11}
+.row.hd{height:36px;font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#8f8f96;background:#0f0f11}
 .row.sel{background:rgba(255,61,205,.08);border-left-color:#ff3dcd}
 .run{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:16px}
 .run div{display:flex;gap:8px;align-items:baseline;white-space:nowrap}
@@ -37,12 +37,12 @@ body{background:#09090b;color:#f2f2f0;font:400 14px/20px 'Instrument Sans',sans-
 .c{display:flex;align-items:center;gap:8px}
 .l{width:8px;height:8px;border-radius:999px;background:#b6ff3d}
 .u{width:8px;height:8px;border-radius:999px;background:#232327;margin-left:0}
-.t{font:400 11px 'Azeret Mono';color:#8f8f96;font-variant-numeric:tabular-nums}
-.chip{height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;font:500 11px 'Azeret Mono';text-transform:uppercase;white-space:nowrap}
+.t{font:400 11px 'Azeret Mono',monospace;color:#8f8f96;font-variant-numeric:tabular-nums}
+.chip{height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;font:500 11px 'Azeret Mono',monospace;text-transform:uppercase;white-space:nowrap}
 .run-c{color:#ff3dcd;background:rgba(255,61,205,.14);box-shadow:0 0 0 1px #ff3dcd,0 0 10px #ff3dcd,0 0 28px rgba(255,61,205,.5)}
 .warn{color:#ffb02e;background:rgba(255,176,46,.14)}
 .err{color:#ff4d4d;background:rgba(255,77,77,.14)}
-.ship{color:#b6ff3d;background:rgba(182,255,61,.14);text-shadow:0 0 8px #b6ff3d;font:600 12px 'Barlow Condensed';letter-spacing:.12em}
+.ship{color:#b6ff3d;background:rgba(182,255,61,.14);text-shadow:0 0 8px #b6ff3d;font:600 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em}
 .el{text-align:right;color:#c4c4c8}
 .comp{grid-area:comp;background:#1f1f24;border-top:1px solid #232327;display:flex;align-items:center;gap:16px;padding:0 24px}
 .comp .sign{font-size:11px;color:#ff3dcd;width:56px}
@@ -73,13 +73,13 @@ body{background:#09090b;color:#f2f2f0;font:400 14px/20px 'Instrument Sans',sans-
 <div class="row"><div class="run"><div><span class="mono">run-28</span>Spellbook brief linter</div><small>Scout</small></div>
 <div class="c"><i class="l"></i><span class="t">0m 33s</span></div><div class="c"><i class="l"></i><span class="t">2m 47s</span></div><div class="c"><i class="l"></i><span class="t">1m 20s</span></div><div class="c"><i class="l"></i><span class="t">0m 58s</span></div><div class="c"><span class="chip run-c">Running</span></div><span class="mono el">9:41</span></div>
 <div class="row"><div class="run"><div><span class="mono">run-27</span>Worktree cleanup command</div><small>Anvil</small></div>
-<div class="c"><i class="l"></i><span class="t">0m 29s</span></div><div class="c"><i class="l"></i><span class="t">4m 02s</span></div><div class="c"><span class="chip err">Failed · step 3</span></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><span class="mono el">6m 20s</span></div>
+<div class="c"><i class="l"></i><span class="t">0m 29s</span></div><div class="c"><i class="l"></i><span class="t">4m 02s</span></div><div class="c"><span class="chip err">Failed at Ship · push rejected</span></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><span class="mono el">6m 20s</span></div>
 <div class="row"><div class="run"><div><span class="mono">run-26</span>Board column counts</div><small>Quill</small></div>
 <div class="c"><i class="l"></i><span class="t">0m 24s</span></div><div class="c"><i class="l"></i><span class="t">3m 51s</span></div><div class="c"><i class="l"></i><span class="t">1m 42s</span></div><div class="c"><i class="l"></i><span class="t">1m 05s</span></div><div class="c"><span class="chip ship">Shipped</span></div><span class="mono el">7m 02s</span></div>
 </div></main>
 <footer class="comp"><span class="sign">Warlock</span><div class="in">Tell the warlock what to do…</div><div class="btn">Send</div></footer>
 <aside class="insp"><h2 class="sign">run-31</h2><p>Add retry to the GitHub sync</p>
-<div class="chips"><span class="chip">station: review</span><span class="chip">agent: Scout</span><span class="chip">worktree run-31</span><span class="chip">branch wl/run-31</span></div>
+<div class="chips"><span class="chip">station: review</span><span class="chip">minion: Scout</span><span class="chip">worktree run-31</span><span class="chip">branch wl/run-31</span></div>
 <h3 class="sign">Log</h3>
 <div class="lg mono"><span>14:02:11</span><span>handoff code → test</span><span>#181</span></div>
 <div class="lg mono"><span>14:02:14</span><span>test minion started</span><span>#182</span></div>

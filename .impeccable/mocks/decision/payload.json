@@ -1,0 +1,46 @@
+{
+  "title": "Choose the home's structure",
+  "question": "The roll dealt three ways to compose Warlock's home inside the Agentic Factory world. Lock one, steer, or re-roll.",
+  "options": [
+    {
+      "id": "timetable-floor",
+      "kind": "assigned",
+      "label": "The timetable floor",
+      "kicker": "THE ROLL",
+      "lineage": "departures boards and railway timetables",
+      "thesis": "Every run is a row, every station a column, and the home reads as the board of where each run has been and is now.",
+      "palette": ["#09090b", "#141417", "#ff3dcd", "#f2f2f0"],
+      "materials": ["matte black", "one magenta tube", "tabular numerals"],
+      "viewport": "Rail on the left; a top bar with the project and run tallies and the one primary button; the floor as a grid of runs by station with the current cell lit and visited cells carrying their time; the inspector on the right for the run you opened; the warlock composer docked along the bottom.",
+      "risk": "Stations differ per formation, so the column set must follow the selected formation or the grid turns into a sparse matrix.",
+      "html": ".impeccable/mocks/decision/timetable-floor.html"
+    },
+    {
+      "id": "board-led-home",
+      "kind": "dealt",
+      "label": "The board as the floor",
+      "lineage": "kanban boards and the GitHub Projects board the tasks already sync to",
+      "thesis": "The task lanes are the home: every task card carries its run's station and lamp, so the board and the floor are one screen.",
+      "palette": ["#09090b", "#141417", "#ff3dcd", "#f2f2f0"],
+      "materials": ["matte black", "one magenta tube", "tabular numerals"],
+      "viewport": "Rail on the left; a top bar with the project, the five lane counts and the one primary button; five lanes (backlog, ready, in progress, in review, done) across the floor, each card showing station, agent, lamp and elapsed; the inspector on the right; the composer as a sheet from the primary button.",
+      "risk": "Lanes are task status, not run position, so a card at in progress hides the handoff rhythm unless the station chip and lamp carry it.",
+      "html": ".impeccable/mocks/decision/board-led-home.html"
+    },
+    {
+      "id": "project-rail-home",
+      "kind": "dealt",
+      "label": "One line per project",
+      "lineage": "multi-line transit diagrams and the design system's own Line component",
+      "thesis": "Each project is a line on the floor, its runs as station cards on the lane, so the home is the floor at a glance, line by line.",
+      "palette": ["#09090b", "#141417", "#ff3dcd", "#f2f2f0"],
+      "materials": ["matte black", "one magenta tube", "tabular numerals"],
+      "viewport": "Rail on the left; a top bar with floor-wide tallies and the one primary button; the floor as stacked lines, one per project, each with its formation's stations on a lane and the runs at them as station cards; the inspector on the right; the composer docked along the bottom.",
+      "risk": "Three or more projects push the floor below the fold, so lines need a collapsed height and a sort by activity.",
+      "html": ".impeccable/mocks/decision/project-rail-home.html"
+    }
+  ],
+  "reroll": true,
+  "buildPath": { "value": "code", "toggle": false },
+  "steer": true
+}

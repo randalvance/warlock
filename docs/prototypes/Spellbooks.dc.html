@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-in{height:32px;box-sizing:border-box;padding:0 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 14px/1 'Instrument Sans',sans-serif;width:100%}
 .wl-ta{box-sizing:border-box;padding:8px 10px;background:var(--surface-200,#1b1b1f);border:1px solid var(--line-100,#232327);border-radius:var(--radius-md,8px);color:var(--ink-100,#f2f2f0);font:400 13px/1.45 'Instrument Sans',sans-serif;width:100%;resize:vertical}
 .wl-lbl{font:500 13px/1 'Instrument Sans',sans-serif;color:var(--ink-200,#c4c4c8)}
@@ -72,7 +74,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <div style="display: flex; flex-direction: column; gap: 10px">
             <span class="wl-lbl">Briefs · one per station in the formation</span>
             <div style="display: flex; flex-direction: column; gap: 6px"><label for="bimpl" class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">implement · Scout</label><textarea id="bimpl" class="wl-ta" rows="3">Move the code first, then rename. Keep every commit green. Do not change public signatures without a note in the handoff.</textarea></div>
-            <div style="display: flex; flex-direction: column; gap: 6px"><label for="brev" class="wl-mono" style="font-size: 11px; color: var(--err, #ff4d4d)">review · Ada · missing</label><textarea id="brev" class="wl-ta" rows="3" placeholder="What Ada should check at the review station" style="border-color: var(--err, #ff4d4d)"></textarea><span style="font-size: 12px; color: var(--err, #ff4d4d)">A spellbook needs a brief for every station in its formation. Missing: review.</span></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="brev" class="wl-mono" style="font-size: 11px; color: var(--err, #ff4d4d)">review · Ada · missing</label><textarea id="brev" class="wl-ta" rows="3" placeholder="What Ada should check at the review station" aria-invalid="true" aria-describedby="brev-err" style="border-color: var(--err, #ff4d4d)"></textarea><span id="brev-err" style="font-size: 12px; color: var(--err, #ff4d4d)">A spellbook needs a brief for every station in its formation. Missing: review.</span></div>
           </div>
         </div>
 
@@ -80,7 +82,7 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           <div class="wl-card">
             <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Selection for WO-14</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">fix the typo in the README of project warlock</span></div>
             <div style="padding: 4px 14px 12px; display: flex; flex-direction: column; gap: 10px">
-              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">The warlock picked</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">Bug fix</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63)">14:01 · 0.8s</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">The warlock picked</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">Bug fix</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">14:01 · 0.8s</span></div>
               <p style="margin: 0; font-size: 13px; color: var(--ink-200, #c4c4c8)">Reason: the task names one wrong word in one file and asks for nothing new. Bug fix fits; Feature expects new behaviour; Refactor is a draft and cannot be picked.</p>
               <div style="display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; padding-top: 6px; border-top: 1px solid var(--line-100, #232327)">
                 <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="override" class="wl-lbl">Override for this task</label><select id="override" class="wl-in"><option>Warlock's pick · Bug fix</option><option>Feature</option></select></div>
@@ -102,9 +104,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 
           <div class="wl-card">
             <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Briefs in the event log</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">run 31 · Bug fix</span></div>
-            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">179</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">spellbook.picked · Bug fix · by warlock</span></div>
-            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">180</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · implement · Scout received brief briefs.implement (412 chars)</span></div>
-            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 32px">…</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · review · Ada receives briefs.review on handoff</span></div>
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">179</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">spellbook.picked · Bug fix · by warlock</span></div>
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">180</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · implement · Scout received brief briefs.implement (412 chars)</span></div>
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">…</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · review · Ada receives briefs.review on handoff</span></div>
           </div>
         </div>
       </section>

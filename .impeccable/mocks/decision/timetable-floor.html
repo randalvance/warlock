@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Warlock floor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=Instrument+Sans:wght@400;500;600&family=Azeret+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;width:1440px;height:900px;overflow:hidden}
+*{box-sizing:border-box}
+body{background:#09090b;color:#f2f2f0;font:400 14px/20px 'Instrument Sans',sans-serif;display:grid;grid-template-columns:56px 1fr 320px;grid-template-rows:56px 1fr 56px;grid-template-areas:"rail top top" "rail main insp" "rail comp insp"}
+.sign{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.mono{font-family:'Azeret Mono',monospace;font-size:12px;font-variant-numeric:tabular-nums}
+.rail{grid-area:rail;background:#0f0f11;border-right:1px solid #232327;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:12px}
+.spark{width:24px;height:24px;background:#ff3dcd;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);margin-bottom:12px}
+.ic{width:24px;height:24px;border-radius:8px;border:1px solid #232327;background:#1b1b1f}
+.ic.on{border-color:#ff3dcd;background:rgba(255,61,205,.14)}
+.rail i{font:600 9px 'Barlow Condensed',sans-serif;letter-spacing:.05em;color:#8f8f96;text-transform:uppercase;font-style:normal;margin-top:-8px}
+.rail i.on{color:#ff3dcd}
+.top{grid-area:top;background:#0f0f11;border-bottom:1px solid #232327;display:flex;align-items:center;gap:20px;padding:0 24px}
+.top h1{margin:0;font-size:22px;letter-spacing:.12em;line-height:24px}
+.sel{height:32px;padding:0 12px;border:1px solid #232327;border-radius:999px;color:#c4c4c8;display:flex;align-items:center;font-size:13px;font-weight:500}
+.tal{display:flex;align-items:baseline;gap:6px;margin-left:12px}
+.tal b{font:500 22px 'Azeret Mono',monospace;font-variant-numeric:tabular-nums}
+.tal span{font-size:11px;color:#8f8f96;text-transform:uppercase;letter-spacing:.05em;margin-right:12px}
+.sp{flex:1}
+.btn{height:32px;padding:0 16px;border-radius:999px;display:flex;align-items:center;font-size:14px;color:#c4c4c8;border:1px solid #232327;background:transparent}
+.btn.pri{color:#ff3dcd;border-color:#ff3dcd;box-shadow:0 0 0 1px #ff3dcd,0 0 10px rgba(255,61,205,.5);font-size:15px}
+.search{width:200px;height:32px;border:1px solid #232327;border-radius:999px;background:#141417;padding:0 12px;display:flex;align-items:center;color:#8f8f96;font-size:13px}
+.main{grid-area:main;padding:24px 24px 0;overflow:hidden}
+.card{background:#141417;border:1px solid #232327;border-radius:14px;overflow:hidden}
+.row{display:grid;grid-template-columns:300px repeat(5,1fr) 88px;align-items:center;height:44px;border-bottom:1px solid #232327;padding:0 16px 0 14px;border-left:2px solid transparent}
+.row:last-child{border-bottom:0}
+.row.hd{height:36px;font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#8f8f96;background:#0f0f11}
+.row.sel{background:rgba(255,61,205,.08);border-left-color:#ff3dcd}
+.run{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:16px}
+.run div{display:flex;gap:8px;align-items:baseline;white-space:nowrap}
+.run .mono{color:#8f8f96;font-size:11px}
+.run small{font-size:12px;color:#8f8f96;line-height:14px}
+.c{display:flex;align-items:center;gap:8px}
+.l{width:8px;height:8px;border-radius:999px;background:#b6ff3d}
+.u{width:8px;height:8px;border-radius:999px;background:#232327;margin-left:0}
+.t{font:400 11px 'Azeret Mono',monospace;color:#8f8f96;font-variant-numeric:tabular-nums}
+.chip{height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;font:500 11px 'Azeret Mono',monospace;text-transform:uppercase;white-space:nowrap}
+.run-c{color:#ff3dcd;background:rgba(255,61,205,.14);box-shadow:0 0 0 1px #ff3dcd,0 0 10px #ff3dcd,0 0 28px rgba(255,61,205,.5)}
+.warn{color:#ffb02e;background:rgba(255,176,46,.14)}
+.err{color:#ff4d4d;background:rgba(255,77,77,.14)}
+.ship{color:#b6ff3d;background:rgba(182,255,61,.14);text-shadow:0 0 8px #b6ff3d;font:600 12px 'Barlow Condensed',sans-serif;letter-spacing:.12em}
+.el{text-align:right;color:#c4c4c8}
+.comp{grid-area:comp;background:#1f1f24;border-top:1px solid #232327;display:flex;align-items:center;gap:16px;padding:0 24px}
+.comp .sign{font-size:11px;color:#ff3dcd;width:56px}
+.comp .in{flex:1;height:32px;border:1px solid #232327;border-radius:999px;background:#141417;padding:0 16px;display:flex;align-items:center;color:#8f8f96}
+.insp{grid-area:insp;background:#0f0f11;border-left:1px solid #232327;padding:24px 20px;overflow:hidden}
+.insp h2{margin:0;font-size:22px;letter-spacing:.05em;line-height:24px}
+.insp p{margin:4px 0 16px;color:#c4c4c8;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.chips .chip{background:#1b1b1f;color:#c4c4c8;border:1px solid #232327}
+.insp h3{margin:0 0 8px;font-size:13px;color:#8f8f96;letter-spacing:.05em}
+.lg{display:grid;grid-template-columns:56px 1fr 36px;gap:8px;align-items:center;height:28px;color:#c4c4c8;border-bottom:1px solid #232327}
+.lg span:first-child{color:#5c5c63}.lg span:last-child{color:#5c5c63;text-align:right}
+.lg.live{color:#f2f2f0}
+</style></head><body>
+<nav class="rail"><div class="spark"></div>
+<div class="ic on"></div><i class="on">Floor</i><div class="ic"></div><i>Proj</i><div class="ic"></div><i>Agents</i><div class="ic"></div><i>Form.</i><div class="ic"></div><i>Books</i><div class="ic"></div><i>Board</i></nav>
+<header class="top"><h1 class="sign">Floor</h1><div class="sel">warlock · main ▾</div>
+<div class="tal"><b>3</b><span>running</span><b style="color:#ffb02e">1</b><span>blocked</span><b>12</b><span>shipped</span></div>
+<div class="sp"></div><div class="search">Search runs</div><div class="btn pri sign">New task</div></header>
+<main class="main"><div class="card">
+<div class="row hd"><span>Run</span><span>Plan</span><span>Code</span><span>Test</span><span>Review</span><span>Ship</span><span class="el">Elapsed</span></div>
+<div class="row sel"><div class="run"><div><span class="mono">run-31</span>Add retry to the GitHub sync</div><small>Scout</small></div>
+<div class="c"><i class="l"></i><span class="t">0m 41s</span></div><div class="c"><i class="l"></i><span class="t">3m 12s</span></div><div class="c"><i class="l"></i><span class="t">2m 04s</span></div><div class="c"><span class="chip run-c">Running</span></div><div class="c"><i class="u"></i></div><span class="mono el">0:38</span></div>
+<div class="row"><div class="run"><div><span class="mono">run-30</span>Formation editor validation</div><small>Forge</small></div>
+<div class="c"><i class="l"></i><span class="t">0m 52s</span></div><div class="c"><span class="chip run-c">Running</span></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><span class="mono el">4:12</span></div>
+<div class="row"><div class="run"><div><span class="mono">run-29</span>Event log replay on restart</div><small>Quill</small></div>
+<div class="c"><i class="l"></i><span class="t">1m 10s</span></div><div class="c"><i class="l"></i><span class="t">5m 38s</span></div><div class="c"><span class="chip warn">Blocked · needs you</span></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><span class="mono el">1m 03s</span></div>
+<div class="row"><div class="run"><div><span class="mono">run-28</span>Spellbook brief linter</div><small>Scout</small></div>
+<div class="c"><i class="l"></i><span class="t">0m 33s</span></div><div class="c"><i class="l"></i><span class="t">2m 47s</span></div><div class="c"><i class="l"></i><span class="t">1m 20s</span></div><div class="c"><i class="l"></i><span class="t">0m 58s</span></div><div class="c"><span class="chip run-c">Running</span></div><span class="mono el">9:41</span></div>
+<div class="row"><div class="run"><div><span class="mono">run-27</span>Worktree cleanup command</div><small>Anvil</small></div>
+<div class="c"><i class="l"></i><span class="t">0m 29s</span></div><div class="c"><i class="l"></i><span class="t">4m 02s</span></div><div class="c"><span class="chip err">Failed at Ship · push rejected</span></div><div class="c"><i class="u"></i></div><div class="c"><i class="u"></i></div><span class="mono el">6m 20s</span></div>
+<div class="row"><div class="run"><div><span class="mono">run-26</span>Board column counts</div><small>Quill</small></div>
+<div class="c"><i class="l"></i><span class="t">0m 24s</span></div><div class="c"><i class="l"></i><span class="t">3m 51s</span></div><div class="c"><i class="l"></i><span class="t">1m 42s</span></div><div class="c"><i class="l"></i><span class="t">1m 05s</span></div><div class="c"><span class="chip ship">Shipped</span></div><span class="mono el">7m 02s</span></div>
+</div></main>
+<footer class="comp"><span class="sign">Warlock</span><div class="in">Tell the warlock what to do…</div><div class="btn">Send</div></footer>
+<aside class="insp"><h2 class="sign">run-31</h2><p>Add retry to the GitHub sync</p>
+<div class="chips"><span class="chip">station: review</span><span class="chip">minion: Scout</span><span class="chip">worktree run-31</span><span class="chip">branch wl/run-31</span></div>
+<h3 class="sign">Log</h3>
+<div class="lg mono"><span>14:02:11</span><span>handoff code → test</span><span>#181</span></div>
+<div class="lg mono"><span>14:02:14</span><span>test minion started</span><span>#182</span></div>
+<div class="lg mono"><span>14:03:40</span><span>tests passed in 2m 04s</span><span>#183</span></div>
+<div class="lg mono"><span>14:03:41</span><span>handoff test → review</span><span>#184</span></div>
+<div class="lg mono"><span>14:03:58</span><span>review minion started</span><span>#185</span></div>
+<div class="lg mono live"><span>14:04:02</span><span>Scout reading diff…</span><span>#186</span></div>
+</aside></body></html>

@@ -21,6 +21,8 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
 .wl-nav.on{color:var(--accent-bright,#ff7ae0);background:var(--accent-tint,rgba(255,61,205,.14))}
 .wl-btn{height:32px;box-sizing:border-box;padding:0 12px;display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-pill,999px);border:1px solid var(--line-200,#303036);background:transparent;color:var(--ink-100,#f2f2f0);font:500 13px/1 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer}
 .wl-btn:hover{border-color:var(--line-300,#45454c);color:var(--ink-100,#f2f2f0)}
+.wl-btn:focus-visible,.wl-nav:focus-visible,.wl-mv:focus-visible,.wl-node:focus-visible,.wl-plist:focus-visible,.wl-in:focus-visible,.wl-ta:focus-visible{outline:2px solid var(--accent,#ff3dcd);outline-offset:2px}
+.wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wl-btn:disabled{opacity:.4;cursor:default}
 .wl-row{display:flex;align-items:center;gap:12px;min-height:28px;padding:0 14px;border-top:1px solid var(--line-100,#232327)}
 .wl-card{background:var(--surface-100,#141417);border:1px solid var(--line-100,#232327);border-radius:var(--radius-xl,14px);overflow:hidden}
@@ -65,9 +67,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           </div>
           <div style="padding: 20px 20px 8px"><x-import component-from-global-scope="AgenticFactory.Line" stations="{{run31}}" label="Run 31: implement running, review queued"></x-import></div>
           <div style="display: flex; align-items: center; gap: 10px; padding: 4px 14px 8px"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">Scout</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">on implement · worktree run-31 · 0 handoffs</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">14:03</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--ok, #b6ff3d)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">edit README.md</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">14:04</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">bash git commit -am "docs: name the domain model in the README"</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">14:05</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--glow-core, #ffd6f3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">running biome check…</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">14:03</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--ok, #b6ff3d)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">edit README.md</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">14:04</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">bash git commit -am "docs: name the domain model in the README"</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">14:05</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--glow-core, #ffd6f3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">running biome check…</span></div>
         </section>
 
         <section aria-label="Run 32" class="wl-card">
@@ -79,9 +81,9 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
           </div>
           <div style="padding: 20px 20px 8px"><x-import component-from-global-scope="AgenticFactory.Line" stations="{{run32}}" label="Run 32: implement passed, review running"></x-import></div>
           <div style="display: flex; align-items: center; gap: 10px; padding: 4px 14px 8px"><x-import component-from-global-scope="AgenticFactory.Chip" plain="{{yes}}">Ada</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">on review · worktree run-32 · 1 handoff · implement → review on done at 13:58</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">13:59</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--ink-300, #8f8f96)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">read handoff artifacts: 2 commits, 1 note</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">14:02</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">bash pnpm test apps/server</span></div>
-          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">14:05</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--glow-core, #ffd6f3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">reviewing src/runtime/worktree.ts…</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">13:59</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--ink-300, #8f8f96)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">read handoff artifacts: 2 commits, 1 note</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">14:02</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--ink-200, #c4c4c8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">bash pnpm test apps/server</span></div>
+          <div class="wl-row"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">14:05</span><span style="width: 6px; height: 6px; border-radius: 999px; background: var(--glow-body, #ff3dcd)"></span><span class="wl-mono" style="font-size: 12px; color: var(--glow-core, #ffd6f3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">reviewing src/runtime/worktree.ts…</span></div>
         </section>
       </div>
 
@@ -98,10 +100,10 @@ a{color:#ff7ae0}a:hover{color:#f2f2f0}
             <button class="wl-btn" type="button" on-click="{{reset}}" disabled="{{atStart}}">Reset</button>
             <button class="wl-btn" type="button" on-click="{{back}}" disabled="{{atStart}}">Step back</button>
             <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="zap" on-click="{{next}}" disabled="{{atEnd}}">Next handoff</x-import>
-            <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{stepLabel}} · {{visits}} · limit 12</span>
+            <span class="wl-mono" role="status" aria-live="polite" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{stepLabel}} · {{visits}} · limit 12</span>
           </div>
           <sc-for list="{{handoffs}}" as="h" hint-placeholder-count="4">
-            <div class="wl-row" style="min-height: 32px; background: {{h.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-400, #5c5c63); width: 40px">{{h.at}}</span><span class="wl-mono" style="font-size: 12px; color: {{h.color}}; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{h.artifacts}}</span></div>
+            <div class="wl-row" style="min-height: 32px; background: {{h.bg}}"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 40px">{{h.at}}</span><span class="wl-mono" style="font-size: 12px; color: {{h.color}}; flex-grow: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{h.text}}</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">{{h.artifacts}}</span></div>
           </sc-for>
         </section>
 
@@ -151,7 +153,7 @@ class Component extends DCLogic {
       handoffs: handoffs.map((h, i) => ({
         ...h,
         bg: i === step - 1 ? 'var(--surface-200, #1b1b1f)' : 'transparent',
-        color: i < step ? 'var(--ink-100, #f2f2f0)' : 'var(--ink-400, #5c5c63)'
+        color: i < step ? 'var(--ink-100, #f2f2f0)' : 'var(--ink-300, #8f8f96)'
       })),
       shipped: [
         { title: 'Add CI smoke test', id: 'WO-9 · run 29', branch: 'warlock/run-29', agent: 'Ada', when: '14:10' },

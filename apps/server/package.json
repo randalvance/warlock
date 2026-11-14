@@ -1,5 +1,5 @@
 {
-	"name": "@warlock/server",
+	"name": "@honeypot/server",
 	"private": true,
 	"type": "module",
 	"exports": {

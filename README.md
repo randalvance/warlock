@@ -1,8 +1,8 @@
-# Warlock
+# Honeypot
 
-Warlock is an agentic software factory, called the dark factory. You give the warlock agent a task. The warlock picks a playbook for the task, and a workflow of minion agents does the work, handing it from step to step.
+Honeypot is an agentic software factory, called the dark factory. You give the companion agent a task. The companion picks a playbook for the task, and a workflow of minion agents does the work, handing it from step to step.
 
-Warlock is early in development. The plan is a set of GitHub issues with the `epic` label.
+Honeypot is early in development. The plan is a set of GitHub issues with the `epic` label.
 
 [The domain model](docs/domain.md) defines every term above and the data shape behind it.
 
@@ -17,7 +17,7 @@ scripts/devcontainer.sh up
 scripts/devcontainer.sh pnpm dev
 ```
 
-`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/warlock.db`. Set `WARLOCK_DB_PATH` to use a different file. Agent profiles pick skills from the skills library, a `skills` folder next to the database that holds one Agent Skills folder per skill. Set `WARLOCK_SKILLS_DIR` to use a different folder. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
+`pnpm dev` starts the server on `http://127.0.0.1:4317` and the web app on `http://127.0.0.1:5173`, both inside the container. The web app sends `/api` requests to the server. The development database is `apps/server/.data/honeypot.db`. Set `HONEYPOT_DB_PATH` to use a different file. Agent profiles pick skills from the skills library, a `skills` folder next to the database that holds one Agent Skills folder per skill. Set `HONEYPOT_SKILLS_DIR` to use a different folder. The server checks each project repo against GitHub with `GITHUB_TOKEN`, or with `gh auth token` when that is unset. Set `GITHUB_API_URL` for GitHub Enterprise.
 
 | Command | What it runs |
 | --- | --- |
@@ -27,6 +27,6 @@ scripts/devcontainer.sh pnpm dev
 | `pnpm db:check` | Fails if a schema change has no migration |
 | `pnpm smoke` | The Playwright browser tests. Playwright runs Vite on port 5273, and each test starts its own server on port 4417 with a fresh database and a local GitHub stub |
 
-[Nx](https://nx.dev) runs each app's `package.json` scripts as tasks. It caches `typecheck`, `test`, and `db:check`, so a rerun with no file changes replays the stored result. Nx hides the output of a task that passes. Add `--output-style=static` to see it. To run one app's script, use `pnpm nx run <project>:<script>`, such as `pnpm nx run @warlock/server:test`. [ADR 0002](docs/adr/0002-nx.md) says why.
+[Nx](https://nx.dev) runs each app's `package.json` scripts as tasks. It caches `typecheck`, `test`, and `db:check`, so a rerun with no file changes replays the stored result. Nx hides the output of a task that passes. Add `--output-style=static` to see it. To run one app's script, use `pnpm nx run <project>:<script>`, such as `pnpm nx run @honeypot/server:test`. [ADR 0002](docs/adr/0002-nx.md) says why.
 
-After you change a table in a `schema.ts` file, run `pnpm nx run @warlock/server:db:generate` and commit the new migration.
+After you change a table in a `schema.ts` file, run `pnpm nx run @honeypot/server:db:generate` and commit the new migration.

@@ -1,4 +1,4 @@
-import type { StreamStatus } from "@warlock/server/events";
+import type { StreamStatus } from "@honeypot/server/events";
 import { NavLink, Outlet } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export function Shell() {
 	return (
 		<div className="flex min-h-svh">
 			<aside className="flex w-56 flex-col gap-4 border-r p-3">
-				<div className="px-2.5 pt-1 font-heading font-semibold">Warlock</div>
+				<div className="px-2.5 pt-1 font-heading font-semibold">Honeypot</div>
 				<nav aria-label="Sections" className="flex flex-col gap-1">
 					{sections.map(({ path, label }) => (
 						<Button

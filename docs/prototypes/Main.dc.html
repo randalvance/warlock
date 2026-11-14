@@ -100,14 +100,14 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 </helmet>
 <div class="{{shellCls}}" onKeyDown="{{onKey}}">
   <nav class="wl-rail" aria-label="Sections" style="box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
-    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Main.dc.html" aria-label="Honeypot home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
     <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
     <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Companion.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <header class="af-topbar wl-top">
@@ -187,14 +187,14 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
     <form onSubmit="{{send}}">
       <label for="project" class="wl-sr">Project</label>
       <select id="project" class="wl-sel" value="{{project}}" onChange="{{onProject}}">
-        <option value="warlock">warlock</option>
+        <option value="honeypot">honeypot</option>
         <option value="dotfiles">dotfiles</option>
         <option value="blog">blog</option>
       </select>
-      <label for="task" class="wl-sr">Tell the warlock what to do</label>
-      <input id="task" class="wl-in" placeholder="Tell the warlock what to do" value="{{draft}}" onChange="{{onDraft}}" autocomplete="off">
+      <label for="task" class="wl-sr">Tell the companion what to do</label>
+      <input id="task" class="wl-in" placeholder="Tell the companion what to do" value="{{draft}}" onChange="{{onDraft}}" autocomplete="off">
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="send" type="submit" on-click="{{send}}">Send</x-import>
-      <a href="Warlock.dc.html" class="wl-btn" style="height: 28px">Open thread</a>
+      <a href="Companion.dc.html" class="wl-btn" style="height: 28px">Open thread</a>
     </form>
   </div>
 
@@ -326,20 +326,20 @@ class Component extends DCLogic {
       confirming: false,
       arriving: null,
       draft: '',
-      project: 'warlock',
+      project: 'honeypot',
       reply: '',
       seq: 187,
       nextRun: 34,
       announce: 'Run 31 open in the inspector. Scout at Implement, 0:38 elapsed.',
       projects: [
-        { name: 'warlock', shipped: 12, lastFormation: 'feature-dev' },
+        { name: 'honeypot', shipped: 12, lastFormation: 'feature-dev' },
         { name: 'dotfiles', shipped: 4, lastFormation: 'implement-then-review' },
         { name: 'blog', shipped: 3, lastFormation: 'content' }
       ],
       runs: [
-        { id: 33, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Plan', state: 'queued', title: 'Cache the repo list', wo: 'WO-16', minion: 'Scout', elapsed: 'queued', worktree: 'run-33', branch: 'warlock/run-33',
+        { id: 33, project: 'honeypot', formation: 'feature-dev', spellbook: 'Feature', station: 'Plan', state: 'queued', title: 'Cache the repo list', wo: 'WO-16', minion: 'Scout', elapsed: 'queued', worktree: 'run-33', branch: 'honeypot/run-33',
           log: [{ seq: 186, time: '14:04', kind: 'said', text: 'run.queued · WO-16 · waiting for Scout' }] },
-        { id: 30, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Test', state: 'blocked', reason: 'needs you', title: 'Fix the flaky sync spec', wo: 'WO-12', minion: 'Mason', elapsed: '12m 40s', worktree: 'run-30', branch: 'warlock/run-30',
+        { id: 30, project: 'honeypot', formation: 'feature-dev', spellbook: 'Feature', station: 'Test', state: 'blocked', reason: 'needs you', title: 'Fix the flaky sync spec', wo: 'WO-12', minion: 'Mason', elapsed: '12m 40s', worktree: 'run-30', branch: 'honeypot/run-30',
           log: [
             { seq: 171, time: '13:48', kind: 'said', text: 'run.started · WO-12 · Mason · worktree run-30' },
             { seq: 174, time: '13:52', kind: 'said', text: 'handoff Plan → Implement' },
@@ -347,14 +347,14 @@ class Component extends DCLogic {
             { seq: 179, time: '14:00', kind: 'said', text: 'handoff Implement → Test' },
             { seq: 183, time: '14:03', kind: 'said', text: 'run.blocked · the spec needs the GitHub token you hold · reply in the thread' }
           ] },
-        { id: 27, project: 'warlock', formation: 'feature-dev', spellbook: 'Feature', station: 'Ship', state: 'failed', reason: 'push rejected', title: 'Add the agents table', wo: 'WO-10', minion: 'Mason', elapsed: '18m 02s', worktree: 'run-27', branch: 'warlock/run-27',
+        { id: 27, project: 'honeypot', formation: 'feature-dev', spellbook: 'Feature', station: 'Ship', state: 'failed', reason: 'push rejected', title: 'Add the agents table', wo: 'WO-10', minion: 'Mason', elapsed: '18m 02s', worktree: 'run-27', branch: 'honeypot/run-27',
           log: [
             { seq: 150, time: '13:10', kind: 'said', text: 'run.started · WO-10 · Mason · worktree run-27' },
             { seq: 164, time: '13:24', kind: 'said', text: 'handoff Review → Ship · Ada approved' },
             { seq: 165, time: '13:27', kind: 'bash', text: 'bash git push · rejected: branch protection' },
             { seq: 166, time: '13:28', kind: 'said', text: 'run.failed · reason: push rejected · worktree run-27 kept' }
           ] },
-        { id: 31, project: 'warlock', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Add a line to the README', wo: 'WO-14', minion: 'Scout', elapsed: '0:38', worktree: 'run-31', branch: 'warlock/run-31',
+        { id: 31, project: 'honeypot', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Add a line to the README', wo: 'WO-14', minion: 'Scout', elapsed: '0:38', worktree: 'run-31', branch: 'honeypot/run-31',
           log: [
             { seq: 180, time: '14:02', kind: 'read', text: 'replayed from event #180' },
             { seq: 180, time: '14:02', kind: 'said', text: 'run.started · WO-14 · Scout · worktree run-31' },
@@ -362,13 +362,13 @@ class Component extends DCLogic {
             { seq: 184, time: '14:04', kind: 'bash', text: 'commit a1f3c2d docs: name the domain model in the README' },
             { seq: 185, time: '14:04', kind: 'bash', text: 'bash pnpm lint', live: true }
           ] },
-        { id: 29, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Trim the zsh startup', wo: 'WO-15', minion: 'Imp', elapsed: '1:12', worktree: 'run-29', branch: 'warlock/run-29',
+        { id: 29, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Implement', state: 'running', title: 'Trim the zsh startup', wo: 'WO-15', minion: 'Imp', elapsed: '1:12', worktree: 'run-29', branch: 'honeypot/run-29',
           log: [
             { seq: 176, time: '13:55', kind: 'said', text: 'run.started · WO-15 · Imp · worktree run-29' },
             { seq: 177, time: '13:56', kind: 'edit', text: 'edit .zshrc' },
             { seq: 187, time: '14:05', kind: 'bash', text: 'bash hyperfine zsh -i -c exit', live: true }
           ] },
-        { id: 28, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Review', state: 'passed', title: 'Pin the pnpm version', wo: 'WO-11', minion: 'Ada', elapsed: '3m 12s', worktree: 'run-28', branch: 'warlock/run-28',
+        { id: 28, project: 'dotfiles', formation: 'implement-then-review', spellbook: 'Bug fix', station: 'Review', state: 'passed', title: 'Pin the pnpm version', wo: 'WO-11', minion: 'Ada', elapsed: '3m 12s', worktree: 'run-28', branch: 'honeypot/run-28',
           log: [
             { seq: 160, time: '13:30', kind: 'said', text: 'run.started · WO-11 · Imp · worktree run-28' },
             { seq: 164, time: '13:31', kind: 'bash', text: 'commit 7c2e91a chore: pin pnpm to 10.22' },
@@ -377,8 +377,8 @@ class Component extends DCLogic {
           ] }
       ],
       dock: [
-        { title: 'Name the event stream states', id: 'run 26', branch: 'warlock/run-26', agent: 'Scout', when: '13:02' },
-        { title: 'Add the projects table', id: 'run 25', branch: 'warlock/run-25', agent: 'Mason', when: '12:40' }
+        { title: 'Name the event stream states', id: 'run 26', branch: 'honeypot/run-26', agent: 'Scout', when: '13:02' },
+        { title: 'Add the projects table', id: 'run 25', branch: 'honeypot/run-25', agent: 'Mason', when: '12:40' }
       ]
     };
   }
@@ -554,13 +554,13 @@ class Component extends DCLogic {
       const hadLane = S.runs.some((r) => r.project === project && r.formation === book.formation);
       const seq = S.seq + 1;
       const newRun = {
-        id: id, project: project, formation: book.formation, spellbook: book.name, station: entry, state: 'queued', title: text, wo: 'WO-' + (id - 17), minion: 'Scout', elapsed: 'queued', worktree: 'run-' + id, branch: 'warlock/run-' + id,
+        id: id, project: project, formation: book.formation, spellbook: book.name, station: entry, state: 'queued', title: text, wo: 'WO-' + (id - 17), minion: 'Scout', elapsed: 'queued', worktree: 'run-' + id, branch: 'honeypot/run-' + id,
         log: [{ seq: seq, time: this.now(), kind: 'said', text: 'run.queued · picked ' + book.name + ' · waiting for Scout' }]
       };
-      const reply = 'warlock · picked ' + book.name + ' · run ' + id + ' queued at ' + entry + ' on ' + project + (hadLane ? '' : ' · new ' + book.formation + ' lane');
+      const reply = 'companion · picked ' + book.name + ' · run ' + id + ' queued at ' + entry + ' on ' + project + (hadLane ? '' : ' · new ' + book.formation + ' lane');
       this.say({
         runs: S.runs.concat([newRun]), nextRun: id + 1, seq: seq, draft: '', reply: reply, arriving: id,
-        announce: 'The warlock picked ' + book.name + '. Run ' + id + ' queued at ' + entry + ' on ' + project + '.'
+        announce: 'The companion picked ' + book.name + '. Run ' + id + ' queued at ' + entry + ' on ' + project + '.'
       });
       setTimeout(() => this.setState({ arriving: null }), 700);
       focusLater('#task');
@@ -640,7 +640,7 @@ class Component extends DCLogic {
       onProject: (e) => this.setState({ project: e.target.value }),
       onDraft: (e) => this.setState({ draft: e.target.value }),
       send: send,
-      newTask: () => { this.say({ announce: 'Composer focused. Name the project and tell the warlock what to do.' }); focusLater('#task'); },
+      newTask: () => { this.say({ announce: 'Composer focused. Name the project and tell the companion what to do.' }); focusLater('#task'); },
       onKey: onKey,
       showRun: !!run, run: run || { id: '', sub: '', title: '', chips: [], log: [], canCancel: false, canHandoff: false, failed: false, passed: false, minion: '' },
       showStation: !!st, st: st || { name: '', sub: '', hasBrief: false, spellbook: '', brief: '', listing: false, books: [] },

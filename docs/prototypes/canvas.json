@@ -1,7 +1,7 @@
 {
   "v": 3,
   "createdOnFiles": { "v": 1, "at": "2026-11-07T10:00:00Z" },
-  "title": "Warlock Feature Prototypes",
+  "title": "Honeypot Feature Prototypes",
   "launch": { "view": "canvas" },
   "pages": [],
   "boards": {
@@ -11,7 +11,7 @@
     "Runtime.dc.html": { "x": 0, "y": 1080, "w": 1360, "h": 960, "title": "#4 Agent runtime · Inspector", "expand": "fill", "is_interactive": true },
     "Formations.dc.html": { "x": 1440, "y": 1080, "w": 1360, "h": 960, "title": "#5 Formations", "expand": "fill", "is_interactive": true },
     "Spellbooks.dc.html": { "x": 2880, "y": 1080, "w": 1360, "h": 960, "title": "#6 Spellbooks", "expand": "fill", "is_interactive": true },
-    "Warlock.dc.html": { "x": 0, "y": 2160, "w": 1360, "h": 960, "title": "#7 Warlock · Thread", "expand": "fill", "is_interactive": true },
+    "Companion.dc.html": { "x": 0, "y": 2160, "w": 1360, "h": 960, "title": "#7 Companion · Thread", "expand": "fill", "is_interactive": true },
     "Board.dc.html": { "x": 1440, "y": 2160, "w": 1360, "h": 960, "title": "#8 Board", "expand": "fill", "is_interactive": true }
   },
   "order": [
@@ -21,11 +21,11 @@
     "Runtime.dc.html",
     "Formations.dc.html",
     "Spellbooks.dc.html",
-    "Warlock.dc.html",
+    "Companion.dc.html",
     "Board.dc.html"
   ],
   "notes": {
-    "title": { "x": 0, "y": -300, "text": "Warlock · one prototype per epic, #1 to #8 · the floor is the factory view (#9)", "kind": "title1", "maxW": 4240 }
+    "title": { "x": 0, "y": -300, "text": "Honeypot · one prototype per epic, #1 to #8 · the floor is the factory view (#9)", "kind": "title1", "maxW": 4240 }
   },
   "designSystems": [
     {

@@ -20,7 +20,7 @@ reviews:
     - path: "**/*"
       instructions: |
         docs/domain.md is the vocabulary contract. Code, docs, issues, and
-        agent prompts use its terms (warlock, minion, formation, station,
+        agent prompts use its terms (companion, minion, formation, station,
         spellbook, run, handoff, and the rest) and no synonyms. Flag any
         synonym, such as "workflow step" for station or "worker" for minion.
     - path: "docs/domain.md"

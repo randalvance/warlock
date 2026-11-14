@@ -5,6 +5,7 @@ import type { ServerEvent } from "../../events.ts";
 import { ApiError, notFound } from "../../http.ts";
 import {
 	AgentProfile,
+	type Companion,
 	emptyProfile,
 	type MemoryNote,
 	MemoryNoteId,
@@ -13,20 +14,19 @@ import {
 	type MinionInput,
 	type MinionSummary,
 	type NoteInput,
-	type Warlock,
 } from "./model.ts";
-import { memoryNotes, minions, warlock as warlockTable } from "./schema.ts";
+import { companion as companionTable, memoryNotes, minions } from "./schema.ts";
 import type { SkillsLibrary } from "./skills.ts";
 
 /** Every minion method that misses its minion throws `not_found`. A write that changes nothing logs no event. */
 export interface Agents {
-	warlock(): Warlock;
+	companion(): Companion;
 	/** A skill missing from the library is `invalid_request` at `profile.skills.<i>`. */
-	saveWarlock(profile: AgentProfile): Promise<Warlock>;
+	saveCompanion(profile: AgentProfile): Promise<Companion>;
 	/** Ordered by name. */
 	listMinions(): MinionSummary[];
 	getMinion(id: MinionId): Minion;
-	/** The same skill check as `saveWarlock`. A taken name, ignoring case, is a `conflict`. */
+	/** The same skill check as `saveCompanion`. A taken name, ignoring case, is a `conflict`. */
 	createMinion(input: MinionInput): Promise<Minion>;
 	/** Replaces the name and the profile, with the same checks as `createMinion`. */
 	saveMinion(id: MinionId, input: MinionInput): Promise<Minion>;
@@ -138,24 +138,24 @@ export function createAgents(deps: {
 	};
 
 	return {
-		warlock() {
-			const row = db.read.select().from(warlockTable).get();
+		companion() {
+			const row = db.read.select().from(companionTable).get();
 			return { profile: row ? AgentProfile.parse(row.profile) : emptyProfile };
 		},
 
-		async saveWarlock(profile) {
+		async saveCompanion(profile) {
 			await requireSkills(profile);
 			return db.commit((tx) => {
-				const row = tx.select().from(warlockTable).get();
+				const row = tx.select().from(companionTable).get();
 				const value = { profile };
 				if (sameJson(row?.profile ?? emptyProfile, profile)) {
 					return { value, events: [] };
 				}
-				tx.insert(warlockTable)
+				tx.insert(companionTable)
 					.values({ id: 1, profile })
-					.onConflictDoUpdate({ target: warlockTable.id, set: { profile } })
+					.onConflictDoUpdate({ target: companionTable.id, set: { profile } })
 					.run();
-				return { value, events: [{ type: "warlock.changed" }] };
+				return { value, events: [{ type: "companion.changed" }] };
 			});
 		},
 

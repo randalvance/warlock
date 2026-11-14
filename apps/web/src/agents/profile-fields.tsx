@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import type {
 	AgentProfile,
 	ApiIssue,
 	McpServerConfig,
 	SkillRef,
-} from "@warlock/server/api";
+} from "@honeypot/server/api";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Field } from "@/components/field";
 import { Badge } from "@/components/ui/badge";

@@ -9,7 +9,7 @@ export type Seq = z.infer<typeof Seq>;
 export const ServerEvent = z.discriminatedUnion("type", [
 	z.object({ type: z.literal("server.started") }),
 	z.object({ type: z.literal("project.changed"), projectId: ProjectId }),
-	z.object({ type: z.literal("warlock.changed") }),
+	z.object({ type: z.literal("companion.changed") }),
 	z.object({ type: z.literal("minion.changed"), minionId: MinionId }),
 ]);
 export type ServerEvent = z.infer<typeof ServerEvent>;

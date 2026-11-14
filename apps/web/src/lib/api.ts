@@ -1,4 +1,4 @@
-import type { ApiErrorBody, AppType } from "@warlock/server/api";
+import type { ApiErrorBody, AppType } from "@honeypot/server/api";
 import { type ClientResponse, hc } from "hono/client";
 import type { SuccessStatusCode } from "hono/utils/http-status";
 

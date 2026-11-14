@@ -206,11 +206,11 @@ test("a repeated environment variable shows a message on its row and does not sa
 	expect(await minions.json()).toEqual({ minions: [] });
 });
 
-test("the warlock profile saves and shows on the warlock card after a reload", async ({
+test("the companion profile saves and shows on the companion card after a reload", async ({
 	page,
 }) => {
 	await openAgents(page);
-	await page.getByRole("link", { name: "Edit warlock profile" }).click();
+	await page.getByRole("link", { name: "Edit companion profile" }).click();
 	await page.getByLabel("System prompt").fill("Pick a playbook for each task.");
 	await page.getByLabel("Skill to add").selectOption("tdd");
 	await page.getByRole("button", { name: "Add skill" }).click();
@@ -219,14 +219,14 @@ test("the warlock profile saves and shows on the warlock card after a reload", a
 	await server.getByLabel("Server name").fill("docs");
 	await server.getByLabel("Type").selectOption("http");
 	await server.getByLabel("URL").fill("https://docs.example/mcp");
-	await page.getByRole("button", { name: "Save warlock" }).click();
+	await page.getByRole("button", { name: "Save companion" }).click();
 
-	const card = page.getByRole("region", { name: "The warlock" });
-	await expect(card.getByRole("list", { name: "Warlock skills" })).toHaveText(
+	const card = page.getByRole("region", { name: "The companion" });
+	await expect(card.getByRole("list", { name: "Companion skills" })).toHaveText(
 		"skills/tdd",
 	);
 	await expect(
-		card.getByRole("list", { name: "Warlock MCP servers" }),
+		card.getByRole("list", { name: "Companion MCP servers" }),
 	).toHaveText("docs · http");
 	await page.reload();
 	await expect(page.getByLabel("System prompt")).toHaveValue(

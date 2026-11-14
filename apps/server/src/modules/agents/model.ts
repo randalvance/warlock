@@ -108,7 +108,7 @@ export const MinionInput = z.strictObject({
 });
 export type MinionInput = z.infer<typeof MinionInput>;
 
-export const WarlockInput = z.strictObject({ profile: AgentProfile });
+export const CompanionInput = z.strictObject({ profile: AgentProfile });
 
 /** File-name safe, so a run can stage a note as `memory/<name>.md` without escaping. */
 export const NoteName = z
@@ -125,7 +125,7 @@ export const NoteInput = z.strictObject({
 });
 export type NoteInput = z.infer<typeof NoteInput>;
 
-export interface Warlock {
+export interface Companion {
 	readonly profile: AgentProfile;
 }
 

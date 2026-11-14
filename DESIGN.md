@@ -1,5 +1,5 @@
 ---
-name: Warlock
+name: Honeypot
 description: The floor of an agentic software factory, dark, where status is a sign and the few lit tubes say everything.
 colors:
   bg-000: "#09090b"
@@ -198,13 +198,13 @@ components:
     height: "56px"
 ---
 
-# Design System: Warlock
+# Design System: Honeypot
 
 ## Overview
 
 **Creative North Star: "The Floor at Night"**
 
-Warlock is one developer's software factory, and its interface is the factory floor seen after hours. The ground is near-black, every surface is matte, and structure is drawn with 1px hairlines rather than fills. Nothing glows by default. Light is signage: a magenta tube around the card that is running right now, a pill of light travelling the lane under it, an amber chip on the run that needs you, a lime SHIPPED sign on finished work. Because the floor is dark and quiet, the three or four lit things on a 1360x960 screen say what is running, what needs you and what shipped in one look.
+Honeypot is one developer's software factory, and its interface is the factory floor seen after hours. The ground is near-black, every surface is matte, and structure is drawn with 1px hairlines rather than fills. Nothing glows by default. Light is signage: a magenta tube around the card that is running right now, a pill of light travelling the lane under it, an amber chip on the run that needs you, a lime SHIPPED sign on finished work. Because the floor is dark and quiet, the three or four lit things on a 1360x960 screen say what is running, what needs you and what shipped in one look.
 
 The visual authority is the Agentic Factory design system, used unchanged. This build adds composition: the home is stacked Lines, one per project, each a strip over a lane of station nodes with the run cards under the station they are at; an inspector on the right for the opened run; a composer docked along the floor's bottom. Density is high and the tone is operational: tabular numerals, sequence numbers, worktree and branch names, uppercase condensed signage for names and sentence-case Instrument Sans for everything else. Confirmed rejections: no light theme, no second accent, no gradients as light, no emoji or glyph icons in chrome, no synonyms for the domain words.
 
@@ -354,7 +354,7 @@ An `af-card` with `data-state`, padded 8px 10px, in the column of its station. H
 The DS `af-inspector` at 320px on `bg-100` with a `line-100` left edge, 18px padding, 12px gaps. Heading 17px signage ("Run 31"), a mono sub-line (work order, spellbook, formation), the full title in 13px `ink-200`, a chip row (station toned by state; minion, worktree, branch plain), then the `af-log`: 28px mono rows with a kind dot, `#seq time` in `ink-400`, text truncating and revealing on hover, the one live row shimmering. Actions pin to the bottom above a `line-100` rule: Cancel run (danger) while running, Rerun (primary) and Dismiss when failed, Review (primary) and Dismiss when succeeded. Cancel opens a confirm strip on `warn-tint` (8px radius) with Keep running and Stop run. For a station the inspector shows its brief in a `surface-100` panel (8px radius, 13px/1.5 `ink-200`) or lists the spellbooks that brief it. Live announcements go through one visually hidden `role=status` region.
 
 ### Composer
-A 56px strip across the floor's bottom on `surface-300` with a `line-200` top edge and 24px side padding. Row: project select pill, the input pill growing to fill, Send (primary, with the send icon), Open thread (quiet, 28px). When the warlock has replied, a 16px mono line in `ink-200` with a 12px zap icon in `accent` sits above the row. Enter sends; focus returns to the input.
+A 56px strip across the floor's bottom on `surface-300` with a `line-200` top edge and 24px side padding. Row: project select pill, the input pill growing to fill, Send (primary, with the send icon), Open thread (quiet, 28px). When the companion has replied, a 16px mono line in `ink-200` with a 12px zap icon in `accent` sits above the row. Enter sends; focus returns to the input.
 
 ### Dock
 `af-dock` on `bg-100` under a 24px "Shipped" strip: 44px rows (104px id column, title in 14px signage truncating, mono branch and agent, time), `line-100` dividers, `surface-200` on hover.

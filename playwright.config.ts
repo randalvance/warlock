@@ -16,13 +16,13 @@ export default defineConfig({
 		},
 	],
 	webServer: {
-		command: "pnpm --filter @warlock/web dev",
+		command: "pnpm --filter @honeypot/web dev",
 		url: web,
 		reuseExistingServer: false,
 		timeout: 60_000,
 		env: {
-			WARLOCK_PORT: String(e2ePorts.server),
-			WARLOCK_WEB_PORT: String(e2ePorts.web),
+			HONEYPOT_PORT: String(e2ePorts.server),
+			HONEYPOT_WEB_PORT: String(e2ePorts.web),
 		},
 	},
 });

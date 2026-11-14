@@ -2,11 +2,11 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { jsonBodyLimit, validate } from "../../http.ts";
 import {
+	CompanionInput,
 	MemoryNoteId,
 	MinionId,
 	MinionInput,
 	NoteInput,
-	WarlockInput,
 } from "./model.ts";
 import type { SkillsLibrary } from "./skills.ts";
 import type { Agents } from "./store.ts";
@@ -14,12 +14,12 @@ import type { Agents } from "./store.ts";
 const MinionParam = z.object({ minionId: MinionId });
 const NoteParam = z.object({ minionId: MinionId, noteId: MemoryNoteId });
 
-export function warlockRoute(agents: Agents) {
+export function companionRoute(agents: Agents) {
 	return new Hono()
-		.get("/", (c) => c.json({ warlock: agents.warlock() }, 200))
-		.put("/", jsonBodyLimit, validate("json", WarlockInput), async (c) => {
+		.get("/", (c) => c.json({ companion: agents.companion() }, 200))
+		.put("/", jsonBodyLimit, validate("json", CompanionInput), async (c) => {
 			const { profile } = c.req.valid("json");
-			return c.json({ warlock: await agents.saveWarlock(profile) }, 200);
+			return c.json({ companion: await agents.saveCompanion(profile) }, 200);
 		});
 }
 

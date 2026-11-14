@@ -2,7 +2,7 @@ import { expect, test } from "./fixtures.ts";
 
 test("a project with two repos, artifacts, and context survives a server restart", async ({
 	page,
-	warlock,
+	honeypot,
 }) => {
 	const streamStatus = page.getByRole("status", { name: "Event stream" });
 	await page.goto("/projects");
@@ -43,7 +43,7 @@ test("a project with two repos, artifacts, and context survives a server restart
 	await page.getByLabel("Upload file").setInputFiles({
 		name: "notes.txt",
 		mimeType: "text/plain",
-		buffer: Buffer.from("hello warlock"),
+		buffer: Buffer.from("hello honeypot"),
 	});
 	await page.getByLabel("Context title").fill("Conventions");
 	await page.getByLabel("Context body").fill("Use npm.");
@@ -75,9 +75,9 @@ test("a project with two repos, artifacts, and context survives a server restart
 	};
 	await expectProject();
 
-	const before = warlock.pid;
-	await warlock.restart();
-	expect(warlock.pid, "a new server process").not.toBe(before);
+	const before = honeypot.pid;
+	await honeypot.restart();
+	expect(honeypot.pid, "a new server process").not.toBe(before);
 	expect(
 		() => process.kill(before, 0),
 		"the first server process is gone",
@@ -91,7 +91,7 @@ test("a project with two repos, artifacts, and context survives a server restart
 		.getAttribute("href");
 	const download = await page.request.get(href ?? "");
 	expect(await download.text(), "the uploaded bytes survived").toBe(
-		"hello warlock",
+		"hello honeypot",
 	);
 	await page
 		.getByRole("navigation", { name: "Sections" })

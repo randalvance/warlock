@@ -42,14 +42,14 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 </helmet>
 <div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
   <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
-    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Main.dc.html" aria-label="Honeypot home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
     <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
     <a href="Agents.dc.html" class="wl-nav" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav on" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Companion.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
@@ -122,12 +122,12 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 
         <div style="display: flex; flex-direction: column; gap: 20px">
           <div class="wl-card">
-            <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Selection for WO-14</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">fix the typo in the README of project warlock</span></div>
+            <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Selection for WO-14</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">fix the typo in the README of project honeypot</span></div>
             <div style="padding: 4px 14px 12px; display: flex; flex-direction: column; gap: 10px">
-              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">The warlock picked</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">Bug fix</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">14:01 · 0.8s</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span style="font-size: 12px; color: var(--ink-300, #8f8f96)">The companion picked</span><x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">Bug fix</x-import><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">14:01 · 0.8s</span></div>
               <p style="margin: 0; font-size: 13px; color: var(--ink-200, #c4c4c8)">Reason: the task names one wrong word in one file and asks for nothing new. Bug fix fits; Feature expects new behaviour; Refactor is a draft and cannot be picked.</p>
               <div style="display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; padding-top: 6px; border-top: 1px solid var(--line-100, #232327)">
-                <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="override" class="wl-lbl">Override for this task</label><select id="override" class="wl-in"><option>Warlock's pick · Bug fix</option><option>Feature</option></select></div>
+                <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="override" class="wl-lbl">Override for this task</label><select id="override" class="wl-in"><option>Companion's pick · Bug fix</option><option>Feature</option></select></div>
                 <button class="wl-btn" type="button">Apply override</button>
               </div>
               <span style="font-size: 12px; color: var(--ink-300, #8f8f96)">An override is stored on the task and survives a restart. The next run of WO-14 uses it.</span>
@@ -146,7 +146,7 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 
           <div class="wl-card">
             <div class="wl-head"><span class="wl-sig" style="font-size: 14px">Briefs in the event log</span><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">run 31 · Bug fix</span></div>
-            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">179</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">spellbook.picked · Bug fix · by warlock</span></div>
+            <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">179</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">spellbook.picked · Bug fix · by companion</span></div>
             <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">180</span><span class="wl-mono" style="font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · implement · Scout received brief briefs.implement (412 chars)</span></div>
             <div class="wl-row" style="min-height: 28px"><span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96); width: 32px">next</span><span class="wl-mono" style="font-size: 12px; color: var(--ink-300, #8f8f96); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">station.started · review · Ada receives briefs.review on handoff</span></div>
           </div>

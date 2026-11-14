@@ -194,10 +194,10 @@ test.each<[string, unknown, string, string, McpServersBody]>([
 	},
 );
 
-test("the warlock rejects an invalid MCP server entry at the bad field and keeps its profile", async () => {
+test("the companion rejects an invalid MCP server entry at the bad field and keeps its profile", async () => {
 	const { server, api } = await serve();
 
-	const rejected = await sendJson(server.url, "PUT", "/api/warlock", {
+	const rejected = await sendJson(server.url, "PUT", "/api/companion", {
 		profile: {
 			systemPrompt: "",
 			skills: [],
@@ -214,8 +214,8 @@ test("the warlock rejects an invalid MCP server entry at the bad field and keeps
 			},
 		],
 	});
-	expect(await (await api.warlock.$get()).json()).toEqual({
-		warlock: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
+	expect(await (await api.companion.$get()).json()).toEqual({
+		companion: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
 	});
 });
 
@@ -292,7 +292,7 @@ test.each([
 
 		for (const rejected of [
 			await api.minions.$post({ json: { name: "Scout", profile } }),
-			await api.warlock.$put({ json: { profile } }),
+			await api.companion.$put({ json: { profile } }),
 		]) {
 			expect(rejected.status).toBe(400);
 			expect(await errorOf(rejected)).toMatchObject({
@@ -301,45 +301,45 @@ test.each([
 			});
 		}
 		expect(await (await api.minions.$get()).json()).toEqual({ minions: [] });
-		expect(await (await api.warlock.$get()).json()).toEqual({
-			warlock: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
+		expect(await (await api.companion.$get()).json()).toEqual({
+			companion: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
 		});
 	},
 );
 
-test("the warlock starts empty, keeps a saved profile across a restart, and logs nothing for an unchanged save", async () => {
+test("the companion starts empty, keeps a saved profile across a restart, and logs nothing for an unchanged save", async () => {
 	const dbPath = tempDbPath();
 	const first = await serve(dbPath);
-	expect(await (await first.api.warlock.$get()).json()).toEqual({
-		warlock: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
+	expect(await (await first.api.companion.$get()).json()).toEqual({
+		companion: { profile: { systemPrompt: "", skills: [], mcpServers: {} } },
 	});
 	writeSkill(join(first.skillsDir, "pick-playbook"));
 	const profile = {
 		systemPrompt: "You pick a playbook for each task.",
 		skills: ["pick-playbook"],
 		mcpServers: {
-			"warlock-api": { type: "stdio" as const, command: "node" },
+			"companion-api": { type: "stdio" as const, command: "node" },
 		},
 	};
-	expect((await first.api.warlock.$put({ json: { profile } })).status).toBe(
+	expect((await first.api.companion.$put({ json: { profile } })).status).toBe(
 		200,
 	);
 	await first.server.stop();
 
 	const { server, api } = await serve(dbPath);
-	expect(await (await api.warlock.$get()).json()).toEqual({
-		warlock: { profile },
+	expect(await (await api.companion.$get()).json()).toEqual({
+		companion: { profile },
 	});
 	const head = await headSeq(server.url);
-	await api.warlock.$put({ json: { profile } });
+	await api.companion.$put({ json: { profile } });
 	expect(await headSeq(server.url), "an unchanged save logs nothing").toBe(
 		head,
 	);
-	await api.warlock.$put({
+	await api.companion.$put({
 		json: { profile: { ...profile, systemPrompt: "Pick carefully." } },
 	});
 	expect(await readEvents(server.url, { after: head, count: 1 })).toEqual([
-		expect.objectContaining({ type: "warlock.changed" }),
+		expect.objectContaining({ type: "companion.changed" }),
 	]);
 });
 

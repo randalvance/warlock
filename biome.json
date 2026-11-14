@@ -61,7 +61,7 @@
 											"hono/*",
 											"@hono/*"
 										],
-										"message": "The web bundles this file through @warlock/server/events, so it must stay browser-safe."
+										"message": "The web bundles this file through @honeypot/server/events, so it must stay browser-safe."
 									}
 								]
 							}

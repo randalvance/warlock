@@ -1,16 +1,16 @@
-import {
-	type QueryClient,
-	type QueryKey,
-	queryOptions,
-} from "@tanstack/react-query";
 import type {
 	EventOf,
 	MinionId,
 	ProjectId,
 	ServerEventType,
 	StoredEvent,
-} from "@warlock/server/api";
-import type { StreamStatus } from "@warlock/server/events";
+} from "@honeypot/server/api";
+import type { StreamStatus } from "@honeypot/server/events";
+import {
+	type QueryClient,
+	type QueryKey,
+	queryOptions,
+} from "@tanstack/react-query";
 import { ApiRequestError, client, unwrap } from "@/lib/api";
 import { subscribeServerEvents } from "@/lib/server-events";
 
@@ -20,7 +20,7 @@ export const projectKeys = {
 };
 
 export const agentKeys = {
-	warlock: ["warlock"] as const,
+	companion: ["companion"] as const,
 	skills: ["skills"] as const,
 	minions: {
 		list: ["minions", "list"] as const,
@@ -49,10 +49,11 @@ export const projectQueries = {
 };
 
 export const agentQueries = {
-	warlock: () =>
+	companion: () =>
 		queryOptions({
-			queryKey: agentKeys.warlock,
-			queryFn: async () => (await unwrap(client.api.warlock.$get())).warlock,
+			queryKey: agentKeys.companion,
+			queryFn: async () =>
+				(await unwrap(client.api.companion.$get())).companion,
 		}),
 	skills: () =>
 		queryOptions({
@@ -91,7 +92,7 @@ export const staleAfter: {
 		projectKeys.list,
 		projectKeys.detail(event.projectId),
 	],
-	"warlock.changed": () => [agentKeys.warlock],
+	"companion.changed": () => [agentKeys.companion],
 	"minion.changed": (event) => [
 		agentKeys.minions.list,
 		agentKeys.minions.detail(event.minionId),

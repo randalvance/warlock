@@ -1,5 +1,5 @@
 {
-	"name": "warlock",
+	"name": "honeypot",
 	"private": true,
 	"type": "module",
 	"packageManager": "pnpm@10.34.5",
@@ -12,7 +12,7 @@
 		"format": "biome check --write .",
 		"typecheck": "tsc && nx run-many -t typecheck",
 		"test": "nx run-many -t test",
-		"db:check": "nx run @warlock/server:db:check",
+		"db:check": "nx run @honeypot/server:db:check",
 		"smoke": "playwright test"
 	},
 	"devDependencies": {

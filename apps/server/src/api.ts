@@ -9,6 +9,7 @@ export type {
 export type { ApiErrorBody, ApiIssue } from "./http.ts";
 export type {
 	AgentProfile,
+	Companion,
 	McpServerConfig,
 	MemoryNote,
 	MemoryNoteId,
@@ -16,7 +17,6 @@ export type {
 	MinionId,
 	MinionSummary,
 	SkillRef,
-	Warlock,
 } from "./modules/agents/model.ts";
 export type {
 	Artifact,

@@ -13,8 +13,8 @@ const storedRows: { [Type in ServerEventType]: [unknown, ...unknown[]] } = {
 			at: "2026-11-07T06:02:41.512Z",
 		},
 	],
-	"warlock.changed": [
-		{ type: "warlock.changed", seq: 3, at: "2026-11-08T02:14:09.330Z" },
+	"companion.changed": [
+		{ type: "companion.changed", seq: 3, at: "2026-11-08T02:14:09.330Z" },
 	],
 	"minion.changed": [
 		{

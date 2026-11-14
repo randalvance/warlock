@@ -1,5 +1,5 @@
+import type { AgentProfile } from "@honeypot/server/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { AgentProfile } from "@warlock/server/api";
 import { type FormEvent, useState } from "react";
 import {
 	fromDraft,
@@ -15,19 +15,19 @@ import { client, unwrap } from "@/lib/api";
 import { agentQueries } from "@/lib/queries";
 import { FormError } from "@/projects/form-error";
 
-export function WarlockPage() {
-	const warlock = useQuery(agentQueries.warlock());
-	if (warlock.error) return <FormError error={warlock.error} />;
-	if (!warlock.data) return <p className="text-muted-foreground">Loading…</p>;
-	return <WarlockEditor saved={warlock.data.profile} />;
+export function CompanionPage() {
+	const companion = useQuery(agentQueries.companion());
+	if (companion.error) return <FormError error={companion.error} />;
+	if (!companion.data) return <p className="text-muted-foreground">Loading…</p>;
+	return <CompanionEditor saved={companion.data.profile} />;
 }
 
-function WarlockEditor({ saved }: { saved: AgentProfile }) {
+function CompanionEditor({ saved }: { saved: AgentProfile }) {
 	const [profile, setProfile] = useState(() => toDraft(saved));
 	const save = useMutation({
 		mutationFn: () =>
 			unwrap(
-				client.api.warlock.$put({ json: { profile: fromDraft(profile) } }),
+				client.api.companion.$put({ json: { profile: fromDraft(profile) } }),
 			),
 	});
 	const submit = (event: FormEvent) => {
@@ -37,13 +37,15 @@ function WarlockEditor({ saved }: { saved: AgentProfile }) {
 	return (
 		<form onSubmit={submit} className="flex flex-col gap-4">
 			<div className="flex items-center justify-between gap-3">
-				<h2 className="font-heading text-xl font-semibold">Warlock profile</h2>
+				<h2 className="font-heading text-xl font-semibold">
+					Companion profile
+				</h2>
 				<Button type="submit" disabled={save.isPending}>
-					Save warlock
+					Save companion
 				</Button>
 			</div>
 			<ProfileFields
-				id="warlock"
+				id="companion"
 				value={profile}
 				onChange={setProfile}
 				issues={issuesOf(save.error)}

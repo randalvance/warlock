@@ -10,9 +10,9 @@ import {
 	notFound,
 } from "./http.ts";
 import {
+	companionRoute,
 	minionsRoute,
 	skillsRoute,
-	warlockRoute,
 } from "./modules/agents/routes.ts";
 import type { SkillsLibrary } from "./modules/agents/skills.ts";
 import type { Agents } from "./modules/agents/store.ts";
@@ -37,7 +37,7 @@ export function createApp(
 		.get("/health", (c) => c.json({ ok: true as const }, 200))
 		.route("/events", eventsRoute(db))
 		.route("/projects", projectsRoute(projects))
-		.route("/warlock", warlockRoute(agents))
+		.route("/companion", companionRoute(agents))
 		.route("/minions", minionsRoute(agents))
 		.route("/skills", skillsRoute(library));
 }

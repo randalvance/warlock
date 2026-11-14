@@ -1,5 +1,5 @@
+import type { MemoryNote, Minion } from "@honeypot/server/api";
 import { useMutation } from "@tanstack/react-query";
-import type { MemoryNote, Minion } from "@warlock/server/api";
 import { type FormEvent, useState } from "react";
 import { Field } from "@/components/field";
 import { Button } from "@/components/ui/button";

@@ -15,8 +15,8 @@ export default defineConfig({
 	resolve: { tsconfigPaths: true },
 	server: {
 		host: "127.0.0.1",
-		port: Number(env.WARLOCK_WEB_PORT ?? 5173),
+		port: Number(env.HONEYPOT_WEB_PORT ?? 5173),
 		strictPort: true,
-		proxy: { "/api": `http://127.0.0.1:${env.WARLOCK_PORT}` },
+		proxy: { "/api": `http://127.0.0.1:${env.HONEYPOT_PORT}` },
 	},
 });

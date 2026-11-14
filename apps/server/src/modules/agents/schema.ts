@@ -8,14 +8,14 @@ import {
 } from "drizzle-orm/sqlite-core";
 import type { AgentProfile, MemoryNoteId, MinionId } from "./model.ts";
 
-/** One row at most. Before the first save there is none, and the warlock reads as `emptyProfile`. */
-export const warlock = sqliteTable(
-	"warlock",
+/** One row at most. Before the first save there is none, and the companion reads as `emptyProfile`. */
+export const companion = sqliteTable(
+	"companion",
 	{
 		id: integer("id").primaryKey(),
 		profile: text("profile", { mode: "json" }).$type<AgentProfile>().notNull(),
 	},
-	() => [check("one_warlock", sql`id = 1`)],
+	() => [check("one_companion", sql`id = 1`)],
 );
 
 export const minions = sqliteTable(

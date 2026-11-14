@@ -1,7 +1,7 @@
 import type { RouteObject } from "react-router";
 import { AgentsIndex, AgentsPage } from "@/agents/agents-page";
+import { CompanionPage } from "@/agents/companion-page";
 import { MinionPage } from "@/agents/minion-page";
-import { WarlockPage } from "@/agents/warlock-page";
 import { ProjectPage } from "@/projects/project-page";
 import { ProjectsPage } from "@/projects/projects-page";
 
@@ -26,7 +26,7 @@ const sectionPages: Partial<Record<SectionPath, RouteObject[]>> = {
 			element: <AgentsPage />,
 			children: [
 				{ index: true, element: <AgentsIndex /> },
-				{ path: "warlock", element: <WarlockPage /> },
+				{ path: "companion", element: <CompanionPage /> },
 				{ path: "minions/new", element: <MinionPage /> },
 				{ path: "minions/:minionId", element: <MinionPage /> },
 			],

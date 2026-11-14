@@ -1,5 +1,5 @@
 {
-	"name": "warlock",
+	"name": "honeypot",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
@@ -7,9 +7,9 @@
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	"mounts": [
-		"source=warlock-${devcontainerId}-node-modules,target=${localWorkspaceFolder}/node_modules,type=volume",
-		"source=warlock-${devcontainerId}-server-node-modules,target=${localWorkspaceFolder}/apps/server/node_modules,type=volume",
-		"source=warlock-${devcontainerId}-web-node-modules,target=${localWorkspaceFolder}/apps/web/node_modules,type=volume"
+		"source=honeypot-${devcontainerId}-node-modules,target=${localWorkspaceFolder}/node_modules,type=volume",
+		"source=honeypot-${devcontainerId}-server-node-modules,target=${localWorkspaceFolder}/apps/server/node_modules,type=volume",
+		"source=honeypot-${devcontainerId}-web-node-modules,target=${localWorkspaceFolder}/apps/web/node_modules,type=volume"
 	],
 	"containerEnv": {
 		"npm_config_store_dir": "${localWorkspaceFolder}/node_modules/.pnpm-store"

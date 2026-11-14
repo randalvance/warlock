@@ -46,7 +46,7 @@ export function createGitHub(config: GitHubConfig): GitHub {
 				headers: {
 					accept: "application/vnd.github+json",
 					authorization: `Bearer ${token}`,
-					"user-agent": "warlock",
+					"user-agent": "honeypot",
 					"x-github-api-version": "2022-11-28",
 				},
 				signal: AbortSignal.timeout(timeoutMs),

@@ -1,5 +1,5 @@
+import type { Minion, MinionId } from "@honeypot/server/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { Minion, MinionId } from "@warlock/server/api";
 import { type FormEvent, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { MemoryNotes } from "@/agents/memory-notes";

@@ -87,12 +87,12 @@ importers:
       '@fontsource-variable/geist':
         specifier: 5.3.0
         version: 5.3.0
+      '@honeypot/server':
+        specifier: workspace:*
+        version: link:../server
       '@tanstack/react-query':
         specifier: 5.105.0
         version: 5.105.0(@types/react@19.3.0)(react@19.3.1)
-      '@warlock/server':
-        specifier: workspace:*
-        version: link:../server
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1

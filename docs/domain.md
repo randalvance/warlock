@@ -1,17 +1,17 @@
-# Warlock domain model
+# Honeypot domain model
 
-This page defines the words Warlock uses and the data shape behind each one. Code, issues, and agent prompts use these names and no synonyms.
+This page defines the words Honeypot uses and the data shape behind each one. Code, issues, and agent prompts use these names and no synonyms.
 
 ## Glossary
 
 | Term | Meaning |
 | --- | --- |
-| Dark factory | The whole Warlock system. It turns tasks into software work that agents do. |
-| Warlock | The main agent. Every command enters through the warlock. It picks a playbook for a task and delegates the work to minions through a workflow. |
+| Dark factory | The whole Honeypot system. It turns tasks into software work that agents do. |
+| Companion | The main agent. Every command enters through the companion. It picks a playbook for a task and delegates the work to minions through a workflow. |
 | Minion | A worker agent. Each minion has its own system prompt, skills, MCP servers, and memory. |
-| Agent profile | The configuration an agent runs with. It holds a system prompt, skills, and MCP servers. The warlock and every minion have one. |
+| Agent profile | The configuration an agent runs with. It holds a system prompt, skills, and MCP servers. The companion and every minion have one. |
 | Skills library | The folder on the server's disk that holds the skills a profile can list. Each skill is an Agent Skills folder with a `SKILL.md`, and a profile names it by its folder name. |
-| Memory note | One markdown note in a minion's memory. A minion reads its notes at the start of a run and can append to them. The warlock has no memory. |
+| Memory note | One markdown note in a minion's memory. A minion reads its notes at the start of a run and can append to them. The companion has no memory. |
 | Project | The owner of a body of work. A project has one or more GitHub repos, a collection of artifacts, and context. |
 | Artifact | A file, link, or note that belongs to a project. Minions read artifacts and produce new ones. |
 | Context | Standing knowledge about a project, such as conventions and architecture notes. Every agent that works on the project receives it. |
@@ -81,7 +81,7 @@ type McpServerConfig =
 	| { type?: "stdio"; command: string; args?: string[]; env?: Record<string, string> }
 	| { type: "http"; url: string; headers?: Record<string, string> };
 
-interface Warlock {
+interface Companion {
 	profile: AgentProfile;
 }
 

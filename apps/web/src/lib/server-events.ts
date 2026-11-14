@@ -1,5 +1,5 @@
-import type { StoredEvent } from "@warlock/server/api";
-import { connectEvents, type StreamStatus } from "@warlock/server/events";
+import type { StoredEvent } from "@honeypot/server/api";
+import { connectEvents, type StreamStatus } from "@honeypot/server/events";
 import { useSyncExternalStore } from "react";
 
 export interface ServerEventListener {

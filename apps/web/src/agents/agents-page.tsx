@@ -1,12 +1,12 @@
+import type { AgentProfile } from "@honeypot/server/api";
 import { useQuery } from "@tanstack/react-query";
-import type { AgentProfile } from "@warlock/server/api";
 import { Link, NavLink, Outlet } from "react-router";
 import { Button } from "@/components/ui/button";
 import { agentQueries } from "@/lib/queries";
 import { FormError } from "@/projects/form-error";
 
 export function AgentsPage() {
-	const warlock = useQuery(agentQueries.warlock());
+	const companion = useQuery(agentQueries.companion());
 	const minions = useQuery(agentQueries.minions.list());
 	return (
 		<div className="flex gap-8">
@@ -18,20 +18,24 @@ export function AgentsPage() {
 					</Button>
 				</div>
 				<section
-					aria-label="The warlock"
+					aria-label="The companion"
 					className="flex flex-col gap-3 rounded-lg border p-3"
 				>
 					<div>
-						<h2 className="font-heading text-lg font-semibold">The warlock</h2>
+						<h2 className="font-heading text-lg font-semibold">
+							The companion
+						</h2>
 						<p className="text-sm text-muted-foreground">
 							One per install. A profile only, with no memory.
 						</p>
 					</div>
-					<FormError error={warlock.error} />
-					{warlock.data && <ProfileSummary profile={warlock.data.profile} />}
+					<FormError error={companion.error} />
+					{companion.data && (
+						<ProfileSummary profile={companion.data.profile} />
+					)}
 					<div>
 						<Button asChild variant="outline" size="sm">
-							<Link to="warlock">Edit warlock profile</Link>
+							<Link to="companion">Edit companion profile</Link>
 						</Button>
 					</div>
 				</section>
@@ -66,7 +70,7 @@ export function AgentsPage() {
 export function AgentsIndex() {
 	return (
 		<p className="text-muted-foreground">
-			Pick the warlock or a minion to edit its profile.
+			Pick the companion or a minion to edit its profile.
 		</p>
 	);
 }
@@ -77,7 +81,7 @@ function ProfileSummary({ profile }: { profile: AgentProfile }) {
 		<div className="flex flex-col gap-2 text-sm">
 			<div>
 				<p className="font-medium">Skills</p>
-				<ul aria-label="Warlock skills" className="font-mono">
+				<ul aria-label="Companion skills" className="font-mono">
 					{profile.skills.map((ref) => (
 						<li key={ref}>skills/{ref}</li>
 					))}
@@ -88,7 +92,7 @@ function ProfileSummary({ profile }: { profile: AgentProfile }) {
 			</div>
 			<div>
 				<p className="font-medium">MCP servers</p>
-				<ul aria-label="Warlock MCP servers" className="font-mono">
+				<ul aria-label="Companion MCP servers" className="font-mono">
 					{servers.map(([name, server]) => (
 						<li key={name}>
 							{name} · {server.type ?? "stdio"}

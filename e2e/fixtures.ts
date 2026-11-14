@@ -11,14 +11,14 @@ import {
 } from "../apps/server/test/github-stub.ts";
 import { e2ePorts } from "./ports.ts";
 
-interface Warlock {
+interface Honeypot {
 	readonly github: GitHubStub;
 	readonly pid: number;
 	restart(): Promise<void>;
 }
 
-export const test = base.extend<{ warlock: Warlock }>({
-	warlock: [
+export const test = base.extend<{ honeypot: Honeypot }>({
+	honeypot: [
 		// biome-ignore lint/correctness/noEmptyPattern: Playwright requires the fixtures argument to be destructured
 		async ({}, use) => {
 			const github = await startGitHubStub({
@@ -26,7 +26,7 @@ export const test = base.extend<{ warlock: Warlock }>({
 				"acme/web": { defaultBranch: "trunk" },
 			});
 			try {
-				const dataDir = mkdtempSync(join(tmpdir(), "warlock-e2e-"));
+				const dataDir = mkdtempSync(join(tmpdir(), "honeypot-e2e-"));
 				try {
 					const skillsDir = join(dataDir, "skills");
 					mkdirSync(join(skillsDir, "tdd"), { recursive: true });
@@ -36,9 +36,9 @@ export const test = base.extend<{ warlock: Warlock }>({
 					);
 					const env = {
 						...process.env,
-						WARLOCK_PORT: String(e2ePorts.server),
-						WARLOCK_DB_PATH: join(dataDir, "warlock.db"),
-						WARLOCK_SKILLS_DIR: skillsDir,
+						HONEYPOT_PORT: String(e2ePorts.server),
+						HONEYPOT_DB_PATH: join(dataDir, "honeypot.db"),
+						HONEYPOT_SKILLS_DIR: skillsDir,
 						GITHUB_API_URL: github.config.apiUrl.href,
 						GITHUB_TOKEN: github.config.token,
 					};
@@ -77,7 +77,7 @@ async function startServer(env: NodeJS.ProcessEnv): Promise<ChildProcess> {
 		env,
 		stdio: ["ignore", "inherit", "inherit"],
 	});
-	const health = `http://127.0.0.1:${env.WARLOCK_PORT}/api/health`;
+	const health = `http://127.0.0.1:${env.HONEYPOT_PORT}/api/health`;
 	for (let attempt = 0; attempt < 100; attempt++) {
 		if (child.exitCode !== null) {
 			throw new Error(`the server exited with ${child.exitCode}`);

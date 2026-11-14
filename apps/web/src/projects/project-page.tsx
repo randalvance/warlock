@@ -1,10 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
 	Artifact,
 	ContextEntry,
 	Project,
 	ProjectId,
-} from "@warlock/server/api";
+} from "@honeypot/server/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { useParams } from "react-router";
 import { Field } from "@/components/field";

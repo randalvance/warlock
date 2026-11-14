@@ -9,9 +9,9 @@ import type { ApiErrorBody } from "../src/http.ts";
 import type { GitHubConfig } from "../src/modules/projects/github.ts";
 
 export function tempDbPath(): string {
-	const dir = mkdtempSync(join(tmpdir(), "warlock-test-"));
+	const dir = mkdtempSync(join(tmpdir(), "honeypot-test-"));
 	onTestFinished(() => rmSync(dir, { recursive: true, force: true }));
-	return join(dir, "warlock.db");
+	return join(dir, "honeypot.db");
 }
 
 const noGitHub: GitHubConfig = {

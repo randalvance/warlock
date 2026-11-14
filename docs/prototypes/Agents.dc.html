@@ -41,20 +41,20 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
 </helmet>
 <div style="min-height: 960px; display: flex; flex-wrap: wrap; background: var(--bg-000, #09090b); color: var(--ink-100, #f2f2f0); font-family: 'Instrument Sans', sans-serif; font-size: 14px; line-height: 1.4">
   <nav aria-label="Sections" style="flex: 0 0 56px; box-sizing: border-box; background: var(--bg-100, #0f0f11); border-right: 1px solid var(--line-100, #232327); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px">
-    <a href="Main.dc.html" aria-label="Warlock home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
+    <a href="Main.dc.html" aria-label="Honeypot home" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; color: var(--accent, #ff3dcd); filter: drop-shadow(0 0 6px var(--glow-halo, rgba(255,61,205,.5)))"><x-import component-from-global-scope="AgenticFactory.Icon" name="zap"></x-import></a>
     <a href="Projects.dc.html" class="wl-nav" aria-label="Projects" title="Projects"><x-import component-from-global-scope="AgenticFactory.Icon" name="layout-grid"></x-import></a>
     <a href="Agents.dc.html" class="wl-nav on" aria-label="Agents" title="Agents"><x-import component-from-global-scope="AgenticFactory.Icon" name="users"></x-import></a>
     <a href="Formations.dc.html" class="wl-nav" aria-label="Formations" title="Formations"><x-import component-from-global-scope="AgenticFactory.Icon" name="map"></x-import></a>
     <a href="Spellbooks.dc.html" class="wl-nav" aria-label="Spellbooks" title="Spellbooks"><x-import component-from-global-scope="AgenticFactory.Icon" name="file-text"></x-import></a>
     <a href="Board.dc.html" class="wl-nav" aria-label="Board" title="Board"><x-import component-from-global-scope="AgenticFactory.Icon" name="clipboard-list"></x-import></a>
     <span style="flex-grow: 1"></span>
-    <a href="Warlock.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
+    <a href="Companion.dc.html" class="wl-nav" aria-label="Thread" title="Thread"><x-import component-from-global-scope="AgenticFactory.Icon" name="terminal"></x-import></a>
   </nav>
 
   <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
     <header class="af-topbar">
       <h1 class="af-heading">Agents</h1>
-      <span class="af-meta">1 warlock · 3 minions · 1 running</span>
+      <span class="af-meta">1 companion · 3 minions · 1 running</span>
       <span style="flex-grow: 1"></span>
       <x-import component-from-global-scope="AgenticFactory.Chip" tone="accent">live</x-import>
       <x-import component-from-global-scope="AgenticFactory.Button" variant="primary" icon="users">New minion</x-import>
@@ -62,13 +62,13 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
     <div class="wl-sr" role="status" aria-live="polite">{{announce}}</div>
 
     <main style="padding: 24px; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box; width: 100%">
-      <section aria-label="The warlock" style="display: flex; flex-direction: column; gap: 12px">
+      <section aria-label="The companion" style="display: flex; flex-direction: column; gap: 12px">
         <div style="display: flex; align-items: baseline; gap: 12px">
-          <span class="wl-sig" style="font-size: 16px">The warlock</span>
+          <span class="wl-sig" style="font-size: 16px">The companion</span>
           <span class="wl-mono" style="font-size: 11px; color: var(--ink-300, #8f8f96)">one per install · profile only, no memory</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start">
-          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Warlock" role="Command agent · Fable 5.1" state="idle" state-label="Idle" on="Listening on the command panel" glyph="zap"></x-import>
+          <x-import component-from-global-scope="AgenticFactory.AgentCard" name="Companion" role="Command agent · Fable 5.1" state="idle" state-label="Idle" on="Listening on the command panel" glyph="zap"></x-import>
           <div class="wl-card" style="grid-column: span 2; display: flex; flex-wrap: wrap; gap: 0">
             <div style="flex: 1 1 200px; padding: 14px; display: flex; flex-direction: column; gap: 4px; border-right: 1px solid var(--line-100, #232327)">
               <span class="wl-sig" style="font-size: 12px; color: var(--ink-300, #8f8f96)">Skills</span>
@@ -77,11 +77,11 @@ a{color:var(--accent-bright,#ff7ae0)}a:hover{color:var(--ink-100,#f2f2f0)}
             </div>
             <div style="flex: 1 1 200px; padding: 14px; display: flex; flex-direction: column; gap: 4px; border-right: 1px solid var(--line-100, #232327)">
               <span class="wl-sig" style="font-size: 12px; color: var(--ink-300, #8f8f96)">MCP servers</span>
-              <span class="wl-mono" style="font-size: 12px">warlock-api · stdio</span>
+              <span class="wl-mono" style="font-size: 12px">companion-api · stdio</span>
               <span class="wl-mono" style="font-size: 12px">github · stdio</span>
             </div>
             <div style="flex: 1 1 160px; padding: 14px; display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: flex-start">
-              <button class="wl-btn" type="button">Edit warlock profile</button>
+              <button class="wl-btn" type="button">Edit companion profile</button>
             </div>
           </div>
         </div>

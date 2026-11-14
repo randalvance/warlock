@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-11-07
-- Epic: [#1 Foundation](https://github.com/randalvance/warlock/issues/1)
+- Epic: [#1 Foundation](https://github.com/randalvance/honeypot/issues/1)
 
 ## Context
 
